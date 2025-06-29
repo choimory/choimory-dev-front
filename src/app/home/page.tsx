@@ -11,6 +11,17 @@ export default function HomePage() {
     router.push('/login');
   };
 
+  // 예시 사용자 데이터 (실제로는 API에서 가져올 데이터)
+  const userInfo = {
+    nickname: 'choimory',
+    posts: 15,
+    comments: 42,
+    following: 128,
+    followers: 256,
+    joinDate: '2024-01-15',
+    lastLogin: '2024-12-19'
+  };
+
   return (
     <div className="flex flex-col h-screen bg-white dark:bg-black">
       {/* Header */}
@@ -33,7 +44,7 @@ export default function HomePage() {
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-md mx-auto px-6 py-8">
+        <div className="max-w-lg mx-auto px-6 py-8">
           {/* Welcome Section */}
           <div className="text-center mb-12">
             <h2 className="text-2xl font-bold mb-4">Welcome</h2>
@@ -44,7 +55,59 @@ export default function HomePage() {
 
           {/* Content Cards */}
           <div className="space-y-6">
-            {[1, 2, 3, 4].map((item) => (
+            {/* User Info Card */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                  {userInfo.nickname.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    환영합니다 {userInfo.nickname}님
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">활성 사용자</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="text-center">
+                  <div className="text-lg font-bold text-gray-900 dark:text-white">{userInfo.posts}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">내 글</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-gray-900 dark:text-white">{userInfo.comments}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">내 댓글</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-gray-900 dark:text-white">{userInfo.following}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">팔로잉</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-gray-900 dark:text-white">{userInfo.followers}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">팔로워</div>
+                </div>
+              </div>
+
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600 dark:text-gray-400">가입일</span>
+                  <span className="text-gray-900 dark:text-white font-medium">{userInfo.joinDate}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600 dark:text-gray-400">최근 접속일</span>
+                  <span className="text-gray-900 dark:text-white font-medium">{userInfo.lastLogin}</span>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <button className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm transition-colors">
+                  프로필 수정
+                </button>
+              </div>
+            </div>
+
+            {/* Other Content Cards */}
+            {[2, 3, 4].map((item) => (
               <div key={item} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
                 <h3 className="text-lg font-semibold mb-2">Section {item}</h3>
                 <p className="text-gray-600 dark:text-gray-300 text-sm">
