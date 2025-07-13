@@ -88,7 +88,7 @@ export default function LoginPage() {
 
           {/* Links */}
           <div className="mt-6 space-y-3 text-center">
-            <a href="#" className="block text-sm text-blue-500 hover:text-blue-600">
+            <a href="/signup" className="block text-sm text-blue-500 hover:text-blue-600">
               아이디가 없으신가요? 회원가입
             </a>
             <a href="#" className="block text-sm text-gray-500 hover:text-gray-600">

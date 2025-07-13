@@ -16,7 +16,9 @@ export default function RootPage() {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       
       if (isLoggedIn) {
-        router.push('/home');
+        // /home 또는 /main 중 하나로 리다이렉트
+        // 여기서는 /main을 우선으로 설정
+        router.push('/main');
       } else {
         router.push('/login');
       }
