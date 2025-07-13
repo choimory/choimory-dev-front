@@ -5,5 +5,6 @@ https://github.com/choimory/choimory-io-architect
 # choimory.io.front
 
 - Next.js
+- Vibe coding
 - Cursor
 - Gemini-cli
