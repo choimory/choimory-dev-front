@@ -65,7 +65,7 @@ function VerifyPageContent() {
   return (
     <div className="flex flex-col h-screen bg-white dark:bg-black">
       <header className="flex items-center justify-center px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
-        <h1 className="text-xl font-bold">choimory-io</h1>
+        <h1 className="text-xl font-bold">choimory</h1>
       </header>
 
       <main className="flex-1 flex items-center justify-center px-6">
