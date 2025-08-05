@@ -1,6 +1,6 @@
-# choimory-io-front
+# choimory-front
 
-This is a [Next.js](https://nextjs.org) project for choimory-io-front.
+This is a [Next.js](https://nextjs.org) project for choimory-front.
 
 ## Getting Started
 

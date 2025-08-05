@@ -61,7 +61,7 @@ export default function SignUpPage() {
     <div className="flex flex-col h-screen bg-white dark:bg-black">
       {/* Signup Header */}
       <header className="flex items-center justify-center px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
-        <h1 className="text-xl font-bold">choimory-io</h1>
+        <h1 className="text-xl font-bold">choimory</h1>
       </header>
 
       {/* Signup Form */}

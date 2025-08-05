@@ -1,6 +1,6 @@
 # choimory.io architect
 
-https://github.com/choimory/choimory-io-architect
+https://github.com/choimory/choimory-architecture
 
 # choimory.io.front
 
