@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Header from '@/components/Header';
 
 export default function MainPage() {
   const router = useRouter();
@@ -24,23 +25,19 @@ export default function MainPage() {
 
   return (
     <div className="flex flex-col h-screen bg-white dark:bg-black">
-      {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
-        <h1 className="text-xl font-bold">choimory</h1>
-        <div className="flex items-center space-x-3">
-          <button 
-            onClick={handleLogout}
-            className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-          >
-            로그아웃
-          </button>
-          <button className="p-2">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-            </svg>
-          </button>
-        </div>
-      </header>
+      <Header>
+        <button 
+          onClick={handleLogout}
+          className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+        >
+          로그아웃
+        </button>
+        <button className="p-2">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+          </svg>
+        </button>
+      </Header>
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">
@@ -49,7 +46,7 @@ export default function MainPage() {
           <div className="text-center mb-12">
             <h2 className="text-2xl font-bold mb-4">Welcome</h2>
             <p className="text-gray-600 dark:text-gray-300">
-              This is a mobile app style layout for choimory-front
+              This is a mobile app style layout for choimory-dev
             </p>
           </div>
 
