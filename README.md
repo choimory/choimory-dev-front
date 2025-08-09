@@ -1,8 +1,8 @@
-# choimory.io architect
+# choimory.dev architect
 
-https://github.com/choimory/choimory-architecture
+https://github.com/choimory/choimory-dev-architecture
 
-# choimory.io.front
+# choimory.dev.front
 
 - Next.js
 - Vibe coding
