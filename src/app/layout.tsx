@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "choimory-front",
-  description: "choimory-front project",
+  title: "choimory-dev-front",
+  description: "choimory-dev-front project",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
 };
 
