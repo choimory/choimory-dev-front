@@ -3,30 +3,37 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+/** 인증 코드 유효 시간(초) */
+const VERIFY_TIMEOUT_SECONDS = 180;
+
+/** 인증 시간이 만료되었을 때 노출할 메시지 */
+const EXPIRED_MESSAGE = '인증 시간이 만료되었습니다. 코드를 다시 요청해주세요.';
+
 function VerifyPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
-  const [timeLeft, setTimeLeft] = useState(180);
-  const [isTimerRunning, setIsTimerRunning] = useState(true);
+  const [timeLeft, setTimeLeft] = useState(VERIFY_TIMEOUT_SECONDS); // 인증 코드 잔여 유효 시간(초)
+
+  // 타이머 동작 여부와 만료 메시지는 별도 상태로 두지 않고 잔여 시간에서 파생시킨다.
+  const isTimerRunning = timeLeft > 0;
+  const displayError = isTimerRunning ? error : EXPIRED_MESSAGE;
 
   useEffect(() => {
-    if (!isTimerRunning) return;
-
+    // 잔여 시간이 모두 소진된 경우 다음 타이머를 예약하지 않는다.
     if (timeLeft === 0) {
-      setIsTimerRunning(false);
-      setError('인증 시간이 만료되었습니다. 코드를 다시 요청해주세요.');
       return;
     }
 
-    const timer = setInterval(() => {
+    // 1초 뒤 잔여 시간을 1 감소시킨다.
+    const timer = setTimeout(() => {
       setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
 
-    return () => clearInterval(timer);
-  }, [timeLeft, isTimerRunning]);
+    return () => clearTimeout(timer);
+  }, [timeLeft]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -36,8 +43,8 @@ function VerifyPageContent() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // 인증 시간이 만료된 경우 제출을 막는다. (만료 메시지는 잔여 시간에서 파생된다)
     if (!isTimerRunning) {
-        setError('인증 시간이 만료되었습니다. 코드를 다시 요청해주세요.');
         return;
     }
     if (!code) {
@@ -55,8 +62,7 @@ function VerifyPageContent() {
   const handleResend = () => {
     // TODO: 인증 코드 재발송 API 호출
     console.log(`Resending verification code to: ${email}`);
-    setTimeLeft(180);
-    setIsTimerRunning(true);
+    setTimeLeft(VERIFY_TIMEOUT_SECONDS);
     setError('');
     setCode('');
     alert('인증 코드를 다시 발송했습니다.');
@@ -105,7 +111,7 @@ function VerifyPageContent() {
               />
             </div>
 
-            {error && <p className="text-sm text-center text-red-500">{error}</p>}
+            {displayError && <p className="text-sm text-center text-red-500">{displayError}</p>}
 
             <button
               type="submit"
