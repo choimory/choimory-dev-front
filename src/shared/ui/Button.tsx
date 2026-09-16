@@ -58,7 +58,10 @@ export function Button({
   const sizeClassName = variant === 'ghost' ? 'text-sm' : SIZE_CLASS_NAME[size];
 
   // 비활성화 상태인 경우 유형별 스타일 대신 비활성화 스타일을 적용한다.
-  const appearanceClassName = isDisabled ? DISABLED_CLASS_NAME : VARIANT_CLASS_NAME[variant];
+  // ghost 유형은 배경이 없으므로 비활성화 시에도 모서리 스타일을 적용하지 않는다.
+  const appearanceClassName = isDisabled
+    ? `${DISABLED_CLASS_NAME} ${variant === 'ghost' ? '' : 'rounded-lg'}`
+    : VARIANT_CLASS_NAME[variant];
 
   const widthClassName = isFullWidth ? 'w-full' : '';
 
@@ -67,7 +70,7 @@ export function Button({
       type={type}
       disabled={isDisabled}
       onClick={onClick}
-      className={`rounded-lg ${appearanceClassName} ${sizeClassName} ${widthClassName}`.trim()}
+      className={`${appearanceClassName} ${sizeClassName} ${widthClassName}`.trim()}
     >
       {children}
     </button>

@@ -1,148 +1,18 @@
-'use client';
+import { Suspense } from 'react';
 
-import { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { VerifyContainer } from '@/features/auth/container/VerifyContainer';
 
-/** 인증 코드 유효 시간(초) */
-const VERIFY_TIMEOUT_SECONDS = 180;
-
-/** 인증 시간이 만료되었을 때 노출할 메시지 */
-const EXPIRED_MESSAGE = '인증 시간이 만료되었습니다. 코드를 다시 요청해주세요.';
-
-function VerifyPageContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const email = searchParams.get('email');
-  const [code, setCode] = useState('');
-  const [error, setError] = useState('');
-  const [timeLeft, setTimeLeft] = useState(VERIFY_TIMEOUT_SECONDS); // 인증 코드 잔여 유효 시간(초)
-
-  // 타이머 동작 여부와 만료 메시지는 별도 상태로 두지 않고 잔여 시간에서 파생시킨다.
-  const isTimerRunning = timeLeft > 0;
-  const displayError = isTimerRunning ? error : EXPIRED_MESSAGE;
-
-  useEffect(() => {
-    // 잔여 시간이 모두 소진된 경우 다음 타이머를 예약하지 않는다.
-    if (timeLeft === 0) {
-      return;
-    }
-
-    // 1초 뒤 잔여 시간을 1 감소시킨다.
-    const timer = setTimeout(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [timeLeft]);
-
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // 인증 시간이 만료된 경우 제출을 막는다. (만료 메시지는 잔여 시간에서 파생된다)
-    if (!isTimerRunning) {
-        return;
-    }
-    if (!code) {
-      setError('인증 코드를 입력해주세요.');
-      return;
-    }
-    const nickname = searchParams.get('nickname');
-
-    // TODO: 인증 코드 확인 API 호출
-    console.log(`Verifying email: ${email} with code: ${code}`);
-    setError('');
-    router.push(`/signup/welcome?nickname=${encodeURIComponent(nickname || '')}`);
-  };
-
-  const handleResend = () => {
-    // TODO: 인증 코드 재발송 API 호출
-    console.log(`Resending verification code to: ${email}`);
-    setTimeLeft(VERIFY_TIMEOUT_SECONDS);
-    setError('');
-    setCode('');
-    alert('인증 코드를 다시 발송했습니다.');
-  };
-
-  return (
-    <div className="flex flex-col h-screen bg-white dark:bg-black">
-      <header className="flex items-center justify-center px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
-        <h1 className="text-xl font-bold">choimory</h1>
-      </header>
-
-      <main className="flex-1 flex items-center justify-center px-6">
-        <div className="w-full max-w-lg">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold mb-2">이메일 인증</h2>
-            <p className="text-gray-600 dark:text-gray-300">
-              <span className="font-medium text-blue-500">{email}</span>으로 발송된
-              인증 코드를 입력해주세요.
-            </p>
-          </div>
-
-          <div className="my-8 text-center">
-            <p className={`text-5xl font-bold ${!isTimerRunning ? 'text-red-500' : 'text-gray-900 dark:text-white'}`}>
-                {formatTime(timeLeft)}
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="code"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                인증 코드
-              </label>
-              <input
-                id="code"
-                name="code"
-                type="text"
-                required
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                placeholder="인증 코드 6자리"
-                disabled={!isTimerRunning}
-              />
-            </div>
-
-            {displayError && <p className="text-sm text-center text-red-500">{displayError}</p>}
-
-            <button
-              type="submit"
-              className={`w-full font-medium py-3 px-4 rounded-lg transition-colors ${isTimerRunning ? 'bg-blue-500 hover:bg-blue-600 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-              disabled={!isTimerRunning}
-            >
-              인증하기
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              코드를 받지 못하셨나요?{' '}
-              <button
-                onClick={handleResend}
-                className="font-medium text-blue-600 hover:underline dark:text-blue-500 bg-transparent border-none p-0"
-              >
-                재전송
-              </button>
-            </p>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-}
-
+/**
+ * 이메일 인증 화면의 라우팅 진입점입니다.
+ *
+ * Container가 쿼리 파라미터를 사용하므로 Suspense 경계로 감쌉니다.
+ *
+ * @returns 이메일 인증 화면
+ */
 export default function VerifyPage() {
-    return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <VerifyPageContent />
-        </Suspense>
-    )
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyContainer />
+    </Suspense>
+  );
 }
