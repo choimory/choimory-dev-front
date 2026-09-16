@@ -15,5 +15,5 @@ type ScreenLayoutProps = {
  * @returns 화면 레이아웃 요소
  */
 export function ScreenLayout({ children }: ScreenLayoutProps) {
-  return <div className="flex flex-col h-screen bg-white dark:bg-black">{children}</div>;
+  return <div className="flex flex-col h-screen bg-background">{children}</div>;
 }
