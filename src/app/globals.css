@@ -1,6 +1,27 @@
 @import "tailwindcss";
 
 :root {
+  --background: #101418;
+  --foreground: #ecf2f8;
+  --shell: #161b22;
+  --surface: #1d232b;
+  --surface-strong: #252c35;
+  --muted: #aeb8c5;
+  --border: #343d49;
+  --primary: #7aa2ff;
+  --primary-foreground: #06111f;
+  --primary-soft: #1c2b4a;
+  --accent-green: #60d7b2;
+  --accent-green-soft: #15382f;
+  --accent-orange: #ffb26f;
+  --accent-orange-soft: #3d2918;
+  --accent-purple: #b79cff;
+  --accent-purple-soft: #30264b;
+  --accent-red: #ff8f8f;
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
   --background: #ffffff;
   --foreground: #17202a;
   --shell: #f8fafc;
@@ -19,29 +40,6 @@
   --accent-purple-soft: #f1eaff;
   --accent-red: #d64545;
   color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #101418;
-    --foreground: #ecf2f8;
-    --shell: #161b22;
-    --surface: #1d232b;
-    --surface-strong: #252c35;
-    --muted: #aeb8c5;
-    --border: #343d49;
-    --primary: #7aa2ff;
-    --primary-foreground: #06111f;
-    --primary-soft: #1c2b4a;
-    --accent-green: #60d7b2;
-    --accent-green-soft: #15382f;
-    --accent-orange: #ffb26f;
-    --accent-orange-soft: #3d2918;
-    --accent-purple: #b79cff;
-    --accent-purple-soft: #30264b;
-    --accent-red: #ff8f8f;
-    color-scheme: dark;
-  }
 }
 
 @theme inline {
