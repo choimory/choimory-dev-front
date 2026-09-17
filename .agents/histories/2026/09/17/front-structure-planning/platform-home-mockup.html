@@ -1,0 +1,717 @@
+<div id="choimory-platform-mock" aria-label="choimory-dev 플랫폼 화면 목업">
+  <style>
+    #choimory-platform-mock {
+      color-scheme: light dark;
+      --choi-page: light-dark(#eef2f6, #101418);
+      --choi-shell: light-dark(#f8fafc, #161b22);
+      --choi-surface: light-dark(#ffffff, #1d232b);
+      --choi-surface-strong: light-dark(#f2f6fa, #252c35);
+      --choi-text: light-dark(#17202a, #ecf2f8);
+      --choi-muted: light-dark(#657386, #aeb8c5);
+      --choi-border: light-dark(#d9e1ea, #343d49);
+      --choi-primary: light-dark(#2563eb, #7aa2ff);
+      --choi-primary-soft: light-dark(#e8f0ff, #1c2b4a);
+      --choi-green: light-dark(#0f8b6d, #60d7b2);
+      --choi-orange: light-dark(#cf6d17, #ffb26f);
+      --choi-purple: light-dark(#7c3aed, #b79cff);
+      --choi-red: light-dark(#d64545, #ff8f8f);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    #choimory-platform-mock * {
+      box-sizing: border-box;
+    }
+
+    #choimory-platform-mock .choi-window {
+      min-height: 720px;
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--choi-primary) 10%, transparent), transparent 34%),
+        var(--choi-page);
+      color: var(--choi-text);
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--choi-border);
+    }
+
+    #choimory-platform-mock .choi-topbar {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 0 24px;
+      background: color-mix(in srgb, var(--choi-shell) 94%, transparent);
+      border-bottom: 1px solid var(--choi-border);
+    }
+
+    #choimory-platform-mock .choi-brand {
+      font-weight: 700;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    #choimory-platform-mock .choi-search {
+      flex: 1;
+      max-width: 420px;
+      height: 38px;
+      border: 1px solid var(--choi-border);
+      background: var(--choi-surface);
+      color: var(--choi-muted);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    #choimory-platform-mock .choi-top-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #choimory-platform-mock .choi-icon-button,
+    #choimory-platform-mock .choi-avatar {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--choi-border);
+      background: var(--choi-surface);
+      color: var(--choi-text);
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    #choimory-platform-mock .choi-avatar {
+      border-radius: 999px;
+      background: var(--choi-primary);
+      color: light-dark(#ffffff, #08101f);
+      border-color: transparent;
+      font-weight: 700;
+    }
+
+    #choimory-platform-mock .choi-layout {
+      display: grid;
+      grid-template-columns: 232px minmax(0, 1fr);
+      min-height: 656px;
+    }
+
+    #choimory-platform-mock .choi-sidebar {
+      background: color-mix(in srgb, var(--choi-shell) 96%, transparent);
+      border-right: 1px solid var(--choi-border);
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    #choimory-platform-mock .choi-nav-group {
+      display: grid;
+      gap: 6px;
+    }
+
+    #choimory-platform-mock .choi-nav-label {
+      color: var(--choi-muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 10px 4px;
+    }
+
+    #choimory-platform-mock .choi-nav-item {
+      border: 0;
+      background: transparent;
+      color: var(--choi-muted);
+      min-height: 42px;
+      border-radius: 10px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      font: inherit;
+    }
+
+    #choimory-platform-mock .choi-nav-item[aria-current="page"] {
+      background: var(--choi-primary-soft);
+      color: var(--choi-primary);
+      font-weight: 700;
+    }
+
+    #choimory-platform-mock .choi-main {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 22px;
+      align-content: start;
+    }
+
+    #choimory-platform-mock .choi-hero {
+      background: var(--choi-surface);
+      border: 1px solid var(--choi-border);
+      border-radius: 16px;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    #choimory-platform-mock h1,
+    #choimory-platform-mock h2,
+    #choimory-platform-mock h3,
+    #choimory-platform-mock p {
+      margin: 0;
+    }
+
+    #choimory-platform-mock h1 {
+      font-size: 24px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    #choimory-platform-mock h2 {
+      font-size: 16px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    #choimory-platform-mock h3 {
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    #choimory-platform-mock .choi-muted {
+      color: var(--choi-muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    #choimory-platform-mock .choi-primary-action {
+      border: 0;
+      background: var(--choi-primary);
+      color: light-dark(#ffffff, #06111f);
+      min-height: 42px;
+      border-radius: 10px;
+      padding: 0 14px;
+      font: inherit;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    #choimory-platform-mock .choi-section {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    #choimory-platform-mock .choi-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    #choimory-platform-mock .choi-link-button {
+      border: 0;
+      background: transparent;
+      color: var(--choi-primary);
+      font: inherit;
+      font-weight: 700;
+      padding: 4px;
+    }
+
+    #choimory-platform-mock .choi-service-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    #choimory-platform-mock .choi-service {
+      background: var(--choi-surface);
+      border: 1px solid var(--choi-border);
+      border-radius: 14px;
+      padding: 14px;
+      min-height: 148px;
+      display: grid;
+      align-content: space-between;
+      gap: 14px;
+    }
+
+    #choimory-platform-mock .choi-service-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--choi-text);
+      background: var(--choi-surface-strong);
+    }
+
+    #choimory-platform-mock .choi-service[data-kind="memo"] .choi-service-icon {
+      color: var(--choi-green);
+      background: color-mix(in srgb, var(--choi-green) 15%, var(--choi-surface));
+    }
+
+    #choimory-platform-mock .choi-service[data-kind="stream"] .choi-service-icon {
+      color: var(--choi-purple);
+      background: color-mix(in srgb, var(--choi-purple) 15%, var(--choi-surface));
+    }
+
+    #choimory-platform-mock .choi-service[data-kind="price"] .choi-service-icon {
+      color: var(--choi-orange);
+      background: color-mix(in srgb, var(--choi-orange) 15%, var(--choi-surface));
+    }
+
+    #choimory-platform-mock .choi-service[data-kind="community"] .choi-service-icon {
+      color: var(--choi-primary);
+      background: var(--choi-primary-soft);
+    }
+
+    #choimory-platform-mock .choi-service-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--choi-muted);
+      font-size: 13px;
+    }
+
+    #choimory-platform-mock .choi-feed {
+      display: grid;
+      gap: 10px;
+    }
+
+    #choimory-platform-mock .choi-activity {
+      background: var(--choi-surface);
+      border: 1px solid var(--choi-border);
+      border-radius: 12px;
+      padding: 13px 14px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #choimory-platform-mock .choi-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--choi-primary);
+    }
+
+    #choimory-platform-mock .choi-dot.green {
+      background: var(--choi-green);
+    }
+
+    #choimory-platform-mock .choi-dot.orange {
+      background: var(--choi-orange);
+    }
+
+    #choimory-platform-mock .choi-side {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    #choimory-platform-mock .choi-panel {
+      background: var(--choi-surface);
+      border: 1px solid var(--choi-border);
+      border-radius: 16px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    #choimory-platform-mock .choi-mini-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    #choimory-platform-mock .choi-mini-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      background: var(--choi-surface-strong);
+      border-radius: 10px;
+    }
+
+    #choimory-platform-mock .choi-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border-radius: 999px;
+      padding: 0 8px;
+      background: var(--choi-primary-soft);
+      color: var(--choi-primary);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    #choimory-platform-mock .choi-mobile-nav {
+      display: none;
+    }
+
+    #choimory-platform-mock svg {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+    }
+
+    @media (max-width: 860px) {
+      #choimory-platform-mock .choi-window {
+        border-radius: 18px;
+      }
+
+      #choimory-platform-mock .choi-topbar {
+        padding: 0 16px;
+      }
+
+      #choimory-platform-mock .choi-search {
+        display: none;
+      }
+
+      #choimory-platform-mock .choi-layout {
+        grid-template-columns: 1fr;
+      }
+
+      #choimory-platform-mock .choi-sidebar {
+        display: none;
+      }
+
+      #choimory-platform-mock .choi-main {
+        grid-template-columns: 1fr;
+        padding: 16px 16px 86px;
+      }
+
+      #choimory-platform-mock .choi-service-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      #choimory-platform-mock .choi-mobile-nav {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+        padding: 8px 10px;
+        border-top: 1px solid var(--choi-border);
+        background: var(--choi-shell);
+      }
+
+      #choimory-platform-mock .choi-mobile-nav button {
+        border: 0;
+        background: transparent;
+        color: var(--choi-muted);
+        min-height: 50px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        gap: 2px;
+        font: inherit;
+        font-size: 12px;
+      }
+
+      #choimory-platform-mock .choi-mobile-nav button[aria-current="page"] {
+        color: var(--choi-primary);
+        background: var(--choi-primary-soft);
+      }
+    }
+
+    @media (max-width: 520px) {
+      #choimory-platform-mock .choi-window {
+        min-height: 760px;
+      }
+
+      #choimory-platform-mock .choi-hero {
+        grid-template-columns: 1fr;
+        padding: 18px;
+      }
+
+      #choimory-platform-mock .choi-primary-action {
+        width: 100%;
+      }
+
+      #choimory-platform-mock .choi-service-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #choimory-platform-mock .choi-activity {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      #choimory-platform-mock .choi-activity time {
+        grid-column: 2;
+      }
+    }
+  </style>
+
+  <div class="choi-window">
+    <header class="choi-topbar">
+      <div class="choi-brand">choimory-dev</div>
+      <div class="choi-search" aria-label="통합 검색">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="m21 21-4.35-4.35" stroke-width="2" stroke-linecap="round"></path>
+          <circle cx="11" cy="11" r="7" stroke-width="2"></circle>
+        </svg>
+        서비스, 메모, 상품, 스트리머 검색
+      </div>
+      <div class="choi-top-actions">
+        <button class="choi-icon-button" type="button" aria-label="알림">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+        </button>
+        <div class="choi-avatar" aria-label="내 프로필">C</div>
+      </div>
+    </header>
+
+    <div class="choi-layout">
+      <aside class="choi-sidebar" aria-label="주요 메뉴">
+        <nav class="choi-nav-group">
+          <div class="choi-nav-label">플랫폼</div>
+          <button class="choi-nav-item" type="button" aria-current="page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z" stroke-width="2" stroke-linejoin="round"></path>
+            </svg>
+            홈
+          </button>
+          <button class="choi-nav-item" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-width="2"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-width="2"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-width="2"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-width="2"></rect>
+            </svg>
+            서비스
+          </button>
+          <button class="choi-nav-item" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M20 13V7a2 2 0 0 0-2-2h-3l-2-2H6a2 2 0 0 0-2 2v14h8" stroke-width="2" stroke-linejoin="round"></path>
+              <path d="M16 19h6M19 16v6" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+            내 공간
+          </button>
+          <button class="choi-nav-item" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M12 8v5l3 3" stroke-width="2" stroke-linecap="round"></path>
+              <circle cx="12" cy="12" r="9" stroke-width="2"></circle>
+            </svg>
+            최근 활동
+          </button>
+        </nav>
+
+        <nav class="choi-nav-group">
+          <div class="choi-nav-label">서비스 바로가기</div>
+          <button class="choi-nav-item" type="button">메모장</button>
+          <button class="choi-nav-item" type="button">스트리머 알림</button>
+          <button class="choi-nav-item" type="button">가격 알림</button>
+          <button class="choi-nav-item" type="button">커뮤니티</button>
+        </nav>
+      </aside>
+
+      <main class="choi-main">
+        <section>
+          <div class="choi-hero">
+            <div>
+              <h1>오늘 필요한 것만 한 번에</h1>
+              <p class="choi-muted" style="margin-top: 8px;">
+                메모, 방송 시작 알림, 가격 추적, 커뮤니티 활동을 한 홈에서 훑고 바로 이어서 작업한다.
+              </p>
+            </div>
+            <button class="choi-primary-action" type="button">새 서비스 추가</button>
+          </div>
+
+          <section class="choi-section" aria-labelledby="favorite-services-title">
+            <div class="choi-section-header">
+              <h2 id="favorite-services-title">자주 쓰는 서비스</h2>
+              <button class="choi-link-button" type="button">전체 보기</button>
+            </div>
+
+            <div class="choi-service-grid">
+              <article class="choi-service" data-kind="memo">
+                <div>
+                  <div class="choi-service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M5 4h14v16H5z" stroke-width="2" stroke-linejoin="round"></path>
+                      <path d="M8 8h8M8 12h8M8 16h5" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                  </div>
+                  <h3 style="margin-top: 12px;">개인 메모장</h3>
+                  <p class="choi-muted" style="margin-top: 4px;">아이디어와 작업 메모</p>
+                </div>
+                <div class="choi-service-bottom">
+                  <span>12개 메모</span>
+                  <span>열기</span>
+                </div>
+              </article>
+
+              <article class="choi-service" data-kind="stream">
+                <div>
+                  <div class="choi-service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <rect x="4" y="5" width="16" height="11" rx="2" stroke-width="2"></rect>
+                      <path d="M9 21h6M12 16v5M10 9l5 2.5L10 14z" stroke-width="2" stroke-linejoin="round"></path>
+                    </svg>
+                  </div>
+                  <h3 style="margin-top: 12px;">스트리머 알림</h3>
+                  <p class="choi-muted" style="margin-top: 4px;">방송 시작과 이벤트</p>
+                </div>
+                <div class="choi-service-bottom">
+                  <span>3명 온라인</span>
+                  <span>보기</span>
+                </div>
+              </article>
+
+              <article class="choi-service" data-kind="price">
+                <div>
+                  <div class="choi-service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M20 12V7H9L4 12l8 8z" stroke-width="2" stroke-linejoin="round"></path>
+                      <circle cx="10" cy="9" r="1" fill="currentColor"></circle>
+                    </svg>
+                  </div>
+                  <h3 style="margin-top: 12px;">가격 알림</h3>
+                  <p class="choi-muted" style="margin-top: 4px;">상품 가격 추적</p>
+                </div>
+                <div class="choi-service-bottom">
+                  <span>2건 하락</span>
+                  <span>확인</span>
+                </div>
+              </article>
+
+              <article class="choi-service" data-kind="community">
+                <div>
+                  <div class="choi-service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M7 8h10M7 12h7M6 20l-2 2v-5a8 8 0 1 1 2 3z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </div>
+                  <h3 style="margin-top: 12px;">커뮤니티</h3>
+                  <p class="choi-muted" style="margin-top: 4px;">글, 댓글, 팔로우</p>
+                </div>
+                <div class="choi-service-bottom">
+                  <span>새 댓글 4개</span>
+                  <span>이동</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="choi-section" aria-labelledby="recent-title">
+            <div class="choi-section-header">
+              <h2 id="recent-title">최근 활동</h2>
+              <button class="choi-link-button" type="button">기록 보기</button>
+            </div>
+
+            <div class="choi-feed">
+              <article class="choi-activity">
+                <span class="choi-dot green" aria-hidden="true"></span>
+                <div>
+                  <h3>메모 "프론트 구성"을 수정함</h3>
+                  <p class="choi-muted">개인 메모장</p>
+                </div>
+                <time class="choi-muted">방금</time>
+              </article>
+              <article class="choi-activity">
+                <span class="choi-dot orange" aria-hidden="true"></span>
+                <div>
+                  <h3>관심 상품이 목표가 아래로 내려감</h3>
+                  <p class="choi-muted">가격 알림</p>
+                </div>
+                <time class="choi-muted">12분 전</time>
+              </article>
+              <article class="choi-activity">
+                <span class="choi-dot" aria-hidden="true"></span>
+                <div>
+                  <h3>내 게시글에 새 댓글이 달림</h3>
+                  <p class="choi-muted">커뮤니티</p>
+                </div>
+                <time class="choi-muted">38분 전</time>
+              </article>
+            </div>
+          </section>
+        </section>
+
+        <aside class="choi-side" aria-label="오늘 요약">
+          <section class="choi-panel">
+            <div class="choi-section-header">
+              <h2>오늘 요약</h2>
+              <span class="choi-badge">통합</span>
+            </div>
+            <div class="choi-mini-list">
+              <div class="choi-mini-item">
+                <span class="choi-muted">읽지 않은 알림</span>
+                <strong>9</strong>
+              </div>
+              <div class="choi-mini-item">
+                <span class="choi-muted">진행 중인 추적</span>
+                <strong>18</strong>
+              </div>
+              <div class="choi-mini-item">
+                <span class="choi-muted">오늘 작성한 항목</span>
+                <strong>4</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="choi-panel">
+            <h2>중요 알림</h2>
+            <div class="choi-mini-list">
+              <div>
+                <h3>방송 시작</h3>
+                <p class="choi-muted">관심 스트리머 2명이 라이브 중</p>
+              </div>
+              <div>
+                <h3>가격 하락</h3>
+                <p class="choi-muted">키보드, 모니터 목표가 도달</p>
+              </div>
+              <div>
+                <h3>커뮤니티</h3>
+                <p class="choi-muted">팔로워 요청 1건</p>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <nav class="choi-mobile-nav" aria-label="모바일 주요 메뉴">
+      <button type="button" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z" stroke-width="2" stroke-linejoin="round"></path>
+        </svg>
+        홈
+      </button>
+      <button type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-width="2"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-width="2"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-width="2"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-width="2"></rect>
+        </svg>
+        서비스
+      </button>
+      <button type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        알림
+      </button>
+      <button type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <circle cx="12" cy="8" r="4" stroke-width="2"></circle>
+          <path d="M4 21a8 8 0 0 1 16 0" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        내 공간
+      </button>
+    </nav>
+  </div>
+</div>
