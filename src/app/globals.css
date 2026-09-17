@@ -1,21 +1,67 @@
 @import "tailwindcss";
 
-/* 다크 테마는 prefers-color-scheme 대신 data-theme 속성으로 전환한다. */
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
-
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #17202a;
+  --shell: #f8fafc;
+  --surface: #ffffff;
+  --surface-strong: #f2f6fa;
+  --muted: #657386;
+  --border: #d9e1ea;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --primary-soft: #e8f0ff;
+  --accent-green: #0f8b6d;
+  --accent-green-soft: #e5f6f1;
+  --accent-orange: #cf6d17;
+  --accent-orange-soft: #fff1e4;
+  --accent-purple: #7c3aed;
+  --accent-purple-soft: #f1eaff;
+  --accent-red: #d64545;
+  color-scheme: light;
 }
 
-[data-theme="dark"] {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #101418;
+    --foreground: #ecf2f8;
+    --shell: #161b22;
+    --surface: #1d232b;
+    --surface-strong: #252c35;
+    --muted: #aeb8c5;
+    --border: #343d49;
+    --primary: #7aa2ff;
+    --primary-foreground: #06111f;
+    --primary-soft: #1c2b4a;
+    --accent-green: #60d7b2;
+    --accent-green-soft: #15382f;
+    --accent-orange: #ffb26f;
+    --accent-orange-soft: #3d2918;
+    --accent-purple: #b79cff;
+    --accent-purple-soft: #30264b;
+    --accent-red: #ff8f8f;
+    color-scheme: dark;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-shell: var(--shell);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent-green: var(--accent-green);
+  --color-accent-green-soft: var(--accent-green-soft);
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-orange-soft: var(--accent-orange-soft);
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-purple-soft: var(--accent-purple-soft);
+  --color-accent-red: var(--accent-red);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

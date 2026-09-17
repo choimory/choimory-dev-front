@@ -1,12 +1,12 @@
-import { RootGateContainer } from '@/features/auth/container/RootGateContainer';
+import { PlatformHomeContainer } from '@/features/platform/container/PlatformHomeContainer';
 
 /**
- * 서비스 진입점입니다.
+ * 서비스 루트 화면입니다.
  *
- * 로그인 여부에 따라 홈 화면 또는 로그인 화면으로 이동시킵니다.
+ * 여러 하위 서비스로 진입하는 플랫폼 홈 화면을 표시합니다.
  *
  * @returns 진입 화면
  */
 export default function RootPage() {
-  return <RootGateContainer />;
+  return <PlatformHomeContainer />;
 }

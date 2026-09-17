@@ -2,7 +2,7 @@
 
 choimory-dev 서비스의 프론트엔드 프로젝트입니다.
 
-모바일 앱 형태의 레이아웃을 기반으로 회원가입, 로그인, 홈 화면을 제공합니다.
+현재는 기존 로그인, 회원가입, 홈 화면 레거시를 제거한 뒤 `plan1.md`의 플랫폼형 화면 구성을 1차 구현한 상태입니다.
 
 ---
 
@@ -41,49 +41,72 @@ npm run lint    # eslint . 실행
 
 ## 프로젝트 구조
 
-```
+```text
 src/
-├── app/                        라우팅 진입점. Container 호출만 담당한다
-│   ├── layout.tsx              루트 레이아웃 (폰트, metadata, viewport)
-│   ├── globals.css             전역 스타일
-│   ├── page.tsx                진입 게이트
-│   ├── login/page.tsx
-│   ├── signup/page.tsx
-│   ├── signup/verify/page.tsx
-│   ├── signup/welcome/page.tsx
-│   └── home/page.tsx
+├── app/
+│   ├── community/page.tsx
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
 │
-├── features/                   도메인별 화면 로직
-│   ├── auth/
-│   │   ├── api/                authApi
-│   │   ├── model/              authTypes, authSession
-│   │   ├── hooks/              useAuthSession, useLogin, useSignUp, useVerify
-│   │   ├── container/          LoginContainer, SignUpContainer, VerifyContainer,
-│   │   │                       WelcomeContainer, RootGateContainer
-│   │   └── components/         LoginForm, SignUpForm, VerifyForm,
-│   │                           WelcomeMessage, SocialLoginButtons
-│   └── user/
-│       ├── api/                userApi
-│       ├── model/              userTypes
-│       ├── hooks/              useUserSummary
-│       ├── container/          DashboardContainer
-│       └── components/         UserSummaryCard, SectionCard, FeatureHighlight
+├── features/
+│   ├── community/
+│   │   ├── components/
+│   │   ├── container/
+│   │   └── model/
+│   └── platform/
+│       ├── components/
+│       ├── container/
+│       └── model/
 │
-└── shared/                     도메인에 종속되지 않는 공통 요소
-    ├── ui/                     ScreenLayout, AppHeader, BottomNav,
-    │                           Button, TextField, Card, ThemeToggle
-    ├── model/                  theme
-    ├── hooks/                  useTheme
-    └── utils/                  formatTime
+└── shared/
+    └── ui/
 ```
 
 경로 별칭은 `@/*` → `./src/*` 입니다.
 
 ---
 
-## 아키텍처
+## 현재 화면 상태
 
-화면은 다음 4계층으로 분리합니다. 상세 규칙은 `.agents/rules/front-end/code-convention-react.md`를 따릅니다.
+현재 라우트는 다음 두 개입니다.
+
+| 경로 | 설명 |
+|---|---|
+| `/` | 여러 하위 서비스로 진입하는 플랫폼 홈 |
+| `/community` | 커뮤니티/SNS 서비스의 중앙 피드 화면 |
+
+기존 레거시 화면에서 제거한 항목은 다음과 같습니다.
+
+- 로그인 화면
+- 회원가입 화면
+- 이메일 인증 화면
+- 가입 완료 화면
+- 홈 대시보드 화면
+- 기존 공통 UI 컴포넌트
+- mock auth/user API와 관련 hook/model/container/component
+
+---
+
+## 향후 화면 설계 방향
+
+프론트 구성 기획은 `.agents/histories/2026/09/17/front-structure-planning/plan1.md`를 기준으로 이어갑니다.
+
+현재 구현 방향은 다음과 같습니다.
+
+- `choimory-dev`는 여러 하위 서비스를 담는 플랫폼으로 본다.
+- 첫 화면은 특정 서비스의 피드가 아니라 서비스 포털/런처 역할을 한다.
+- 커뮤니티/SNS 기능은 플랫폼 자체가 아니라 하위 서비스 중 하나로 분리한다.
+- PC에서도 모바일 앱처럼 중앙 콘텐츠 폭을 좁게 유지하는 방향을 우선 검토한다.
+
+---
+
+## 아키텍처 기준
+
+화면을 다시 만들 때는 `.agents/rules/front-end/code-convention-react.md`를 따른다.
+
+기본 계층은 다음과 같습니다.
 
 | 계층 | 위치 | 책임 |
 |---|---|---|
@@ -92,88 +115,7 @@ src/
 | `hook` | `features/*/hooks` | 복잡한 상태와 이벤트 로직. UI를 반환하지 않는다 |
 | `component` | `features/*/components` | UI 렌더링만 담당. props로 데이터를 전달받는다 |
 
-데이터 흐름은 `page → container → (hook) → component` 단방향입니다.
-
-### 공통 UI
-
-여러 화면에서 반복되는 요소는 `shared/ui`에 둡니다.
-
-| 컴포넌트 | 용도 |
-|---|---|
-| `ScreenLayout` | 화면 전체를 감싸는 세로 배치 래퍼 |
-| `AppHeader` | 상단 헤더. `isCentered`, `isLinked`로 인증 화면과 일반 화면을 구분한다 |
-| `BottomNav` | 하단 네비게이션 (이동 처리는 미연결) |
-| `Button` | `primary` / `social` / `ghost` 유형, `md` / `sm` 크기 |
-| `TextField` | 라벨 + 입력 필드. `actionLabel`로 중복확인 버튼을 함께 렌더링한다 |
-| `Card` | 콘텐츠 섹션 카드 |
-| `ThemeToggle` | 라이트/다크 테마 전환 버튼. `AppHeader`에 포함되어 모든 화면에 노출된다 |
-
-### 테마
-
-라이트와 다크 두 가지 테마를 지원하며 사용자가 직접 전환할 수 있습니다.
-
-테마는 `<html>`의 `data-theme` 속성으로 결정됩니다. Tailwind의 `dark:` 변형을 `prefers-color-scheme` 대신 이 속성에 연결했습니다.
-
-```css
-/* globals.css */
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
-```
-
-- 최초 진입 시 저장된 선택이 있으면 그 값을, 없으면 OS 설정을 따릅니다.
-- 첫 페인트 이전에 `layout.tsx`의 인라인 스크립트가 `data-theme`을 지정하여 화면 깜빡임을 방지합니다.
-- 테마 상태 접근은 `shared/model/theme.ts`에서만 수행합니다. `useTheme`은 `useSyncExternalStore`로 이를 구독하므로 다른 탭에서 테마를 변경해도 반영됩니다.
-
-배경색과 전경색은 CSS 변수로 관리합니다. 그 외 색상은 아직 `dark:` 유틸리티를 직접 사용하고 있습니다.
-
-```css
-:root               { --background: #ffffff; --foreground: #171717; }
-[data-theme="dark"] { --background: #0a0a0a; --foreground: #ededed; }
-```
-
-### API 레이어
-
-API 호출은 컴포넌트에 직접 작성하지 않고 도메인별 `api` 파일에 둡니다.
-
-응답 타입과 화면 표시용 ViewModel은 분리하며, 변환은 mapper 함수로 작성합니다. (`toUserSummaryViewModel`)
-
----
-
-## 도메인
-
-### auth
-
-회원가입과 로그인을 담당합니다.
-
-| 화면 | 경로 | 설명 |
-|---|---|---|
-| 진입 게이트 | `/` | 로그인 여부를 확인하여 `/home` 또는 `/login`으로 이동 |
-| 로그인 | `/login` | 아이디/비밀번호 입력, SNS 로그인 버튼 |
-| 회원가입 | `/signup` | 이메일·닉네임 중복확인, 비밀번호 입력 |
-| 이메일 인증 | `/signup/verify` | 인증 코드 입력. 유효 시간 180초 |
-| 가입 완료 | `/signup/welcome` | 가입 완료 안내 |
-
-화면 간 이동 시 `email`, `nickname`을 쿼리 파라미터로 전달합니다.
-
-**세션 관리**
-
-로그인 상태는 `features/auth/model/authSession.ts`에서만 접근합니다. 화면과 hook은 저장 방식을 알지 못하므로, 저장소를 변경하더라도 이 파일만 수정하면 됩니다.
-
-`useAuthSession`은 `useSyncExternalStore`로 저장소를 구독하며 세 가지 상태를 반환합니다.
-
-- `loading` : 서버 렌더링 시점 등 아직 확인되지 않은 상태
-- `authenticated` / `unauthenticated`
-
-`storage` 이벤트를 함께 구독하므로 다른 탭에서 로그아웃하면 현재 탭에도 반영됩니다.
-
-### user
-
-로그인한 사용자의 홈 화면을 담당합니다.
-
-| 화면 | 경로 | 설명 |
-|---|---|---|
-| 홈 | `/home` | 사용자 요약 정보, 콘텐츠 섹션, 하단 네비게이션 |
-
-`/main`은 과거 `/home`과 동일한 화면이었으나 중복이므로 제거되었습니다. 해당 경로는 이후 랜딩 페이지 용도로 사용할 수 있습니다.
+공통 UI는 `shared/ui`에 둡니다.
 
 ---
 
@@ -211,25 +153,6 @@ API 호출은 컴포넌트에 직접 작성하지 않고 도메인별 `api` 파�
 - 타입의 각 필드에는 측면 주석을 작성한다.
 - 로직은 흐름 단위로 분리하여 한글 주석을 작성한다.
 - 코드 자체로 의미가 명확한 부분에는 주석을 작성하지 않는다.
-
----
-
-## 현재 제약 사항
-
-**백엔드가 연동되어 있지 않습니다.**
-
-모든 API는 `features/*/api`의 mock 구현이며 `TODO` 주석으로 교체 지점을 표시해 두었습니다. 연동 시 해당 파일의 함수 내부만 수정하면 되고 호출부는 변경하지 않습니다.
-
-**인증이 구현되어 있지 않습니다.**
-
-로그인은 입력값 검증 없이 통과하며, 세션은 브라우저 저장소의 플래그 하나로 관리됩니다. 토큰, 라우트 가드, 비밀번호 검증이 없으므로 `/home`에 직접 접근할 수 있습니다.
-
-향후 JWT와 Redis 기반 세션으로 전환할 예정이며, 그 시점에 `proxy.ts` 라우트 가드를 함께 도입합니다.
-
-**기타**
-
-- 하단 네비게이션과 일부 버튼(프로필 수정, 섹션 Action)은 동작이 연결되어 있지 않습니다.
-- 배경색과 전경색을 제외한 나머지 색상(`dark:text-gray-300` 등)은 아직 토큰화되지 않았습니다. 화면별 디자인 상세 논의 시점에 함께 정리할 예정입니다.
 
 ---
 
