@@ -117,7 +117,6 @@ export function MemberServiceFeedSection({ services }: MemberServiceFeedSectionP
                 C
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-bold text-primary">내정보</p>
                 <h3 id="member-profile-title" className="mt-1 text-2xl font-bold tracking-normal text-foreground">{MEMBER_PROFILE.nickname}</h3>
                 <p className="mt-1 text-sm text-muted">{MEMBER_PROFILE.email}</p>
                 <p className="mt-2 text-sm leading-5 text-muted">{MEMBER_PROFILE.description}</p>

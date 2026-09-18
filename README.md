@@ -170,6 +170,7 @@ src/
 - `AppTopBar`와 `BottomNavigation`의 기본 폭도 wide 기준이다.
 - 상단바 액션은 `shared/ui/TopBarActions.tsx`에서 검색, 알림, 로그인/로그아웃 UI를 담당한다.
 - 검색 오버레이는 `document.body` portal 기반으로 렌더링하여 화면 전체 기준으로 표시한다.
+- 알림 팝오버도 `document.body` portal 기반으로 렌더링하여 화면 빈 영역 클릭으로 닫히게 한다.
 - 브랜드 로고는 `shared/ui/BrandLogo.tsx`를 사용하며 화면별로 애니메이션 여부를 조정한다.
 - 좁은 레이아웃은 로그인/회원가입 같은 예외 화면에만 제한적으로 사용한다.
 - 개발 확인용 공통 모델은 `shared/model`에 둔다.

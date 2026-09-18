@@ -88,29 +88,32 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
         {isLoggedIn ? '로그아웃' : '로그인'}
       </Link>
 
-      {isNotificationOpen && (
-        <section className="absolute right-0 top-12 z-40 w-[min(calc(100vw-2rem),320px)] rounded-2xl border border-border bg-surface p-3 shadow-[0_18px_50px_rgba(0,0,0,0.28)]" aria-label="알림">
-          <div className="grid grid-cols-3 gap-1 rounded-[10px] bg-surface-strong p-1">
-            {NOTIFICATION_TABS.map((tab) => (
-              <button
-                key={tab.id}
-                className={`h-8 rounded-[8px] text-xs font-bold ${notificationTab === tab.id ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
-                type="button"
-                onClick={() => setNotificationTab(tab.id)}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          <div className="mt-3 grid gap-2">
-            {filteredNotificationItems.map((item) => (
-              <article key={item.id} className="rounded-[10px] bg-surface-strong p-3">
-                <h2 className="text-sm font-bold leading-5 text-foreground">{item.title}</h2>
-                <p className="mt-1 text-xs text-muted">{item.meta}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+      {isNotificationOpen && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-30 bg-transparent" role="presentation" onClick={() => setIsNotificationOpen(false)}>
+          <section className="absolute right-4 top-16 w-[min(calc(100vw-2rem),320px)] rounded-2xl border border-border bg-surface p-3 shadow-[0_18px_50px_rgba(0,0,0,0.28)] min-[768px]:right-[max(1rem,calc((100vw-768px)/2))]" aria-label="알림" onClick={(event) => event.stopPropagation()}>
+            <div className="grid grid-cols-3 gap-1 rounded-[10px] bg-surface-strong p-1">
+              {NOTIFICATION_TABS.map((tab) => (
+                <button
+                  key={tab.id}
+                  className={`h-8 rounded-[8px] text-xs font-bold ${notificationTab === tab.id ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
+                  type="button"
+                  onClick={() => setNotificationTab(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 grid gap-2">
+              {filteredNotificationItems.map((item) => (
+                <article key={item.id} className="rounded-[10px] bg-surface-strong p-3">
+                  <h2 className="text-sm font-bold leading-5 text-foreground">{item.title}</h2>
+                  <p className="mt-1 text-xs text-muted">{item.meta}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>,
+        document.body,
       )}
 
       {isSearchOpen && typeof document !== 'undefined' && createPortal(
