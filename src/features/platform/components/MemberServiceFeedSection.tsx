@@ -2,22 +2,13 @@ import Link from 'next/link';
 
 import { Icon } from '@/shared/ui/Icon';
 
-import type { PlatformService, RecentActivity, TodaySummary } from '../model/platformHomeTypes';
+import type { PlatformService } from '../model/platformHomeTypes';
 
 /**
  * 로그인 사용자용 서비스 피드 섹션 컴포넌트의 Props
  */
 type MemberServiceFeedSectionProps = {
-  todaySummaries: TodaySummary[];      // 오늘 요약 목록
-  recentActivities: RecentActivity[];  // 최근 활동 목록
-  services: PlatformService[];         // 서비스별 피드 카드 목록
-};
-
-/** 최근 활동 강조 색상 클래스 */
-const ACTIVITY_TONE_CLASS_NAME: Record<RecentActivity['tone'], string> = {
-  blue: 'bg-primary text-primary-foreground',
-  green: 'bg-accent-green text-primary-foreground',
-  orange: 'bg-accent-orange text-primary-foreground',
+  services: PlatformService[]; // 서비스별 피드 카드 목록
 };
 
 /** 서비스 강조 색상별 클래스 */
@@ -95,58 +86,55 @@ const PLANNED_SERVICE_NOTIFICATIONS: MemberServiceFeedNotification[] = [
   { id: 'planned-2', title: '활성화 후 개인 피드가 표시됩니다', timeText: '예정' },
 ];
 
+/** 플랫폼 홈 프로필 임시 데이터 */
+const MEMBER_PROFILE = {
+  nickname: 'mory.dev',
+  email: 'mory@example.com',
+  description: 'choimory.dev의 서비스를 조용히 다듬는 계정입니다.',
+};
+
 /**
  * 로그인 사용자에게 서비스별 요약 피드를 표시합니다.
  *
  * @param props 컴포넌트 Props
  * @returns 로그인 사용자용 서비스 피드 섹션
  */
-export function MemberServiceFeedSection({ todaySummaries, recentActivities, services }: MemberServiceFeedSectionProps) {
+export function MemberServiceFeedSection({ services }: MemberServiceFeedSectionProps) {
   return (
     <section className="grid gap-4" aria-label="내 서비스 피드">
-      <div className="grid grid-cols-3 gap-2">
-        {todaySummaries.map((summary) => (
-          <article key={summary.label} className="rounded-2xl border border-border bg-surface p-3 text-center">
-            <p className="text-2xl font-black text-foreground">{summary.value}</p>
-            <p className="mt-1 text-xs leading-4 text-muted">{summary.label}</p>
-          </article>
-        ))}
-      </div>
-
-      <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="member-feed-title">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <p className="text-sm font-bold text-primary">내 피드</p>
-            <h2 id="member-feed-title" className="mt-1 text-xl font-bold leading-tight">
-              서비스별 활동 요약
-            </h2>
-          </div>
-          <button className="h-9 rounded-[10px] bg-surface-strong px-3 text-sm font-bold text-foreground" type="button">
-            모두 보기
-          </button>
+      <section className="grid gap-3" aria-labelledby="member-profile-section-title">
+        <div className="px-1">
+          <p className="text-sm font-bold text-primary">/me</p>
+          <h2 id="member-profile-section-title" className="mt-1 text-xl font-bold leading-tight text-foreground">
+            나를 소개하세요
+          </h2>
         </div>
 
-        <div className="mt-4 grid gap-3">
-          {recentActivities.map((activity) => (
-            <article key={activity.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl bg-surface-strong p-3">
-              <span className={`grid size-9 place-items-center rounded-full text-xs font-black ${ACTIVITY_TONE_CLASS_NAME[activity.tone]}`}>
-                {activity.serviceName.slice(0, 1)}
-              </span>
-              <div className="min-w-0">
-                <h3 className="truncate text-sm font-bold text-foreground">{activity.title}</h3>
-                <p className="mt-1 text-xs text-muted">{activity.serviceName}</p>
+        <article className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="member-profile-title">
+          <div className="flex items-center justify-between gap-3">
+            <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
+              <div className="grid size-16 place-items-center rounded-3xl bg-primary text-xl font-black text-primary-foreground">
+                C
               </div>
-              <time className="text-xs text-muted">{activity.timeText}</time>
-            </article>
-          ))}
-        </div>
+              <div className="min-w-0">
+                <p className="text-sm font-bold text-primary">내정보</p>
+                <h3 id="member-profile-title" className="mt-1 text-2xl font-bold tracking-normal text-foreground">{MEMBER_PROFILE.nickname}</h3>
+                <p className="mt-1 text-sm text-muted">{MEMBER_PROFILE.email}</p>
+                <p className="mt-2 text-sm leading-5 text-muted">{MEMBER_PROFILE.description}</p>
+              </div>
+            </div>
+            <Link className="hidden h-10 shrink-0 place-items-center rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground sm:grid" href="/me">
+              내 정보 관리
+            </Link>
+          </div>
+        </article>
       </section>
 
       <section className="grid gap-3" aria-labelledby="service-feed-card-title">
         <div className="px-1">
-          <p className="text-sm font-bold text-primary">서비스별 피드</p>
+          <p className="text-sm font-bold text-primary">/services</p>
           <h2 id="service-feed-card-title" className="mt-1 text-xl font-bold leading-tight text-foreground">
-            각 서비스 흐름을 바로 확인
+            나의 현황을 서비스별로 확인하세요
           </h2>
         </div>
 

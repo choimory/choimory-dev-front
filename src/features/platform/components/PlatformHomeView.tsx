@@ -40,9 +40,7 @@ export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
         <ServiceLauncherCard services={viewModel.services} />
         {isMember ? (
           <MemberServiceFeedSection
-            recentActivities={viewModel.recentActivities}
             services={viewModel.services}
-            todaySummaries={viewModel.todaySummaries}
           />
         ) : (
           <GuestLandingSection services={viewModel.services} />
