@@ -55,16 +55,33 @@ export function ServiceLauncherCard({ services }: ServiceLauncherCardProps) {
       </button>
 
       <div ref={scrollContainerRef} className="flex gap-3 overflow-x-hidden scroll-smooth">
-        {services.map((service) => (
-          <Link key={service.id} className="group grid w-20 shrink-0 justify-items-center gap-2 rounded-2xl p-2 text-center transition hover:bg-surface-strong" href={service.href}>
-            <span className={`grid size-12 place-items-center rounded-2xl border border-border/60 shadow-sm ${SERVICE_TONE_CLASS_NAME[service.tone]}`}>
-              <Icon name={service.iconName} />
-            </span>
-            <span className="max-w-full text-xs font-medium leading-4 text-foreground group-hover:text-primary">
-              {service.name}
-            </span>
-          </Link>
-        ))}
+        {services.map((service) => {
+          const serviceContent = (
+            <>
+              <span className={`relative grid size-12 place-items-center rounded-2xl border border-border/60 shadow-sm ${SERVICE_TONE_CLASS_NAME[service.tone]}`}>
+                <Icon name={service.iconName} />
+                {service.status === 'planned' && (
+                  <span className="absolute -right-1 -top-1 rounded-full bg-surface px-1.5 py-0.5 text-[10px] font-bold text-muted shadow-sm">
+                    예정
+                  </span>
+                )}
+              </span>
+              <span className={`max-w-full text-xs font-medium leading-4 ${service.status === 'planned' ? 'text-muted' : 'text-foreground group-hover:text-primary'}`}>
+                {service.name}
+              </span>
+            </>
+          );
+
+          return service.status === 'active' ? (
+            <Link key={service.id} className="group grid w-20 shrink-0 justify-items-center gap-2 rounded-2xl p-2 text-center transition hover:bg-surface-strong" href={service.href}>
+              {serviceContent}
+            </Link>
+          ) : (
+            <button key={service.id} className="grid w-20 shrink-0 cursor-not-allowed justify-items-center gap-2 rounded-2xl p-2 text-center opacity-75" type="button" aria-disabled="true">
+              {serviceContent}
+            </button>
+          );
+        })}
       </div>
 
       <button

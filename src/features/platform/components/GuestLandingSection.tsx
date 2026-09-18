@@ -14,7 +14,7 @@ type GuestLandingSectionProps = {
 /** 비회원에게 안내할 서비스 특징 */
 const GUEST_FEATURES = [
   '공개 blog 피드는 바로 둘러보기',
-  '로그인 후 메모와 개인 피드 저장',
+  'feed에서 방송과 가격 알림 흐름 확인',
   '서비스별 알림과 활동 요약 확인',
 ];
 
@@ -30,10 +30,10 @@ export function GuestLandingSection({ services }: GuestLandingSectionProps) {
       <div className="grid gap-3">
         <p className="text-sm font-bold text-primary">choimory.dev 시작하기</p>
         <h2 id="guest-landing-title" className="text-2xl font-black leading-tight">
-          blog로 둘러보고, 로그인하면 내 서비스 허브가 열립니다
+          blog와 feed부터 둘러보고, 로그인하면 내 서비스 허브가 열립니다
         </h2>
         <p className="text-sm leading-6 text-muted">
-          비회원은 공개 글과 서비스 구성을 확인할 수 있고, 로그인하면 메모 저장, 개인 피드, 알림 요약을 이어서 사용할 수 있습니다.
+          비회원은 공개 글과 서비스 구성을 확인할 수 있고, 로그인하면 개인 피드와 알림 요약을 이어서 사용할 수 있습니다.
         </p>
         <div className="flex flex-wrap gap-2">
           <Link className="grid h-10 place-items-center rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" href="/login">
@@ -57,18 +57,32 @@ export function GuestLandingSection({ services }: GuestLandingSectionProps) {
       </div>
 
       <div className="grid gap-2" aria-label="비회원 서비스 안내">
-        {services.map((service) => (
-          <Link key={service.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] py-2" href={service.href}>
-            <span className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-primary">
-              <Icon className="size-4" name={service.iconName} />
-            </span>
-            <span className="min-w-0">
-              <span className="block text-sm font-bold text-foreground">{service.name}</span>
-              <span className="block truncate text-xs text-muted">{service.description}</span>
-            </span>
-            <span className="text-xs font-bold text-primary">{service.meta}</span>
-          </Link>
-        ))}
+        {services.map((service) => {
+          const serviceContent = (
+            <>
+              <span className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-primary">
+                <Icon className="size-4" name={service.iconName} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-sm font-bold text-foreground">{service.name}</span>
+                <span className="block truncate text-xs text-muted">{service.description}</span>
+              </span>
+              <span className={`text-xs font-bold ${service.status === 'active' ? 'text-primary' : 'text-muted'}`}>
+                {service.meta}
+              </span>
+            </>
+          );
+
+          return service.status === 'active' ? (
+            <Link key={service.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] py-2" href={service.href}>
+              {serviceContent}
+            </Link>
+          ) : (
+            <div key={service.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] py-2 opacity-75" aria-disabled="true">
+              {serviceContent}
+            </div>
+          );
+        })}
       </div>
     </section>
   );

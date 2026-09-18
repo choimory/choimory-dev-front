@@ -11,6 +11,7 @@ export type PlatformService = {
   href: string;           // 서비스 진입 경로
   iconName: IconName;     // 서비스 아이콘 이름
   tone: 'blue' | 'green' | 'orange' | 'purple'; // 서비스 강조 색상
+  status: 'active' | 'planned'; // 서비스 제공 상태
   meta: string;           // 서비스 상태 요약
 };
 
@@ -48,7 +49,18 @@ export const platformHomeViewModel: PlatformHomeViewModel = {
       href: '/blog',
       iconName: 'chat',
       tone: 'blue',
+      status: 'active',
       meta: '피드 보기',
+    },
+    {
+      id: 'feed',
+      name: '피드',
+      description: '방송, 가격 알림을 모아보는 피드',
+      href: '/feed',
+      iconName: 'bell',
+      tone: 'orange',
+      status: 'active',
+      meta: '알림 모아보기',
     },
     {
       id: 'memo',
@@ -57,16 +69,18 @@ export const platformHomeViewModel: PlatformHomeViewModel = {
       href: '#',
       iconName: 'note',
       tone: 'green',
-      meta: '12개 메모',
+      status: 'planned',
+      meta: '준비 중',
     },
     {
-      id: 'feed',
-      name: '피드',
-      description: '방송, 가격 알림을 모아보는 피드',
+      id: 'schedule',
+      name: '일정',
+      description: '개인 일정과 이벤트 관리',
       href: '#',
-      iconName: 'menu',
-      tone: 'orange',
-      meta: '알림 모아보기',
+      iconName: 'calendar',
+      tone: 'blue',
+      status: 'planned',
+      meta: '준비 중',
     },
     {
       id: 'account-book',
@@ -75,15 +89,7 @@ export const platformHomeViewModel: PlatformHomeViewModel = {
       href: '#',
       iconName: 'tag',
       tone: 'purple',
-      meta: '준비 중',
-    },
-    {
-      id: 'schedule',
-      name: '일정',
-      description: '개인 일정과 이벤트 관리',
-      href: '#',
-      iconName: 'star',
-      tone: 'blue',
+      status: 'planned',
       meta: '준비 중',
     },
   ],
