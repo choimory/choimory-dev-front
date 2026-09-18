@@ -81,3 +81,37 @@ body {
   padding: 0;
   overflow-x: hidden;
 }
+
+@keyframes brand-logo-typewriter {
+  from {
+    max-width: 0;
+  }
+
+  to {
+    max-width: calc(var(--brand-logo-character-count) * 1ch);
+  }
+}
+
+@keyframes brand-logo-caret {
+  50% {
+    border-color: transparent;
+  }
+}
+
+.brand-logo-typewriter {
+  animation:
+    brand-logo-typewriter 1200ms steps(var(--brand-logo-character-count)) both,
+    brand-logo-caret 850ms step-end infinite;
+  border-right: 0.12em solid currentColor;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-logo-typewriter {
+    animation: none;
+    border-right: 0;
+    max-width: none;
+  }
+}

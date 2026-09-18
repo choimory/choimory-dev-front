@@ -1,5 +1,6 @@
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
+import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { WideContent } from '@/shared/ui/WideContent';
 
@@ -27,7 +28,9 @@ export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
       <AppTopBar size="wide" />
       <WideContent className="grid gap-5">
         <section className="mx-auto w-full max-w-[640px] py-2 text-center">
-          <h1 className="text-4xl font-bold leading-tight tracking-normal text-foreground">choimory.dev</h1>
+          <h1 className="leading-tight tracking-normal">
+            <BrandLogo size="lg" />
+          </h1>
           <PlatformSearchBar />
         </section>
 
