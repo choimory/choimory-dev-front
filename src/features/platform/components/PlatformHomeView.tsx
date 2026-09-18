@@ -44,7 +44,7 @@ export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
             todaySummaries={viewModel.todaySummaries}
           />
         ) : (
-          <GuestLandingSection />
+          <GuestLandingSection services={viewModel.services} />
         )}
       </WideContent>
 
