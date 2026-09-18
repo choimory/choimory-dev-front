@@ -41,6 +41,7 @@ export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
         {isMember ? (
           <MemberServiceFeedSection
             recentActivities={viewModel.recentActivities}
+            services={viewModel.services}
             todaySummaries={viewModel.todaySummaries}
           />
         ) : (

@@ -156,7 +156,7 @@ export function FeedView({ viewModel }: FeedViewProps) {
         items={[
           { label: '홈', href: '/feed', iconName: 'home', isActive: true },
           { label: '인기', href: '#', iconName: 'trophy' },
-          { label: '추적', href: '#', iconName: 'telescope' },
+          { label: '추적', href: '#', iconName: 'barChart' },
           { label: '내 피드', href: '#', iconName: 'user' },
         ]}
       />

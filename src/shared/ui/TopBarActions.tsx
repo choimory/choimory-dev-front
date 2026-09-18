@@ -84,8 +84,8 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
       >
         <Icon name="bell" />
       </button>
-      <Link className="grid h-9 shrink-0 place-items-center rounded-full bg-primary px-3 text-sm font-bold text-primary-foreground min-[380px]:px-4" href={isLoggedIn ? '/me' : '/login'}>
-        {isLoggedIn ? '내 정보' : '로그인'}
+      <Link className="grid h-9 shrink-0 place-items-center rounded-full bg-primary px-3 text-sm font-bold text-primary-foreground min-[380px]:px-4" href={isLoggedIn ? '/' : '/login'}>
+        {isLoggedIn ? '로그아웃' : '로그인'}
       </Link>
 
       {isNotificationOpen && (

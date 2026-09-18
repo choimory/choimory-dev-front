@@ -1,5 +1,6 @@
 /** 서비스 화면에서 사용하는 아이콘 이름 */
 export type IconName =
+  | 'barChart'
   | 'bell'
   | 'bookmark'
   | 'calendar'
@@ -17,7 +18,6 @@ export type IconName =
   | 'share'
   | 'star'
   | 'tag'
-  | 'telescope'
   | 'trophy'
   | 'user';
 
@@ -45,6 +45,12 @@ export function Icon({ name, className = 'size-5' }: IconProps) {
   };
 
   switch (name) {
+    case 'barChart':
+      return (
+        <svg {...commonProps}>
+          <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+        </svg>
+      );
     case 'bell':
       return (
         <svg {...commonProps}>
@@ -155,12 +161,6 @@ export function Icon({ name, className = 'size-5' }: IconProps) {
         <svg {...commonProps}>
           <path d="M20 12V7H9L4 12l8 8z" strokeLinejoin="round" strokeWidth={2} />
           <circle cx="10" cy="9" fill="currentColor" r="1" stroke="none" />
-        </svg>
-      );
-    case 'telescope':
-      return (
-        <svg {...commonProps}>
-          <path d="M3 11l8-4 2 4-8 4zM13 9l6-3 2 4-6 3zM10 14l2 7M15 13l4 8M8 18h8" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
         </svg>
       );
     case 'trophy':
