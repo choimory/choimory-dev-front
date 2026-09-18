@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 import { BrandLogo } from './BrandLogo';
-import { Icon } from './Icon';
+import { TopBarActions } from './TopBarActions';
 
 /**
  * 상단 앱 바 컴포넌트의 Props
@@ -50,17 +50,7 @@ export function AppTopBar({ serviceName, serviceHref, leading, size = 'wide', is
           )}
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-1 min-[380px]:gap-2">
-          <button className="hidden size-10 place-items-center rounded-[10px] text-foreground min-[380px]:grid" type="button" aria-label="검색">
-            <Icon name="search" />
-          </button>
-          <button className="hidden size-10 place-items-center rounded-[10px] text-foreground min-[380px]:grid" type="button" aria-label="알림">
-            <Icon name="bell" />
-          </button>
-          <Link className="grid h-9 shrink-0 place-items-center rounded-full bg-primary px-3 text-sm font-bold text-primary-foreground min-[380px]:px-4" href={isLoggedIn ? '/me' : '/login'}>
-            {isLoggedIn ? '내 공간' : '로그인'}
-          </Link>
-        </div>
+        <TopBarActions isLoggedIn={isLoggedIn} />
       </div>
     </header>
   );

@@ -8,6 +8,7 @@ export type IconName =
   | 'grid'
   | 'heart'
   | 'home'
+  | 'megaphone'
   | 'menu'
   | 'monitor'
   | 'note'
@@ -16,6 +17,8 @@ export type IconName =
   | 'share'
   | 'star'
   | 'tag'
+  | 'telescope'
+  | 'trophy'
   | 'user';
 
 /**
@@ -95,6 +98,13 @@ export function Icon({ name, className = 'size-5' }: IconProps) {
           <path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z" strokeLinejoin="round" strokeWidth={2} />
         </svg>
       );
+    case 'megaphone':
+      return (
+        <svg {...commonProps}>
+          <path d="M4 14h3l9 4V6l-9 4H4z" strokeLinejoin="round" strokeWidth={2} />
+          <path d="M7 14l1 5h3l-1.5-4.2M19 9a4 4 0 0 1 0 6" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+        </svg>
+      );
     case 'menu':
       return (
         <svg {...commonProps}>
@@ -145,6 +155,19 @@ export function Icon({ name, className = 'size-5' }: IconProps) {
         <svg {...commonProps}>
           <path d="M20 12V7H9L4 12l8 8z" strokeLinejoin="round" strokeWidth={2} />
           <circle cx="10" cy="9" fill="currentColor" r="1" stroke="none" />
+        </svg>
+      );
+    case 'telescope':
+      return (
+        <svg {...commonProps}>
+          <path d="M3 11l8-4 2 4-8 4zM13 9l6-3 2 4-6 3zM10 14l2 7M15 13l4 8M8 18h8" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+        </svg>
+      );
+    case 'trophy':
+      return (
+        <svg {...commonProps}>
+          <path d="M8 4h8v4a4 4 0 0 1-8 0z" strokeLinejoin="round" strokeWidth={2} />
+          <path d="M8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4M12 12v5M9 21h6M10 17h4" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
         </svg>
       );
     case 'user':

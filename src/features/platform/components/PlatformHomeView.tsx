@@ -51,9 +51,9 @@ export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
       <BottomNavigation
         items={[
           { label: '홈', href: '/', iconName: 'home', isActive: true },
+          { label: '공지사항', href: '#', iconName: 'megaphone' },
           { label: '서비스', href: '#', iconName: 'grid' },
-          { label: '알림', href: '#', iconName: 'bell' },
-          { label: '내 공간', href: '/me', iconName: 'user' },
+          { label: '내 정보', href: '/me', iconName: 'user' },
         ]}
       />
     </AppFrame>

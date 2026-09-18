@@ -49,10 +49,10 @@ export function BlogView({ viewModel }: BlogViewProps) {
 
       <BottomNavigation
         items={[
-          { label: '피드', href: '/blog', iconName: 'menu', isActive: true },
-          { label: '인기', href: '#', iconName: 'star' },
-          { label: '작성', href: '#', iconName: 'plus' },
-          { label: '홈', href: '/', iconName: 'home' },
+          { label: '홈', href: '/blog', iconName: 'home', isActive: true },
+          { label: '인기', href: '#', iconName: 'trophy' },
+          { label: '팔로잉', href: '#', iconName: 'user' },
+          { label: '내 블로그', href: '#', iconName: 'bookmark' },
         ]}
       />
     </AppFrame>

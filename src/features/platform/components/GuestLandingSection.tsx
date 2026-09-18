@@ -13,8 +13,8 @@ type GuestLandingSectionProps = {
 
 /** 비회원에게 안내할 서비스 특징 */
 const GUEST_FEATURES = [
-  '공개 blog 피드는 바로 둘러보기',
-  'feed에서 방송과 가격 알림 흐름 확인',
+  '공개 블로그 피드는 바로 둘러보기',
+  '피드에서 방송과 가격 알림 흐름 확인',
   '서비스별 알림과 활동 요약 확인',
 ];
 
@@ -30,7 +30,7 @@ export function GuestLandingSection({ services }: GuestLandingSectionProps) {
       <div className="grid gap-3">
         <p className="text-sm font-bold text-primary">choimory.dev 시작하기</p>
         <h2 id="guest-landing-title" className="text-2xl font-black leading-tight">
-          blog와 feed부터 둘러보고, 로그인하면 내 서비스 허브가 열립니다
+          블로그와 피드부터 둘러보고, 로그인하면 내 서비스 허브가 열립니다
         </h2>
         <p className="text-sm leading-6 text-muted">
           비회원은 공개 글과 서비스 구성을 확인할 수 있고, 로그인하면 개인 피드와 알림 요약을 이어서 사용할 수 있습니다.
