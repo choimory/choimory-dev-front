@@ -6,6 +6,7 @@
   - [mock auth 전환 구조](#mock-auth-전환-구조)
   - [플랫폼 홈 비로그인 랜딩 개선](#플랫폼-홈-비로그인-랜딩-개선)
   - [blog 비로그인 화면 개선](#blog-비로그인-화면-개선)
+  - [blog 레이아웃 폭 통일](#blog-레이아웃-폭-통일)
   - [plan6.md 갱신](#plan6md-갱신)
   - [검증 상태](#검증-상태)
 
@@ -28,6 +29,8 @@
 - 플랫폼 홈 Container와 blog Container가 외부에서 받은 `authStatus`를 ViewModel에 반영하도록 변경함.
 - 플랫폼 홈 비로그인 랜딩을 단순 소개 카드에서 서비스 허브형 안내로 확장함.
 - blog 비로그인 화면에 공개/로그인/연결 안내와 공개 글 미리보기 제목을 추가함.
+- blog 화면을 플랫폼 홈과 동일한 wide 레이아웃으로 변경함.
+- blog 비로그인 소개 카드 상단 문구는 로고가 아니라 `choimory.dev / blog 시작하기` 텍스트로 표시함.
 
 ## mock auth 전환 구조
 
@@ -87,7 +90,7 @@
 
 - `src/features/blog/components/BlogGuestSection.tsx`
 
-blog 비로그인 소개 카드에서 `choimory.dev / blog` 평문을 공통 `BrandLogo`와 `/ blog` 조합으로 변경했다.
+blog 비로그인 소개 카드 상단 문구는 `choimory.dev / blog 시작하기` 텍스트로 표시한다.
 
 추가된 화면 요소:
 
@@ -98,6 +101,28 @@ blog 비로그인 소개 카드에서 `choimory.dev / blog` 평문을 공통 `Br
 - 로그인 참여 CTA
 
 기존 게시글 미리보기는 유지했다.
+
+## blog 레이아웃 폭 통일
+
+수정함:
+
+- `src/features/blog/components/BlogView.tsx`
+
+blog 화면도 플랫폼 홈과 동일한 폭 정책을 따르도록 변경했다.
+
+변경 내용:
+
+- `NarrowContent` 제거
+- `WideContent` 적용
+- `AppTopBar size="wide"` 적용
+- `BottomNavigation size="wide"` 적용
+
+이를 통해 `/blog`도 플랫폼 홈처럼 `max-w-[768px]` 기준의 넓은 레이아웃으로 표시된다.
+
+추가 논의:
+
+- 서비스별로 레이아웃을 다르게 고르는 방식보다 프로젝트 전체 기본 레이아웃을 통일해서 관리하는 방향이 더 적합하다.
+- 이후 `AppContent` 같은 공통 레이아웃 컴포넌트로 `WideContent`, `NarrowContent`를 정리하는 방향을 검토한다.
 
 ## plan6.md 갱신
 
@@ -111,6 +136,8 @@ blog 비로그인 소개 카드에서 `choimory.dev / blog` 평문을 공통 `Br
 - 구현 범위
 - 권장 구현 순서
 - 주의할 점
+- 프로젝트 전체 레이아웃 통일 방향
+- `AppContent` 기반 추가 구현계획
 
 ## 검증 상태
 

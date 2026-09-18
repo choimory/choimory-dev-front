@@ -15,6 +15,10 @@
   - [구현 범위](#구현-범위)
   - [권장 구현 순서](#권장-구현-순서)
   - [주의할 점](#주의할-점)
+- [추가 방향성](#추가-방향성)
+  - [서비스별 레이아웃 분리 대신 프로젝트 전체 통일](#서비스별-레이아웃-분리-대신-프로젝트-전체-통일)
+  - [추천 구조](#추천-구조)
+  - [추가 구현계획](#추가-구현계획)
 
 ---
 
@@ -223,3 +227,66 @@
 - mock auth 구조는 실제 인증 로직처럼 과설계하지 않는다.
 - URL query 방식은 개발 확인용이라는 점을 코드와 문서에 명확히 남긴다.
 - blog 상단의 `choimory.dev / blog` 로고 구조는 유지한다.
+
+---
+
+# 추가 방향성
+
+## 서비스별 레이아웃 분리 대신 프로젝트 전체 통일
+
+blog 화면을 플랫폼 홈과 동일한 넓은 레이아웃으로 맞추면서, 레이아웃 정책을 서비스별로 나누지 말고 프로젝트 전체에서 통일해서 관리하는 방향이 더 적합하다고 판단했다.
+
+현재처럼 서비스가 계속 늘어날 구조에서는 각 화면마다 `NarrowContent`, `WideContent`, `AppTopBar size`, `BottomNavigation size`를 직접 고르는 방식이 쉽게 흔들릴 수 있다.
+
+따라서 기본 앱 레이아웃은 프로젝트 전체에서 하나로 관리하고, 좁은 레이아웃은 로그인/회원가입 같은 특수 화면의 예외로만 두는 방향이 좋다.
+
+## 추천 구조
+
+추천 구조:
+
+- 프로젝트 기본 앱 레이아웃을 하나로 둔다.
+  - 예: `AppContent`
+  - 기본 폭은 현재 플랫폼 기준인 `max-w-[768px]`로 둔다.
+  - 기본 여백, 상단 여백, 하단 네비 여백도 이 컴포넌트에서 관리한다.
+- 좁은 레이아웃은 예외로만 둔다.
+  - 로그인, 회원가입 같은 폼 화면은 좁은 폭이 자연스럽다.
+  - 서비스 화면은 기본적으로 wide 레이아웃을 따른다.
+  - 필요한 경우만 `variant="narrow"` 같은 옵션을 사용한다.
+- 상단바와 하단바도 기본 wide로 통일한다.
+  - `AppTopBar`의 기본 `size`를 `wide`로 변경한다.
+  - `BottomNavigation`의 기본 `size`도 `wide`로 변경한다.
+  - 서비스 화면에서 매번 `size="wide"`를 붙이지 않아도 되게 만든다.
+- 기존 `NarrowContent`, `WideContent`는 `AppContent`로 정리한다.
+  - 둘 다 계속 직접 쓰기보다 `AppContent` 하나로 통합하는 편이 좋다.
+  - 필요하다면 `variant="narrow"`를 제공한다.
+
+예시:
+
+```tsx
+<AppContent>
+  ...
+</AppContent>
+```
+
+좁은 화면이 필요할 때:
+
+```tsx
+<AppContent variant="narrow">
+  ...
+</AppContent>
+```
+
+## 추가 구현계획
+
+다음 단계에서는 레이아웃 통일 작업을 진행한다.
+
+구현 순서:
+
+1. `AppContent` 공통 컴포넌트 추가
+2. 기본 variant를 `wide`로 설정
+3. `PlatformHomeView`, `BlogView`, `MeView` 등 주요 화면을 `AppContent`로 교체
+4. 로그인/회원가입은 필요하면 `variant="narrow"` 유지
+5. `AppTopBar`, `BottomNavigation` 기본 size를 `wide`로 변경
+6. 안 쓰게 된 `WideContent`, `NarrowContent`는 이후 제거하거나 deprecated 처리
+
+이렇게 정리하면 `/memo`, `/feed`, `/account-book`, `/schedule` 같은 서비스 화면을 추가할 때도 같은 레이아웃 정책을 자연스럽게 재사용할 수 있다.
