@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 /**
  * 비로그인 사용자에게 플랫폼의 주요 서비스를 소개하는 섹션입니다.
  *
@@ -14,12 +16,12 @@ export function GuestLandingSection() {
         비회원은 서비스를 둘러볼 수 있고, 로그인하면 메모 저장, 개인 피드, 알림 설정을 이어서 사용할 수 있습니다.
       </p>
       <div className="flex flex-wrap gap-2">
-        <button className="h-10 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">
+        <Link className="grid h-10 place-items-center rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" href="/login">
           로그인
-        </button>
-        <button className="h-10 rounded-[10px] bg-surface-strong px-4 text-sm font-bold text-foreground" type="button">
+        </Link>
+        <Link className="grid h-10 place-items-center rounded-[10px] bg-surface-strong px-4 text-sm font-bold text-foreground" href="/signup">
           회원가입
-        </button>
+        </Link>
       </div>
     </section>
   );

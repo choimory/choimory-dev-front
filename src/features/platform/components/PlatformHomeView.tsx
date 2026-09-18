@@ -5,6 +5,7 @@ import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { WideContent } from '@/shared/ui/WideContent';
 
 import { GuestLandingSection } from './GuestLandingSection';
+import { MemberServiceFeedSection } from './MemberServiceFeedSection';
 import { PlatformSearchBar } from './PlatformSearchBar';
 import { ServiceLauncherCard } from './ServiceLauncherCard';
 import type { PlatformHomeViewModel } from '../model/platformHomeTypes';
@@ -23,9 +24,11 @@ type PlatformHomeViewProps = {
  * @returns 플랫폼 홈 화면
  */
 export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
+  const isMember = viewModel.authStatus === 'member';
+
   return (
     <AppFrame>
-      <AppTopBar size="wide" />
+      <AppTopBar isLoggedIn={isMember} size="wide" />
       <WideContent className="grid gap-5">
         <section className="mx-auto w-full max-w-[640px] py-2 text-center">
           <h1 className="leading-tight tracking-normal">
@@ -35,7 +38,14 @@ export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
         </section>
 
         <ServiceLauncherCard services={viewModel.services} />
-        <GuestLandingSection />
+        {isMember ? (
+          <MemberServiceFeedSection
+            recentActivities={viewModel.recentActivities}
+            todaySummaries={viewModel.todaySummaries}
+          />
+        ) : (
+          <GuestLandingSection />
+        )}
       </WideContent>
 
       <BottomNavigation
@@ -43,7 +53,7 @@ export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
           { label: '홈', href: '/', iconName: 'home', isActive: true },
           { label: '서비스', href: '#', iconName: 'grid' },
           { label: '알림', href: '#', iconName: 'bell' },
-          { label: '내 공간', href: '#', iconName: 'user' },
+          { label: '내 공간', href: '/me', iconName: 'user' },
         ]}
         size="wide"
       />

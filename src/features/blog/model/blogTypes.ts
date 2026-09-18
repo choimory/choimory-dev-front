@@ -1,3 +1,6 @@
+/** blog 화면 인증 상태 */
+export type BlogAuthStatus = 'guest' | 'member';
+
 /** blog 피드 필터 */
 export type BlogFeedTab = {
   label: string;      // 필터 이름
@@ -18,12 +21,14 @@ export type BlogPost = {
 
 /** blog 화면 데이터 */
 export type BlogViewModel = {
+  authStatus: BlogAuthStatus; // blog 화면 인증 상태
   tabs: BlogFeedTab[]; // 피드 필터 목록
   posts: BlogPost[];   // 게시글 목록
 };
 
 /** blog 화면에 표시할 임시 데이터 */
 export const blogViewModel: BlogViewModel = {
+  authStatus: 'guest',
   tabs: [
     { label: '추천', isActive: true },
     { label: '팔로잉', isActive: false },

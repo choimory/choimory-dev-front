@@ -1,5 +1,8 @@
 import type { IconName } from '@/shared/ui/Icon';
 
+/** 화면 인증 상태 */
+export type PlatformAuthStatus = 'guest' | 'member';
+
 /** 플랫폼 서비스 카드 정보 */
 export type PlatformService = {
   id: string;             // 서비스 고유 ID
@@ -28,6 +31,7 @@ export type RecentActivity = {
 
 /** 플랫폼 홈 화면 데이터 */
 export type PlatformHomeViewModel = {
+  authStatus: PlatformAuthStatus;      // 플랫폼 홈 인증 상태
   services: PlatformService[];       // 자주 쓰는 서비스 목록
   todaySummaries: TodaySummary[];    // 오늘 요약 목록
   recentActivities: RecentActivity[]; // 최근 활동 목록
@@ -35,6 +39,7 @@ export type PlatformHomeViewModel = {
 
 /** 플랫폼 홈 화면에 표시할 임시 데이터 */
 export const platformHomeViewModel: PlatformHomeViewModel = {
+  authStatus: 'guest',
   services: [
     {
       id: 'blog',
@@ -64,67 +69,22 @@ export const platformHomeViewModel: PlatformHomeViewModel = {
       meta: '알림 모아보기',
     },
     {
-      id: 'calendar',
-      name: '캘린더',
-      description: '일정과 이벤트 관리',
-      href: '#',
-      iconName: 'star',
-      tone: 'purple',
-      meta: '더미',
-    },
-    {
-      id: 'bookmark',
-      name: '북마크',
-      description: '저장한 링크 모음',
-      href: '#',
-      iconName: 'bookmark',
-      tone: 'blue',
-      meta: '더미',
-    },
-    {
-      id: 'file',
-      name: '파일',
-      description: '파일과 자료 보관',
-      href: '#',
-      iconName: 'grid',
-      tone: 'green',
-      meta: '더미',
-    },
-    {
-      id: 'todo',
-      name: '할 일',
-      description: '작업 목록 관리',
-      href: '#',
-      iconName: 'note',
-      tone: 'orange',
-      meta: '더미',
-    },
-    {
-      id: 'link',
-      name: '링크',
-      description: '공유 링크 관리',
-      href: '#',
-      iconName: 'share',
-      tone: 'purple',
-      meta: '더미',
-    },
-    {
-      id: 'wallet',
-      name: '지갑',
-      description: '결제와 자산 관리',
+      id: 'account-book',
+      name: '가계부',
+      description: '수입과 지출을 기록하는 서비스',
       href: '#',
       iconName: 'tag',
-      tone: 'green',
-      meta: '더미',
+      tone: 'purple',
+      meta: '준비 중',
     },
     {
-      id: 'settings',
-      name: '설정',
-      description: '계정과 환경 설정',
+      id: 'schedule',
+      name: '일정',
+      description: '개인 일정과 이벤트 관리',
       href: '#',
-      iconName: 'user',
+      iconName: 'star',
       tone: 'blue',
-      meta: '더미',
+      meta: '준비 중',
     },
   ],
   todaySummaries: [
