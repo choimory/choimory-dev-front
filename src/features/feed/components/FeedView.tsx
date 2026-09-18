@@ -157,7 +157,7 @@ export function FeedView({ viewModel }: FeedViewProps) {
           { label: '홈', href: '/feed', iconName: 'home', isActive: true },
           { label: '인기', href: '#', iconName: 'trophy' },
           { label: '추적', href: '#', iconName: 'telescope' },
-          { label: '내 피드', href: '#', iconName: 'bookmark' },
+          { label: '내 피드', href: '#', iconName: 'user' },
         ]}
       />
     </AppFrame>

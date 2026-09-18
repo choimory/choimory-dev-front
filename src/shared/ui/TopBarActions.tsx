@@ -2,7 +2,9 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 
+import { BrandLogo } from './BrandLogo';
 import { Icon } from './Icon';
 
 /**
@@ -13,12 +15,16 @@ type TopBarActionsProps = {
 };
 
 /** 알림 탭 */
-type NotificationTab = 'all' | 'service';
+type NotificationTab = 'all' | 'blog' | 'feed';
+
+/** 알림 서비스 */
+type NotificationService = Exclude<NotificationTab, 'all'>;
 
 /** 알림 탭 목록 */
 const NOTIFICATION_TABS: Array<{ id: NotificationTab; label: string }> = [
   { id: 'all', label: '전체' },
-  { id: 'service', label: '서비스별' },
+  { id: 'blog', label: '블로그' },
+  { id: 'feed', label: '피드' },
 ];
 
 /** 검색 대상 목록 */
@@ -30,10 +36,23 @@ const SEARCH_TARGETS = [
 
 /** 알림 샘플 목록 */
 const NOTIFICATION_ITEMS = [
-  { id: 'notice-1', title: '블로그에 새 댓글이 달렸습니다', meta: '블로그 · 방금' },
-  { id: 'notice-2', title: '관심 스트리머 방송이 시작되었습니다', meta: '피드 · 12분 전' },
-  { id: 'notice-3', title: '관심 상품이 목표가 아래로 내려갔습니다', meta: '피드 · 38분 전' },
-];
+  { id: 'notice-1', service: 'blog', title: '블로그에 새 댓글이 달렸습니다', meta: '블로그 · 방금' },
+  { id: 'notice-2', service: 'feed', title: '관심 스트리머 방송이 시작되었습니다', meta: '피드 · 12분 전' },
+  { id: 'notice-3', service: 'feed', title: '관심 상품이 목표가 아래로 내려갔습니다', meta: '피드 · 38분 전' },
+] satisfies Array<{ id: string; service: NotificationService; title: string; meta: string }>;
+
+/** 검색 오버레이 중앙 영역 위치 클래스 */
+const SEARCH_PANEL_CLASS_NAME = [
+  'fixed left-1/2 top-[42%]',
+  'grid w-[min(calc(100vw-2rem),720px)] -translate-x-1/2 -translate-y-1/2 gap-5',
+].join(' ');
+
+/** 검색 폼 클래스 */
+const SEARCH_FORM_CLASS_NAME = [
+  'grid grid-cols-[92px_minmax(0,1fr)_auto] gap-2',
+  'rounded-2xl border border-border bg-surface p-2',
+  'shadow-[0_24px_70px_rgba(0,0,0,0.35)]',
+].join(' ');
 
 /**
  * 상단바의 검색, 알림, 로그인 액션을 담당합니다.
@@ -45,6 +64,7 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notificationTab, setNotificationTab] = useState<NotificationTab>('all');
+  const filteredNotificationItems = notificationTab === 'all' ? NOTIFICATION_ITEMS : NOTIFICATION_ITEMS.filter((item) => item.service === notificationTab);
 
   return (
     <div className="relative ml-auto flex shrink-0 items-center gap-1 min-[380px]:gap-2">
@@ -70,7 +90,7 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
 
       {isNotificationOpen && (
         <section className="absolute right-0 top-12 z-40 w-[min(calc(100vw-2rem),320px)] rounded-2xl border border-border bg-surface p-3 shadow-[0_18px_50px_rgba(0,0,0,0.28)]" aria-label="알림">
-          <div className="grid grid-cols-2 gap-1 rounded-[10px] bg-surface-strong p-1">
+          <div className="grid grid-cols-3 gap-1 rounded-[10px] bg-surface-strong p-1">
             {NOTIFICATION_TABS.map((tab) => (
               <button
                 key={tab.id}
@@ -83,7 +103,7 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
             ))}
           </div>
           <div className="mt-3 grid gap-2">
-            {NOTIFICATION_ITEMS.map((item) => (
+            {filteredNotificationItems.map((item) => (
               <article key={item.id} className="rounded-[10px] bg-surface-strong p-3">
                 <h2 className="text-sm font-bold leading-5 text-foreground">{item.title}</h2>
                 <p className="mt-1 text-xs text-muted">{item.meta}</p>
@@ -93,17 +113,14 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
         </section>
       )}
 
-      {isSearchOpen && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 px-4 backdrop-blur-sm" role="presentation">
-          <section className="w-full max-w-[520px] rounded-3xl border border-border bg-surface p-4 shadow-[0_24px_70px_rgba(0,0,0,0.35)]" aria-label="검색">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="text-lg font-bold text-foreground">통합 검색</h2>
-              <button className="grid size-9 place-items-center rounded-[10px] text-muted" type="button" aria-label="검색 닫기" onClick={() => setIsSearchOpen(false)}>
-                <span className="text-xl leading-none">×</span>
-              </button>
+      {isSearchOpen && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" role="presentation" onClick={() => setIsSearchOpen(false)}>
+          <div className={SEARCH_PANEL_CLASS_NAME} onClick={(event) => event.stopPropagation()}>
+            <div className="flex justify-center">
+              <BrandLogo size="md" />
             </div>
-            <form className="mt-4 grid grid-cols-[120px_minmax(0,1fr)_auto] gap-2" onSubmit={(event) => event.preventDefault()}>
-              <select className="h-11 rounded-[10px] border border-border bg-surface-strong px-3 text-sm font-bold text-foreground outline-none" aria-label="검색 대상" defaultValue="all">
+            <form className={SEARCH_FORM_CLASS_NAME} aria-label="검색" onSubmit={(event) => event.preventDefault()}>
+              <select className="h-11 rounded-[10px] border border-border bg-surface-strong px-2 text-sm font-bold text-foreground outline-none" aria-label="검색 대상" defaultValue="all">
                 {SEARCH_TARGETS.map((target) => (
                   <option key={target.value} value={target.value}>
                     {target.label}
@@ -111,12 +128,13 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
                 ))}
               </select>
               <input className="h-11 min-w-0 rounded-[10px] border border-border bg-surface-strong px-3 text-sm text-foreground outline-none" placeholder="검색어를 입력하세요" type="search" />
-              <button className="h-11 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="submit">
+              <button className="h-11 rounded-[10px] bg-primary px-3 text-sm font-bold text-primary-foreground min-[380px]:px-4" type="submit">
                 검색
               </button>
             </form>
-          </section>
-        </div>
+          </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
