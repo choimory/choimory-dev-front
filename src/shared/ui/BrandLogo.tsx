@@ -5,6 +5,7 @@ import type { CSSProperties } from 'react';
  */
 type BrandLogoProps = {
   size?: 'sm' | 'md' | 'lg'; // 로고 표시 크기
+  isAnimated?: boolean;      // 타자기 애니메이션 적용 여부
 };
 
 /** 로고 크기별 클래스 */
@@ -47,11 +48,11 @@ const BRAND_LOGO_STYLE = {
  * @param props 컴포넌트 Props
  * @returns 브랜드 로고
  */
-export function BrandLogo({ size = 'md' }: BrandLogoProps) {
+export function BrandLogo({ size = 'md', isAnimated = true }: BrandLogoProps) {
   return (
     <span
-      className={`brand-logo-typewriter inline-block font-mono font-black tracking-normal text-foreground ${BRAND_LOGO_SIZE_CLASS_NAME[size]}`}
-      style={BRAND_LOGO_STYLE}
+      className={`${isAnimated ? 'brand-logo-typewriter' : ''} inline-block font-mono font-black tracking-normal text-foreground ${BRAND_LOGO_SIZE_CLASS_NAME[size]}`.trim()}
+      style={isAnimated ? BRAND_LOGO_STYLE : undefined}
       aria-label="choimory.dev"
     >
       <span className="inline-flex">

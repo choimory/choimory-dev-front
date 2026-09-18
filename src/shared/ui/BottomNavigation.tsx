@@ -35,7 +35,7 @@ const BOTTOM_NAVIGATION_WIDTH_CLASS_NAME: Record<NonNullable<BottomNavigationPro
 export function BottomNavigation({ items, size = 'narrow' }: BottomNavigationProps) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 pointer-events-none">
-      <nav className={`pointer-events-auto mx-auto grid h-[70px] w-full ${BOTTOM_NAVIGATION_WIDTH_CLASS_NAME[size]} grid-cols-4 gap-1 border border-b-0 border-border bg-shell px-2 py-2 sm:rounded-t-2xl`}>
+      <nav className={`pointer-events-auto mx-auto grid h-[70px] w-[calc(100%-2rem)] ${BOTTOM_NAVIGATION_WIDTH_CLASS_NAME[size]} grid-cols-4 gap-1 border border-b-0 border-border bg-shell px-2 py-2 sm:rounded-t-2xl`}>
         {items.map((item) => (
           <Link
             key={item.label}

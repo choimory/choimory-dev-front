@@ -25,6 +25,12 @@
   - [색상 분리 복구](#색상-분리-복구)
   - [plan4.md 갱신](#plan4md-갱신-2)
   - [검증 상태](#검증-상태-3)
+- [추가사항4 반영](#추가사항4-반영)
+  - [작업 내용](#작업-내용-4)
+  - [상단바 반응형 보정](#상단바-반응형-보정)
+  - [768px 여백 보정](#768px-여백-보정)
+  - [plan4.md 갱신](#plan4md-갱신-3)
+  - [검증 상태](#검증-상태-4)
 
 ---
 
@@ -145,8 +151,6 @@
 - `/login`
 - `/me`
 - `/signup`
-
----
 
 # 추가사항1 반영
 
@@ -375,3 +379,69 @@
 - `/login`
 - `/me`
 - `/signup`
+
+---
+
+# 추가사항4 반영
+
+## 작업 내용
+
+- 플랫폼 홈 모바일S에서 상단 로그인 버튼이 깨지는 문제를 보정함.
+- blog 홈 모바일S에서 로고 타이핑 애니메이션이 우측 요소를 밀어내는 문제를 보정함.
+- 플랫폼 홈 태블릿 768px에서 좌우 마진이 사라지는 문제를 보정함.
+- `plan4.md`에 `추가사항4 분석`과 `추가사항4 구현계획`을 추가함.
+
+## 상단바 반응형 보정
+
+수정함:
+
+- `src/shared/ui/BrandLogo.tsx`
+- `src/shared/ui/AppTopBar.tsx`
+
+`BrandLogo`에 `isAnimated?: boolean` 옵션을 추가했다.
+
+상단바에서는 `BrandLogo`를 `isAnimated={false}`로 사용하여 로고 타이핑 중 실제 레이아웃 폭이 변하지 않도록 했다.
+
+`AppTopBar`에서는 다음 반응형 보정을 적용했다.
+
+- 상단바 내부 gap을 줄임.
+- 로고 링크에 `min-w-0`, `max-w`, `overflow-hidden`을 적용함.
+- 모바일S 근처에서는 검색/알림 아이콘을 숨김.
+- 로그인 버튼에 `shrink-0`과 작은 padding을 적용함.
+- blog 화면처럼 뒤로가기 버튼이 있는 경우에도 leading 영역을 `shrink-0`으로 보호함.
+
+## 768px 여백 보정
+
+수정함:
+
+- `src/shared/ui/AppTopBar.tsx`
+- `src/shared/ui/WideContent.tsx`
+- `src/shared/ui/BottomNavigation.tsx`
+
+`AppTopBar`와 `WideContent`의 `md:px-0`을 `lg:px-0`로 변경했다.
+
+이로 인해 768px 태블릿 폭에서는 좌우 `px-4` 여백이 유지된다.
+
+`BottomNavigation`은 wide 기준에서도 좌우 여백이 남도록 `w-[calc(100%-2rem)]`을 적용했다.
+
+## plan4.md 갱신
+
+수정함:
+
+- `.agents/histories/2026/09/17/front-structure-planning/plan4.md`
+
+반영 내용:
+
+- 목차에 `추가사항4`를 추가함.
+- 320px 상단 로그인 버튼 깨짐 원인을 분석함.
+- 320px blog 홈에서 로고 타이핑 중 우측 요소 밀림 원인을 분석함.
+- 768px에서 좌우 여백이 사라지는 원인을 분석함.
+- `BrandLogo` 옵션, 상단바 모바일S 대응, 768px 마진 보정 구현계획을 정리함.
+
+## 검증 상태
+
+아직 다음 검증은 실행하지 않음.
+
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run build`

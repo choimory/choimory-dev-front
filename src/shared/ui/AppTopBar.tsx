@@ -9,6 +9,7 @@ import { Icon } from './Icon';
  */
 type AppTopBarProps = {
   serviceName?: string;  // 현재 진입한 하위 서비스 이름
+  serviceHref?: string;  // 현재 하위 서비스 홈 경로
   leading?: ReactNode;   // 브랜드 앞에 표시할 좌측 액션
   size?: 'narrow' | 'wide'; // 상단 바 내부 콘텐츠 폭
   isLoggedIn?: boolean;  // 로그인 사용자 여부
@@ -26,24 +27,37 @@ const TOP_BAR_WIDTH_CLASS_NAME: Record<NonNullable<AppTopBarProps['size']>, stri
  * @param props 컴포넌트 Props
  * @returns 상단 앱 바
  */
-export function AppTopBar({ serviceName, leading, size = 'narrow', isLoggedIn = false }: AppTopBarProps) {
+export function AppTopBar({ serviceName, serviceHref, leading, size = 'narrow', isLoggedIn = false }: AppTopBarProps) {
+  const serviceLabel = serviceName ? `/ ${serviceName}` : null;
+
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-shell/95 backdrop-blur">
-      <div className={`mx-auto flex h-16 w-full ${TOP_BAR_WIDTH_CLASS_NAME[size]} items-center gap-3 px-4 md:px-0`}>
-        {leading}
-        <Link className="shrink-0" href="/" aria-label="choimory.dev 홈">
-          <BrandLogo size="sm" />
-        </Link>
-        {serviceName && <span className="text-sm text-muted">/ {serviceName}</span>}
+      <div className={`mx-auto flex min-h-16 w-full ${TOP_BAR_WIDTH_CLASS_NAME[size]} items-center gap-2 px-4 py-2 lg:px-0`}>
+        {leading && <div className="shrink-0">{leading}</div>}
+        <div className="grid min-w-0 shrink gap-0.5 min-[380px]:flex min-[380px]:items-baseline min-[380px]:gap-2">
+          <Link className="min-w-0 max-w-[160px] overflow-hidden" href="/" aria-label="choimory.dev 홈">
+            <BrandLogo isAnimated={false} size="sm" />
+          </Link>
+          {serviceLabel && serviceHref && (
+            <Link className="w-fit text-xs font-bold text-muted hover:text-primary min-[380px]:text-sm" href={serviceHref}>
+              {serviceLabel}
+            </Link>
+          )}
+          {serviceLabel && !serviceHref && (
+            <span className="w-fit text-xs font-bold text-muted min-[380px]:text-sm">
+              {serviceLabel}
+            </span>
+          )}
+        </div>
 
-        <div className="ml-auto flex items-center gap-2">
-          <button className="grid size-10 place-items-center rounded-[10px] text-foreground" type="button" aria-label="검색">
+        <div className="ml-auto flex shrink-0 items-center gap-1 min-[380px]:gap-2">
+          <button className="hidden size-10 place-items-center rounded-[10px] text-foreground min-[380px]:grid" type="button" aria-label="검색">
             <Icon name="search" />
           </button>
-          <button className="grid size-10 place-items-center rounded-[10px] text-foreground" type="button" aria-label="알림">
+          <button className="hidden size-10 place-items-center rounded-[10px] text-foreground min-[380px]:grid" type="button" aria-label="알림">
             <Icon name="bell" />
           </button>
-          <Link className="grid h-9 place-items-center rounded-full bg-primary px-4 text-sm font-bold text-primary-foreground" href={isLoggedIn ? '/me' : '/login'}>
+          <Link className="grid h-9 shrink-0 place-items-center rounded-full bg-primary px-3 text-sm font-bold text-primary-foreground min-[380px]:px-4" href={isLoggedIn ? '/me' : '/login'}>
             {isLoggedIn ? '내 공간' : '로그인'}
           </Link>
         </div>

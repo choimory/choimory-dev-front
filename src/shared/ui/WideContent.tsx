@@ -16,7 +16,7 @@ type WideContentProps = {
  */
 export function WideContent({ children, className = '' }: WideContentProps) {
   return (
-    <main className={`mx-auto w-full max-w-[768px] px-4 pb-24 pt-8 md:px-0 ${className}`.trim()}>
+    <main className={`mx-auto w-full max-w-[768px] px-4 pb-24 pt-8 lg:px-0 ${className}`.trim()}>
       {children}
     </main>
   );
