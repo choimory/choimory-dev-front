@@ -41,7 +41,7 @@ export function FeedView({ viewModel }: FeedViewProps) {
         <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="feed-title">
           <p className="text-sm font-bold text-primary">choimory.dev / feed</p>
           <h1 id="feed-title" className="mt-1 text-2xl font-black leading-tight text-foreground">
-            {viewModel.title}
+            방송 시작과 가격 하락을 한 피드에서
           </h1>
           <p className="mt-2 text-sm leading-6 text-muted">{viewModel.description}</p>
 
@@ -57,26 +57,46 @@ export function FeedView({ viewModel }: FeedViewProps) {
           )}
         </section>
 
-        {isMember && (
-          <section className="grid grid-cols-3 gap-2" aria-label="feed 요약">
-            {viewModel.summaries.map((summary) => (
-              <article key={summary.label} className="rounded-2xl border border-border bg-surface p-3 text-center">
-                <p className="text-2xl font-black text-foreground">{summary.value}</p>
-                <p className="mt-1 text-xs leading-4 text-muted">{summary.label}</p>
-              </article>
-            ))}
-          </section>
-        )}
+        {isMember ? (
+          <>
+            <section className="grid grid-cols-3 gap-2" aria-label="feed 요약">
+              {viewModel.summaries.map((summary) => (
+                <article key={summary.label} className="rounded-2xl border border-border bg-surface p-3 text-center">
+                  <p className="text-2xl font-black text-foreground">{summary.value}</p>
+                  <p className="mt-1 text-xs leading-4 text-muted">{summary.label}</p>
+                </article>
+              ))}
+            </section>
 
-        <section className="grid gap-3" aria-labelledby="feed-signal-title">
-          <div className="px-1">
-            <p className="text-sm font-bold text-primary">{isMember ? '추적 피드' : '준비 중인 피드'}</p>
-            <h2 id="feed-signal-title" className="mt-1 text-lg font-bold text-foreground">
-              {isMember ? '관심 알림 요약' : '이런 알림을 한 곳에서 볼 수 있게 준비합니다'}
-            </h2>
-          </div>
+            <section className="grid gap-3" aria-labelledby="feed-tracking-title">
+              <div className="px-1">
+                <p className="text-sm font-bold text-primary">추적 중인 항목</p>
+                <h2 id="feed-tracking-title" className="mt-1 text-lg font-bold text-foreground">
+                  관심 피드
+                </h2>
+              </div>
+              <div className="grid gap-3">
+                {viewModel.trackingItems.map((item) => (
+                  <article key={item.id} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-border bg-surface p-3">
+                    <span className="grid size-10 place-items-center rounded-full bg-accent-orange-soft text-accent-orange">
+                      <Icon className="size-5" name="star" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-bold text-foreground">{item.title}</span>
+                      <span className="mt-1 block text-xs text-muted">{item.category} · {item.status}</span>
+                    </span>
+                  </article>
+                ))}
+              </div>
+            </section>
 
-          {isMember ? (
+            <section className="grid gap-3" aria-labelledby="feed-activity-title">
+              <div className="px-1">
+                <p className="text-sm font-bold text-primary">최근 이벤트</p>
+                <h2 id="feed-activity-title" className="mt-1 text-lg font-bold text-foreground">
+                  방금 들어온 알림
+                </h2>
+              </div>
             <div className="grid gap-3">
               {viewModel.activities.map((activity) => (
                 <article key={activity.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3">
@@ -91,7 +111,17 @@ export function FeedView({ viewModel }: FeedViewProps) {
                 </article>
               ))}
             </div>
-          ) : (
+            </section>
+          </>
+        ) : (
+          <>
+            <section className="grid gap-3" aria-labelledby="feed-signal-title">
+              <div className="px-1">
+                <p className="text-sm font-bold text-primary">준비 중인 피드</p>
+                <h2 id="feed-signal-title" className="mt-1 text-lg font-bold text-foreground">
+                  이런 알림을 한 곳에서 볼 수 있게 준비합니다
+                </h2>
+              </div>
             <div className="grid gap-3">
               {viewModel.signals.map((signal) => (
                 <article key={signal.id} className="rounded-2xl border border-border bg-surface p-4">
@@ -100,15 +130,33 @@ export function FeedView({ viewModel }: FeedViewProps) {
                 </article>
               ))}
             </div>
-          )}
-        </section>
+            </section>
+
+            <section className="grid gap-3" aria-labelledby="feed-benefit-title">
+              <div className="px-1">
+                <p className="text-sm font-bold text-primary">로그인하면 가능한 것</p>
+                <h2 id="feed-benefit-title" className="mt-1 text-lg font-bold text-foreground">
+                  내 관심사로 피드를 만들기
+                </h2>
+              </div>
+              <div className="grid gap-3">
+                {viewModel.guestBenefits.map((benefit) => (
+                  <article key={benefit.id} className="rounded-2xl border border-border bg-surface p-4">
+                    <h3 className="text-base font-bold text-foreground">{benefit.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-muted">{benefit.description}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </>
+        )}
       </AppContent>
 
       <BottomNavigation
         items={[
           { label: '피드', href: '/feed', iconName: 'bell', isActive: true },
-          { label: '관심', href: '#', iconName: 'star' },
-          { label: 'blog', href: '/blog', iconName: 'chat' },
+          { label: '추적', href: '#', iconName: 'star' },
+          { label: '알림', href: '#', iconName: 'menu' },
           { label: '홈', href: '/', iconName: 'home' },
         ]}
       />
