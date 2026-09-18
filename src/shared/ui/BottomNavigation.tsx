@@ -32,7 +32,7 @@ const BOTTOM_NAVIGATION_WIDTH_CLASS_NAME: Record<NonNullable<BottomNavigationPro
  * @param props 컴포넌트 Props
  * @returns 하단 네비게이션
  */
-export function BottomNavigation({ items, size = 'narrow' }: BottomNavigationProps) {
+export function BottomNavigation({ items, size = 'wide' }: BottomNavigationProps) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 pointer-events-none">
       <nav className={`pointer-events-auto mx-auto grid h-[70px] w-[calc(100%-2rem)] ${BOTTOM_NAVIGATION_WIDTH_CLASS_NAME[size]} grid-cols-4 gap-1 border border-b-0 border-border bg-shell px-2 py-2 sm:rounded-t-2xl`}>

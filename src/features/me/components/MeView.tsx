@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
+import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
-import { WideContent } from '@/shared/ui/WideContent';
 
 import { MeSettingCard } from './MeSettingCard';
 import type { MeViewModel } from '../model/meTypes';
@@ -24,9 +24,9 @@ type MeViewProps = {
 export function MeView({ viewModel }: MeViewProps) {
   return (
     <AppFrame>
-      <AppTopBar isLoggedIn size="wide" />
+      <AppTopBar isLoggedIn />
 
-      <WideContent className="grid gap-4">
+      <AppContent className="grid gap-4">
         <section className="rounded-3xl border border-border bg-surface p-5">
           <div className="flex items-start justify-between gap-4">
             <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
@@ -50,7 +50,7 @@ export function MeView({ viewModel }: MeViewProps) {
             <MeSettingCard key={item.id} item={item} />
           ))}
         </section>
-      </WideContent>
+      </AppContent>
 
       <BottomNavigation
         items={[
@@ -59,7 +59,6 @@ export function MeView({ viewModel }: MeViewProps) {
           { label: '알림', href: '#', iconName: 'bell' },
           { label: '내 공간', href: '/me', iconName: 'user', isActive: true },
         ]}
-        size="wide"
       />
     </AppFrame>
   );

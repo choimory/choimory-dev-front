@@ -1,8 +1,8 @@
 import { AppFrame } from '@/shared/ui/AppFrame';
+import { AppContent } from '@/shared/ui/AppContent';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
-import { WideContent } from '@/shared/ui/WideContent';
 
 import { GuestLandingSection } from './GuestLandingSection';
 import { MemberServiceFeedSection } from './MemberServiceFeedSection';
@@ -28,8 +28,8 @@ export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
 
   return (
     <AppFrame>
-      <AppTopBar isLoggedIn={isMember} size="wide" />
-      <WideContent className="grid gap-5">
+      <AppTopBar isLoggedIn={isMember} />
+      <AppContent className="grid gap-5">
         <section className="mx-auto w-full max-w-[640px] py-2 text-center">
           <h1 className="leading-tight tracking-normal">
             <BrandLogo size="lg" />
@@ -46,7 +46,7 @@ export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
         ) : (
           <GuestLandingSection services={viewModel.services} />
         )}
-      </WideContent>
+      </AppContent>
 
       <BottomNavigation
         items={[
@@ -55,7 +55,6 @@ export function PlatformHomeView({ viewModel }: PlatformHomeViewProps) {
           { label: '알림', href: '#', iconName: 'bell' },
           { label: '내 공간', href: '/me', iconName: 'user' },
         ]}
-        size="wide"
       />
     </AppFrame>
   );

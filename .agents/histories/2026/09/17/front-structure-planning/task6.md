@@ -7,6 +7,8 @@
   - [플랫폼 홈 비로그인 랜딩 개선](#플랫폼-홈-비로그인-랜딩-개선)
   - [blog 비로그인 화면 개선](#blog-비로그인-화면-개선)
   - [blog 레이아웃 폭 통일](#blog-레이아웃-폭-통일)
+  - [프로젝트 공통 레이아웃 통합](#프로젝트-공통-레이아웃-통합)
+  - [README.md 최신화](#readmemd-최신화)
   - [plan6.md 갱신](#plan6md-갱신)
   - [검증 상태](#검증-상태)
 
@@ -31,6 +33,10 @@
 - blog 비로그인 화면에 공개/로그인/연결 안내와 공개 글 미리보기 제목을 추가함.
 - blog 화면을 플랫폼 홈과 동일한 wide 레이아웃으로 변경함.
 - blog 비로그인 소개 카드 상단 문구는 로고가 아니라 `choimory.dev / blog 시작하기` 텍스트로 표시함.
+- `AppContent`를 추가하여 서비스 화면 중앙 레이아웃을 프로젝트 공통으로 통합함.
+- `AppTopBar`, `BottomNavigation`의 기본 폭을 wide로 변경함.
+- 기존 `WideContent`, `NarrowContent`를 제거함.
+- README.md의 레이아웃 설명을 현재 구조에 맞게 최신화함.
 
 ## mock auth 전환 구조
 
@@ -113,16 +119,60 @@ blog 화면도 플랫폼 홈과 동일한 폭 정책을 따르도록 변경했�
 변경 내용:
 
 - `NarrowContent` 제거
-- `WideContent` 적용
-- `AppTopBar size="wide"` 적용
-- `BottomNavigation size="wide"` 적용
+- 초기에는 `WideContent`를 적용했고, 이후 프로젝트 공통 레이아웃 통합 단계에서 `AppContent`로 정리
+- `AppTopBar`와 `BottomNavigation`은 기본 wide 정책을 따르도록 변경
 
 이를 통해 `/blog`도 플랫폼 홈처럼 `max-w-[768px]` 기준의 넓은 레이아웃으로 표시된다.
 
 추가 논의:
 
 - 서비스별로 레이아웃을 다르게 고르는 방식보다 프로젝트 전체 기본 레이아웃을 통일해서 관리하는 방향이 더 적합하다.
-- 이후 `AppContent` 같은 공통 레이아웃 컴포넌트로 `WideContent`, `NarrowContent`를 정리하는 방향을 검토한다.
+- 이후 구현에서 `AppContent` 공통 레이아웃 컴포넌트로 `WideContent`, `NarrowContent`를 정리했다.
+
+## 프로젝트 공통 레이아웃 통합
+
+추가함:
+
+- `src/shared/ui/AppContent.tsx`
+
+수정함:
+
+- `src/shared/ui/AppTopBar.tsx`
+- `src/shared/ui/BottomNavigation.tsx`
+- `src/features/platform/components/PlatformHomeView.tsx`
+- `src/features/blog/components/BlogView.tsx`
+- `src/features/me/components/MeView.tsx`
+
+제거함:
+
+- `src/shared/ui/WideContent.tsx`
+- `src/shared/ui/NarrowContent.tsx`
+
+서비스 화면의 중앙 콘텐츠 레이아웃을 `AppContent`로 통합했다.
+
+`AppContent`의 기본 variant는 `wide`이며, 현재 기본 폭은 `max-w-[768px]`이다.
+
+필요하면 `variant="narrow"`를 사용할 수 있지만, 서비스 화면은 기본적으로 wide 레이아웃을 따른다.
+
+`AppTopBar`와 `BottomNavigation`도 기본 `size`를 `wide`로 변경했다.
+
+이에 따라 플랫폼 홈, blog, 마이페이지는 별도 `size="wide"` 지정 없이 같은 폭 정책을 사용한다.
+
+로그인과 회원가입 화면은 폼 중심 특수 화면이므로 기존 좁은 중앙 폼 레이아웃을 유지했다.
+
+## README.md 최신화
+
+수정함:
+
+- `README.md`
+
+반영 내용:
+
+- `shared/model` 구조 추가
+- 서비스 화면의 기본 레이아웃이 `AppContent` 기준임을 명시
+- 플랫폼 홈, blog, 마이페이지 같은 서비스 화면은 `768px` 중앙 폭을 기본으로 사용한다고 정리
+- 로그인, 회원가입 같은 폼 중심 화면은 예외적으로 좁은 중앙 폼 레이아웃을 사용할 수 있다고 정리
+- 기존 blog 좁은 피드 폭 유지 설명을 제거
 
 ## plan6.md 갱신
 

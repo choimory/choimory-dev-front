@@ -27,7 +27,7 @@ const TOP_BAR_WIDTH_CLASS_NAME: Record<NonNullable<AppTopBarProps['size']>, stri
  * @param props 컴포넌트 Props
  * @returns 상단 앱 바
  */
-export function AppTopBar({ serviceName, serviceHref, leading, size = 'narrow', isLoggedIn = false }: AppTopBarProps) {
+export function AppTopBar({ serviceName, serviceHref, leading, size = 'wide', isLoggedIn = false }: AppTopBarProps) {
   const serviceLabel = serviceName ? `/ ${serviceName}` : null;
 
   return (

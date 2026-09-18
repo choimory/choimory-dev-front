@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
+import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
-import { WideContent } from '@/shared/ui/WideContent';
 
 import { BlogGuestSection } from './BlogGuestSection';
 import { BlogMemberFeedSection } from './BlogMemberFeedSection';
@@ -32,7 +32,6 @@ export function BlogView({ viewModel }: BlogViewProps) {
         isLoggedIn={isMember}
         serviceName="blog"
         serviceHref="/blog"
-        size="wide"
         leading={
           <Link className="grid size-10 place-items-center rounded-[10px] text-foreground" href="/" aria-label="플랫폼 홈으로 돌아가기">
             <Icon name="chevronLeft" />
@@ -40,13 +39,13 @@ export function BlogView({ viewModel }: BlogViewProps) {
         }
       />
 
-      <WideContent className="grid gap-3">
+      <AppContent className="grid gap-3">
         {isMember ? (
           <BlogMemberFeedSection posts={viewModel.posts} tabs={viewModel.tabs} />
         ) : (
           <BlogGuestSection posts={viewModel.posts} />
         )}
-      </WideContent>
+      </AppContent>
 
       <BottomNavigation
         items={[
@@ -55,7 +54,6 @@ export function BlogView({ viewModel }: BlogViewProps) {
           { label: '작성', href: '#', iconName: 'plus' },
           { label: '홈', href: '/', iconName: 'home' },
         ]}
-        size="wide"
       />
     </AppFrame>
   );
