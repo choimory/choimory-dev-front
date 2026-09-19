@@ -1,6 +1,9 @@
 /** feed 화면 인증 상태 */
 export type FeedAuthStatus = 'guest' | 'member';
 
+/** feed 하단 메뉴 종류 */
+export type FeedMenuKind = 'popular' | 'observations' | 'me';
+
 /** feed에서 제공할 알림 유형 */
 export type FeedSignal = {
   id: string;          // 알림 유형 고유 ID
@@ -21,12 +24,12 @@ export type FeedSummary = {
   value: string; // 요약 값
 };
 
-/** feed 추적 중인 항목 */
-export type FeedTrackingItem = {
-  id: string;       // 추적 항목 고유 ID
-  title: string;    // 추적 항목 제목
-  category: string; // 추적 항목 분류
-  status: string;   // 추적 상태
+/** feed 관찰 중인 항목 */
+export type FeedObservationItem = {
+  id: string;       // 관찰 항목 고유 ID
+  title: string;    // 관찰 항목 제목
+  category: string; // 관찰 항목 분류
+  status: string;   // 관찰 상태
 };
 
 /** feed 최근 알림 */
@@ -45,7 +48,7 @@ export type FeedViewModel = {
   signals: FeedSignal[];           // 제공할 알림 유형 목록
   guestBenefits: FeedGuestBenefit[]; // 비회원 혜택 안내 목록
   summaries: FeedSummary[];        // 회원용 요약 목록
-  trackingItems: FeedTrackingItem[]; // 추적 중인 항목 목록
+  observations: FeedObservationItem[]; // 관찰 중인 항목 목록
   activities: FeedActivity[];      // 최근 알림 목록
 };
 
@@ -89,25 +92,25 @@ export const feedViewModel: FeedViewModel = {
     },
   ],
   summaries: [
-    { label: '추적 중', value: '18' },
+    { label: '관찰 중', value: '18' },
     { label: '새 알림', value: '9' },
     { label: '관심 항목', value: '6' },
   ],
-  trackingItems: [
+  observations: [
     {
-      id: 'track-1',
+      id: 'observation-1',
       title: 'mory_live',
       category: '스트리머',
       status: '방송 시작 감지',
     },
     {
-      id: 'track-2',
+      id: 'observation-2',
       title: '기계식 키보드',
       category: '가격 알림',
       status: '목표가 120,000원',
     },
     {
-      id: 'track-3',
+      id: 'observation-3',
       title: 'devlog 채널',
       category: '콘텐츠',
       status: '새 업로드 대기',

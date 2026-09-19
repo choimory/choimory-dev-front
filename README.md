@@ -2,7 +2,7 @@
 
 choimory.dev 서비스의 프론트엔드 프로젝트입니다.
 
-현재는 여러 하위 서비스를 담는 플랫폼형 화면 구조를 기준으로 `/`, `/blog`, `/feed`, `/login`, `/signup`, `/me` 화면을 구성한 상태입니다.
+현재는 여러 하위 서비스를 담는 플랫폼형 화면 구조를 기준으로 `/`, `/services`, `/notice`, `/blog`, `/feed`, `/login`, `/signup`, `/me`와 주요 메뉴/상세 화면을 구성한 상태입니다.
 
 ---
 
@@ -45,13 +45,24 @@ npm run lint    # eslint . 실행
 src/
 ├── app/
 │   ├── blog/page.tsx
+│   ├── blog/following/page.tsx
+│   ├── blog/me/page.tsx
+│   ├── blog/popular/page.tsx
+│   ├── blog/posts/[postId]/page.tsx
 │   ├── feed/page.tsx
+│   ├── feed/activities/[activityId]/page.tsx
+│   ├── feed/me/page.tsx
+│   ├── feed/observations/page.tsx
+│   ├── feed/observations/[observationId]/page.tsx
+│   ├── feed/popular/page.tsx
 │   ├── favicon.ico
 │   ├── globals.css
 │   ├── layout.tsx
 │   ├── login/page.tsx
 │   ├── me/page.tsx
+│   ├── notice/page.tsx
 │   ├── page.tsx
+│   ├── services/page.tsx
 │   └── signup/page.tsx
 │
 ├── features/
@@ -92,8 +103,19 @@ src/
 | 경로 | 설명 |
 |---|---|
 | `/` | 여러 하위 서비스로 진입하는 플랫폼 홈 |
+| `/services` | 플랫폼 전체 서비스 메뉴 |
+| `/notice` | 플랫폼 공지사항 |
 | `/blog` | 인스타그램 같은 글, 이미지, 댓글, 팔로우 중심의 blog 서비스 피드 |
+| `/blog/popular` | blog 인기 글 메뉴 |
+| `/blog/following` | blog 팔로잉 피드 메뉴 |
+| `/blog/me` | 내 blog 메뉴 |
+| `/blog/posts/[postId]` | blog 게시글 상세 |
 | `/feed` | 스트리머 활동 알림과 가격 알림을 모아보는 feed 서비스 |
+| `/feed/popular` | feed 인기 알림 메뉴 |
+| `/feed/observations` | feed 관찰 목록 |
+| `/feed/observations/[observationId]` | feed 관찰 상세 |
+| `/feed/activities/[activityId]` | feed 알림 상세 |
+| `/feed/me` | 내 feed 메뉴 |
 | `/login` | 로그인 화면 |
 | `/signup` | 회원가입 화면 |
 | `/me` | 개인정보와 사이트 설정을 관리하는 마이페이지 |
@@ -104,6 +126,8 @@ src/
   - `choimory.dev` 브랜드 로고
   - 통합 검색바
   - 좌우 화살표로 넘기는 서비스 런처
+  - 전체 서비스 메뉴
+  - 공지사항 메뉴
   - 비회원 사용자용 서비스 소개 섹션
   - 로그인 사용자용 내정보 프로필 카드
   - 로그인 사용자용 서비스별 대형 피드 카드
@@ -112,12 +136,17 @@ src/
   - 피드 필터
   - 글 작성 진입 영역
   - 게시글 카드
+  - 인기, 팔로잉, 내 blog 메뉴 화면
+  - 게시글 상세 화면
   - 서비스 내부 하단 네비게이션
 - feed
   - 스트리머 활동 알림 소개
   - 가격 알림 소개
   - 로그인 사용자용 관심 피드 요약 뼈대
+  - 관찰 목록과 관찰 상세 화면
   - 최근 알림 목록 뼈대
+  - 인기, 내 feed 메뉴 화면
+  - 알림 상세 화면
   - 서비스 내부 하단 네비게이션
 - 인증
   - 로그인 화면

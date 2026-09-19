@@ -1,6 +1,9 @@
 /** blog 화면 인증 상태 */
 export type BlogAuthStatus = 'guest' | 'member';
 
+/** blog 하단 메뉴 종류 */
+export type BlogMenuKind = 'popular' | 'following' | 'me';
+
 /** blog 피드 필터 */
 export type BlogFeedTab = {
   label: string;      // 필터 이름

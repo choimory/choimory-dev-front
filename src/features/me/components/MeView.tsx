@@ -55,8 +55,8 @@ export function MeView({ viewModel }: MeViewProps) {
       <BottomNavigation
         items={[
           { label: '홈', href: '/', iconName: 'home' },
-          { label: '서비스', href: '#', iconName: 'grid' },
-          { label: '알림', href: '#', iconName: 'bell' },
+          { label: '공지사항', href: '/notice', iconName: 'megaphone' },
+          { label: '서비스', href: '/services', iconName: 'grid' },
           { label: '내 공간', href: '/me', iconName: 'user', isActive: true },
         ]}
       />

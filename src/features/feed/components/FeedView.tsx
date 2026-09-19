@@ -68,16 +68,16 @@ export function FeedView({ viewModel }: FeedViewProps) {
               ))}
             </section>
 
-            <section className="grid gap-3" aria-labelledby="feed-tracking-title">
+            <section className="grid gap-3" aria-labelledby="feed-observation-title">
               <div className="px-1">
-                <p className="text-sm font-bold text-primary">추적 중인 항목</p>
-                <h2 id="feed-tracking-title" className="mt-1 text-lg font-bold text-foreground">
+                <p className="text-sm font-bold text-primary">관찰 중인 항목</p>
+                <h2 id="feed-observation-title" className="mt-1 text-lg font-bold text-foreground">
                   관심 피드
                 </h2>
               </div>
               <div className="grid gap-3">
-                {viewModel.trackingItems.map((item) => (
-                  <article key={item.id} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-border bg-surface p-3">
+                {viewModel.observations.map((item) => (
+                  <Link key={item.id} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition hover:bg-surface-strong" href={`/feed/observations/${item.id}`}>
                     <span className="grid size-10 place-items-center rounded-full bg-accent-orange-soft text-accent-orange">
                       <Icon className="size-5" name="star" />
                     </span>
@@ -85,7 +85,7 @@ export function FeedView({ viewModel }: FeedViewProps) {
                       <span className="block truncate text-sm font-bold text-foreground">{item.title}</span>
                       <span className="mt-1 block text-xs text-muted">{item.category} · {item.status}</span>
                     </span>
-                  </article>
+                  </Link>
                 ))}
               </div>
             </section>
@@ -99,7 +99,7 @@ export function FeedView({ viewModel }: FeedViewProps) {
               </div>
             <div className="grid gap-3">
               {viewModel.activities.map((activity) => (
-                <article key={activity.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3">
+                <Link key={activity.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition hover:bg-surface-strong" href={`/feed/activities/${activity.id}`}>
                   <span className="grid size-10 place-items-center rounded-full bg-primary-soft text-primary">
                     <Icon className="size-5" name="bell" />
                   </span>
@@ -108,7 +108,7 @@ export function FeedView({ viewModel }: FeedViewProps) {
                     <span className="mt-1 block text-xs text-muted">{activity.source}</span>
                   </span>
                   <time className="text-xs text-muted">{activity.timeText}</time>
-                </article>
+                </Link>
               ))}
             </div>
             </section>
@@ -155,9 +155,9 @@ export function FeedView({ viewModel }: FeedViewProps) {
       <BottomNavigation
         items={[
           { label: '홈', href: '/feed', iconName: 'home', isActive: true },
-          { label: '인기', href: '#', iconName: 'trophy' },
-          { label: '추적', href: '#', iconName: 'barChart' },
-          { label: '내 피드', href: '#', iconName: 'user' },
+          { label: '인기', href: '/feed/popular', iconName: 'trophy' },
+          { label: '관찰', href: '/feed/observations', iconName: 'barChart' },
+          { label: '내 피드', href: '/feed/me', iconName: 'user' },
         ]}
       />
     </AppFrame>

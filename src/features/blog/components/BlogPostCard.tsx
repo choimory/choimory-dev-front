@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Icon } from '@/shared/ui/Icon';
 
 import type { BlogPost } from '../model/blogTypes';
@@ -22,20 +24,25 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         <div className="grid size-10 place-items-center rounded-full bg-surface-strong text-sm font-bold text-primary">
           {post.authorInitial}
         </div>
-        <div>
+        <Link className="min-w-0" href={`/blog/posts/${post.id}`}>
           <h2 className="text-sm font-bold">{post.authorName}</h2>
           <p className="text-xs leading-5 text-muted">{post.meta}</p>
-        </div>
+        </Link>
         <button className="grid size-9 place-items-center rounded-[10px] text-muted" type="button" aria-label="게시글 메뉴">
           <span className="text-xl leading-none">...</span>
         </button>
       </header>
 
       {post.hasMedia && (
-        <div
-          className="aspect-[4/5] bg-[linear-gradient(135deg,color-mix(in_srgb,var(--color-primary)_72%,transparent),transparent),linear-gradient(45deg,color-mix(in_srgb,var(--color-accent-green)_55%,transparent),color-mix(in_srgb,var(--color-accent-red)_40%,transparent))]"
-          aria-label="게시글 이미지"
-        />
+        <Link
+          href={`/blog/posts/${post.id}`}
+          className="block"
+        >
+          <span
+            className="block aspect-[4/5] bg-[linear-gradient(135deg,color-mix(in_srgb,var(--color-primary)_72%,transparent),transparent),linear-gradient(45deg,color-mix(in_srgb,var(--color-accent-green)_55%,transparent),color-mix(in_srgb,var(--color-accent-red)_40%,transparent))]"
+            aria-label="게시글 이미지"
+          />
+        </Link>
       )}
 
       <div className="flex items-center gap-1 px-3 pt-2">
@@ -56,12 +63,12 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
 
       <div className="grid gap-2 px-3 pb-4 pt-1">
         <p className="text-sm font-bold">좋아요 {post.likeCount}개</p>
-        <p className="text-sm leading-6">
+        <Link className="text-sm leading-6" href={`/blog/posts/${post.id}`}>
           <strong>{post.authorName}</strong> {post.content}
-        </p>
-        <button className="w-fit text-sm text-muted" type="button">
+        </Link>
+        <Link className="w-fit text-sm text-muted" href={`/blog/posts/${post.id}`}>
           댓글 {post.commentCount}개 모두 보기
-        </button>
+        </Link>
       </div>
     </article>
   );

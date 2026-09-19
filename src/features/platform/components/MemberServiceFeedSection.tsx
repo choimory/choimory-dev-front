@@ -25,6 +25,7 @@ const SERVICE_TONE_CLASS_NAME: Record<PlatformService['tone'], string> = {
 type MemberServiceFeedMetric = {
   label: string; // 지표 이름
   value: string; // 지표 값
+  href: string;  // 지표 상세 경로
 };
 
 /**
@@ -34,6 +35,7 @@ type MemberServiceFeedNotification = {
   id: string;       // 알림 고유 ID
   title: string;    // 알림 제목
   timeText: string; // 알림 시간
+  href: string;     // 알림 상세 경로
 };
 
 /**
@@ -52,38 +54,38 @@ const MEMBER_SERVICE_FEED_CARDS: MemberServiceFeedCard[] = [
     id: 'blog-feed',
     serviceId: 'blog',
     metrics: [
-      { label: '내가 쓴 글', value: '12' },
-      { label: '내가 쓴 댓글', value: '48' },
-      { label: '팔로워 수', value: '128' },
-      { label: '팔로잉 수', value: '36' },
+      { label: '내가 쓴 글', value: '12', href: '/blog/me' },
+      { label: '내가 쓴 댓글', value: '48', href: '/blog/me' },
+      { label: '팔로워 수', value: '128', href: '/blog/me' },
+      { label: '팔로잉 수', value: '36', href: '/blog/following' },
     ],
     notifications: [
-      { id: 'blog-notice-1', title: '새 댓글이 달렸습니다', timeText: '방금' },
-      { id: 'blog-notice-2', title: '팔로잉한 사용자가 글을 올렸습니다', timeText: '14분 전' },
-      { id: 'blog-notice-3', title: '내 글이 인기 목록에 올랐습니다', timeText: '38분 전' },
-      { id: 'blog-notice-4', title: '새 팔로워가 생겼습니다', timeText: '1시간 전' },
+      { id: 'blog-notice-1', title: '새 댓글이 달렸습니다', timeText: '방금', href: '/blog/posts/post-1' },
+      { id: 'blog-notice-2', title: '팔로잉한 사용자가 글을 올렸습니다', timeText: '14분 전', href: '/blog/following' },
+      { id: 'blog-notice-3', title: '내 글이 인기 목록에 올랐습니다', timeText: '38분 전', href: '/blog/popular' },
+      { id: 'blog-notice-4', title: '새 팔로워가 생겼습니다', timeText: '1시간 전', href: '/blog/me' },
     ],
   },
   {
     id: 'feed-feed',
     serviceId: 'feed',
     metrics: [
-      { label: '관찰 중인 아이템', value: '18' },
-      { label: '관찰 중인 스트리머', value: '7' },
+      { label: '관찰 중인 아이템', value: '18', href: '/feed/observations' },
+      { label: '관찰 중인 스트리머', value: '7', href: '/feed/observations' },
     ],
     notifications: [
-      { id: 'feed-notice-1', title: '관심 스트리머 방송이 시작되었습니다', timeText: '12분 전' },
-      { id: 'feed-notice-2', title: '관심 상품이 목표가 아래로 내려갔습니다', timeText: '22분 전' },
-      { id: 'feed-notice-3', title: '새 가격 변동이 감지되었습니다', timeText: '46분 전' },
-      { id: 'feed-notice-4', title: '관찰 목록에 새 업데이트가 있습니다', timeText: '2시간 전' },
+      { id: 'feed-notice-1', title: '관심 스트리머 방송이 시작되었습니다', timeText: '12분 전', href: '/feed/activities/activity-1' },
+      { id: 'feed-notice-2', title: '관심 상품이 목표가 아래로 내려갔습니다', timeText: '22분 전', href: '/feed/activities/activity-2' },
+      { id: 'feed-notice-3', title: '새 가격 변동이 감지되었습니다', timeText: '46분 전', href: '/feed/activities/activity-3' },
+      { id: 'feed-notice-4', title: '관찰 목록에 새 업데이트가 있습니다', timeText: '2시간 전', href: '/feed/observations' },
     ],
   },
 ];
 
 /** 준비 중 서비스 알림 안내 */
 const PLANNED_SERVICE_NOTIFICATIONS: MemberServiceFeedNotification[] = [
-  { id: 'planned-1', title: '서비스 데이터 구조를 준비 중입니다', timeText: '예정' },
-  { id: 'planned-2', title: '활성화 후 개인 피드가 표시됩니다', timeText: '예정' },
+  { id: 'planned-1', title: '서비스 데이터 구조를 준비 중입니다', timeText: '예정', href: '/services' },
+  { id: 'planned-2', title: '활성화 후 개인 피드가 표시됩니다', timeText: '예정', href: '/services' },
 ];
 
 /** 플랫폼 홈 프로필 임시 데이터 */
@@ -168,20 +170,20 @@ export function MemberServiceFeedSection({ services }: MemberServiceFeedSectionP
                 {metrics.length > 0 && (
                   <div className="grid grid-cols-2 gap-2">
                     {metrics.map((metric) => (
-                      <article key={metric.label} className="rounded-2xl bg-surface-strong p-3 transition hover:bg-primary-soft">
+                      <Link key={metric.label} className="rounded-2xl bg-surface-strong p-3 transition hover:bg-primary-soft" href={metric.href}>
                         <p className="text-2xl font-black text-foreground">{metric.value}</p>
                         <p className="mt-1 text-xs leading-4 text-muted">{metric.label}</p>
-                      </article>
+                      </Link>
                     ))}
                   </div>
                 )}
 
                 <div className="grid gap-2">
                   {notifications.map((notification) => (
-                    <article key={notification.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl bg-surface-strong p-3 transition hover:bg-primary-soft">
+                    <Link key={notification.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl bg-surface-strong p-3 transition hover:bg-primary-soft" href={notification.href}>
                       <h4 className="truncate text-sm font-bold text-foreground">{notification.title}</h4>
                       <time className="text-xs text-muted">{notification.timeText}</time>
-                    </article>
+                    </Link>
                   ))}
                 </div>
               </article>
