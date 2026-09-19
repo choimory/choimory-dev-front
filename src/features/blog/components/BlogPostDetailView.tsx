@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
@@ -18,8 +21,24 @@ type BlogPostDetailViewProps = {
 
 /** 게시글 상세 댓글 임시 데이터 */
 const POST_DETAIL_COMMENTS = [
-  { id: 'comment-1', authorName: 'mory.dev', content: '이 구조면 상세 화면을 붙이기 쉬워 보입니다.', timeText: '3분 전' },
-  { id: 'comment-2', authorName: 'jin.note', content: '하단 메뉴별 화면도 같은 패턴으로 가면 좋겠네요.', timeText: '12분 전' },
+  {
+    id: 'comment-1',
+    authorName: 'mory.dev',
+    content: '이 구조면 상세 화면을 붙이기 쉬워 보입니다.',
+    likeCount: 8,
+    timeText: '3분 전',
+    replies: [
+      { id: 'reply-1', authorName: 'jin.note', content: '@mory.dev 메뉴별 상단 카드까지 들어가면 더 자연스러울 듯합니다.', likeCount: 3, timeText: '1분 전' },
+    ],
+  },
+  {
+    id: 'comment-2',
+    authorName: 'jin.note',
+    content: '하단 메뉴별 화면도 같은 패턴으로 가면 좋겠네요.',
+    likeCount: 5,
+    timeText: '12분 전',
+    replies: [],
+  },
 ];
 
 /**
@@ -29,6 +48,8 @@ const POST_DETAIL_COMMENTS = [
  * @returns blog 게시글 상세 화면
  */
 export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps) {
+  const [replyingCommentId, setReplyingCommentId] = useState<string | null>(null);
+
   return (
     <AppFrame>
       <AppTopBar
@@ -43,6 +64,13 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
       />
 
       <AppContent className="grid gap-3">
+        <section className="px-1" aria-labelledby="post-section-title">
+          <p className="text-sm font-bold text-primary">blog / post</p>
+          <h1 id="post-section-title" className="mt-1 text-lg font-bold text-foreground">
+            포스트
+          </h1>
+        </section>
+
         <article className="overflow-hidden rounded-3xl border border-border bg-surface" aria-labelledby="post-detail-title">
           <header className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 p-4">
             <div className="grid size-12 place-items-center rounded-full bg-surface-strong text-sm font-bold text-primary">
@@ -62,34 +90,88 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
           )}
 
           <div className="grid gap-4 p-4">
-            <p className="text-sm leading-6 text-foreground">{post.content}</p>
-            <div className="grid grid-cols-2 gap-2">
-              <article className="rounded-2xl bg-surface-strong p-3">
-                <p className="text-2xl font-black text-foreground">{post.likeCount}</p>
-                <p className="mt-1 text-xs text-muted">좋아요</p>
-              </article>
-              <article className="rounded-2xl bg-surface-strong p-3">
-                <p className="text-2xl font-black text-foreground">{post.commentCount}</p>
-                <p className="mt-1 text-xs text-muted">댓글</p>
-              </article>
+            <div className="flex items-center gap-1">
+              <button className="grid size-9 place-items-center rounded-[10px] text-accent-red" type="button" aria-label="좋아요">
+                <Icon name="heart" />
+              </button>
+              <button className="grid size-9 place-items-center rounded-[10px]" type="button" aria-label="댓글">
+                <Icon name="chat" />
+              </button>
+              <button className="grid size-9 place-items-center rounded-[10px]" type="button" aria-label="공유">
+                <Icon name="share" />
+              </button>
+              <span className="flex-1" />
+              <button className="grid size-9 place-items-center rounded-[10px]" type="button" aria-label="저장">
+                <Icon name="bookmark" />
+              </button>
             </div>
+            <p className="text-sm font-bold text-foreground">
+              좋아요 {post.likeCount}개 · 댓글 {post.commentCount}개
+            </p>
+            <p className="text-sm leading-6 text-foreground">{post.content}</p>
           </div>
         </article>
 
         <section className="grid gap-3" aria-labelledby="post-comments-title">
           <div className="px-1">
-            <p className="text-sm font-bold text-primary">comments</p>
+            <p className="text-sm font-bold text-primary">blog / comments</p>
             <h2 id="post-comments-title" className="mt-1 text-lg font-bold text-foreground">
               댓글
             </h2>
           </div>
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-2xl border border-border bg-surface p-3">
+            <input className="h-10 min-w-0 rounded-[10px] border border-border bg-surface-strong px-3 text-sm text-foreground" placeholder="댓글을 남겨보세요" />
+            <button className="h-10 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">
+              작성
+            </button>
+          </div>
           {POST_DETAIL_COMMENTS.map((comment) => (
-            <article key={comment.id} className="rounded-2xl border border-border bg-surface p-4">
+            <article key={comment.id} className="rounded-2xl border border-border bg-surface p-3">
               <div className="flex items-start justify-between gap-3">
-                <h3 className="text-sm font-bold text-foreground">{comment.authorName}</h3>
-                <time className="text-xs text-muted">{comment.timeText}</time>
+                <div className="min-w-0">
+                  <h3 className="text-sm font-bold text-foreground">{comment.authorName}</h3>
+                  <p className="mt-1 text-sm leading-5 text-muted">{comment.content}</p>
+                </div>
+                <button className="grid size-8 shrink-0 place-items-center rounded-[10px] text-muted" type="button" aria-label="댓글 좋아요">
+                  <Icon className="size-4" name="heart" />
+                </button>
               </div>
-              <p className="mt-2 text-sm leading-6 text-muted">{comment.content}</p>
+              <div className="mt-2 flex items-center gap-3 text-xs text-muted">
+                <time>{comment.timeText}</time>
+                <span>좋아요 {comment.likeCount}개</span>
+                <button className="font-bold" type="button" onClick={() => setReplyingCommentId((currentId) => (currentId === comment.id ? null : comment.id))}>
+                  답글 달기
+                </button>
+              </div>
+              {replyingCommentId === comment.id && (
+                <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-2xl bg-surface-strong p-3">
+                  <input className="h-10 min-w-0 rounded-[10px] border border-border bg-surface px-3 text-sm text-foreground" placeholder={`@${comment.authorName} 답글을 남겨보세요`} />
+                  <button className="h-10 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">
+                    작성
+                  </button>
+                </div>
+              )}
+              {comment.replies.length > 0 && (
+                <div className="mt-3 grid gap-2 border-l border-border pl-3">
+                  {comment.replies.map((reply) => (
+                    <article key={reply.id} className="rounded-2xl bg-surface-strong p-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <h4 className="text-sm font-bold text-foreground">{reply.authorName}</h4>
+                          <p className="mt-1 text-sm leading-5 text-muted">{reply.content}</p>
+                        </div>
+                        <button className="grid size-8 shrink-0 place-items-center rounded-[10px] text-muted" type="button" aria-label="대댓글 좋아요">
+                          <Icon className="size-4" name="heart" />
+                        </button>
+                      </div>
+                      <div className="mt-2 flex items-center gap-3 text-xs text-muted">
+                        <time>{reply.timeText}</time>
+                        <span>좋아요 {reply.likeCount}개</span>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
             </article>
           ))}
         </section>

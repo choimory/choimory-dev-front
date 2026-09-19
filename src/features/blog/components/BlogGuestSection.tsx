@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { BrandLogo } from '@/shared/ui/BrandLogo';
+
 import { BlogPostCard } from './BlogPostCard';
 import type { BlogPost } from '../model/blogTypes';
 
@@ -20,7 +22,10 @@ export function BlogGuestSection({ posts }: BlogGuestSectionProps) {
   return (
     <div className="grid gap-3">
       <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="blog-guest-title">
-        <p className="text-sm font-bold text-primary">choimory.dev / blog 시작하기</p>
+        <p className="flex items-center gap-1 text-sm font-bold text-primary">
+          <BrandLogo size="sm" isAnimated={false} />
+          <span>/ blog</span>
+        </p>
         <h1 id="blog-guest-title" className="mt-1 text-xl font-bold leading-tight">
           글과 이미지를 둘러보고, 로그인하면 내 피드를 이어갈 수 있습니다
         </h1>

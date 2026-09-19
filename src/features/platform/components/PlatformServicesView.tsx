@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
+import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
 
@@ -36,7 +37,10 @@ export function PlatformServicesView({ isLoggedIn, services }: PlatformServicesV
       <AppTopBar isLoggedIn={isLoggedIn} />
       <AppContent className="grid gap-4">
         <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="services-title">
-          <p className="text-sm font-bold text-primary">choimory.dev / services</p>
+          <p className="flex items-center gap-1 text-sm font-bold text-primary">
+            <BrandLogo size="sm" isAnimated={false} />
+            <span>/ services</span>
+          </p>
           <h1 id="services-title" className="mt-1 text-2xl font-black leading-tight text-foreground">
             사용할 서비스를 선택하세요
           </h1>
@@ -57,7 +61,7 @@ export function PlatformServicesView({ isLoggedIn, services }: PlatformServicesV
                   <span className="mt-1 block text-sm leading-5 text-muted">{service.description}</span>
                 </span>
                 <span className="shrink-0 rounded-full bg-surface-strong px-2.5 py-1 text-xs font-bold text-muted">
-                  {service.meta}
+                  {service.status === 'active' ? '이동' : '준비 중'}
                 </span>
               </>
             );

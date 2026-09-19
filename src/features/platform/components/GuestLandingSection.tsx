@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { Icon } from '@/shared/ui/Icon';
 
 import type { PlatformService } from '../model/platformHomeTypes';
@@ -28,7 +29,10 @@ export function GuestLandingSection({ services }: GuestLandingSectionProps) {
   return (
     <section className="grid gap-4 rounded-3xl border border-border bg-surface p-5" aria-labelledby="guest-landing-title">
       <div className="grid gap-3">
-        <p className="text-sm font-bold text-primary">choimory.dev 시작하기</p>
+        <p className="flex items-center gap-1 text-sm font-bold text-primary">
+          <BrandLogo size="sm" isAnimated={false} />
+          <span>/ welcome</span>
+        </p>
         <h2 id="guest-landing-title" className="text-2xl font-black leading-tight">
           블로그와 피드부터 둘러보고, 로그인하면 내 서비스 허브가 열립니다
         </h2>
@@ -68,7 +72,7 @@ export function GuestLandingSection({ services }: GuestLandingSectionProps) {
                 <span className="block truncate text-xs text-muted">{service.description}</span>
               </span>
               <span className={`text-xs font-bold ${service.status === 'active' ? 'text-primary' : 'text-muted'}`}>
-                {service.meta}
+                {service.status === 'active' ? '이동' : '준비 중'}
               </span>
             </>
           );

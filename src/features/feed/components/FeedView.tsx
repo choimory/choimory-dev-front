@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
+import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
 
@@ -39,7 +40,10 @@ export function FeedView({ viewModel }: FeedViewProps) {
 
       <AppContent className="grid gap-4">
         <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="feed-title">
-          <p className="text-sm font-bold text-primary">choimory.dev / feed</p>
+          <p className="flex items-center gap-1 text-sm font-bold text-primary">
+            <BrandLogo size="sm" isAnimated={false} />
+            <span>/ feed</span>
+          </p>
           <h1 id="feed-title" className="mt-1 text-2xl font-black leading-tight text-foreground">
             방송 시작과 가격 하락을 한 피드에서
           </h1>
