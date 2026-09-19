@@ -58,6 +58,9 @@ const BLOG_FOLLOWERS: BlogRelationUser[] = [
   { id: 'follower-1', nickname: 'jin.note', initial: 'J', summary: '개발 노트와 UI 메모를 기록' },
   { id: 'follower-2', nickname: 'ui.archive', initial: 'U', summary: '작은 인터랙션 패턴 수집' },
   { id: 'follower-3', nickname: 'nav.lab', initial: 'N', summary: '서비스 네비게이션 구조 연구' },
+  { id: 'follower-4', nickname: 'feed.watch', initial: 'F', summary: '관찰 피드와 알림 흐름 기록' },
+  { id: 'follower-5', nickname: 'route.log', initial: 'R', summary: '라우팅 구조를 정리하는 개발자' },
+  { id: 'follower-6', nickname: 'design.memo', initial: 'D', summary: '작은 화면 설계 메모' },
 ];
 
 /** 팔로잉 mock 데이터 */
@@ -65,6 +68,9 @@ const BLOG_FOLLOWINGS: BlogRelationUser[] = [
   { id: 'following-1', nickname: 'jin.note', initial: 'J', summary: '개발 노트와 UI 메모를 기록' },
   { id: 'following-2', nickname: 'ui.archive', initial: 'U', summary: '작은 인터랙션 패턴 수집' },
   { id: 'following-3', nickname: 'feed.watch', initial: 'F', summary: '관찰 피드와 알림 흐름 기록' },
+  { id: 'following-4', nickname: 'nav.lab', initial: 'N', summary: '서비스 네비게이션 구조 연구' },
+  { id: 'following-5', nickname: 'build.note', initial: 'B', summary: '빌드와 배포 체크리스트 기록' },
+  { id: 'following-6', nickname: 'comment.lab', initial: 'C', summary: '댓글 인터랙션 실험 기록' },
 ];
 
 /**
@@ -74,9 +80,20 @@ const BLOG_FOLLOWINGS: BlogRelationUser[] = [
  * @returns 관계 목록 모달
  */
 function BlogRelationModal({ title, users, onClose }: { title: string; users: BlogRelationUser[]; onClose: () => void }) {
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageSize = 3;
+  const pageCount = Math.max(1, Math.ceil(users.length / pageSize));
+  const pageUsers = users.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
+
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-background/70 px-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="blog-relation-modal-title">
-      <section className="w-full max-w-sm rounded-3xl border border-border bg-surface p-4 shadow-2xl">
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-background/70 px-4 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="blog-relation-modal-title"
+      onClick={onClose}
+    >
+      <section className="w-full max-w-sm rounded-3xl border border-border bg-surface p-4 shadow-2xl" onClick={(event) => event.stopPropagation()}>
         <div className="flex items-center justify-between gap-3">
           <h3 id="blog-relation-modal-title" className="text-lg font-black text-foreground">{title}</h3>
           <button className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted" type="button" aria-label="닫기" onClick={onClose}>
@@ -84,7 +101,7 @@ function BlogRelationModal({ title, users, onClose }: { title: string; users: Bl
           </button>
         </div>
         <div className="mt-4 grid gap-2">
-          {users.map((user) => (
+          {pageUsers.map((user) => (
             <article key={user.id} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-2xl bg-surface-strong p-3">
               <span className="grid size-10 place-items-center rounded-full bg-primary-soft text-sm font-bold text-primary">
                 {user.initial}
@@ -95,6 +112,29 @@ function BlogRelationModal({ title, users, onClose }: { title: string; users: Bl
               </span>
             </article>
           ))}
+        </div>
+        <div className="mt-4 flex items-center justify-between gap-3">
+          <button
+            className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted disabled:opacity-35"
+            type="button"
+            aria-label="이전 목록"
+            disabled={pageIndex === 0}
+            onClick={() => setPageIndex((currentValue) => Math.max(0, currentValue - 1))}
+          >
+            <Icon name="chevronLeft" />
+          </button>
+          <span className="text-xs font-bold text-muted">
+            {pageIndex + 1} / {pageCount}
+          </span>
+          <button
+            className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted disabled:opacity-35"
+            type="button"
+            aria-label="다음 목록"
+            disabled={pageIndex >= pageCount - 1}
+            onClick={() => setPageIndex((currentValue) => Math.min(pageCount - 1, currentValue + 1))}
+          >
+            <Icon className="size-5 rotate-180" name="chevronLeft" />
+          </button>
         </div>
       </section>
     </div>
@@ -187,7 +227,7 @@ export function BlogUserBlogView({ isLoggedIn, nickname, posts }: BlogUserBlogVi
           { label: '홈', href: '/blog', iconName: 'home' },
           { label: '인기', href: '/blog/popular', iconName: 'trophy' },
           { label: '팔로잉', href: '/blog/following', iconName: 'heart' },
-          { label: '내 블로그', href: '/blog/users/mory.dev', iconName: 'user', isActive: profile.nickname === 'mory.dev' },
+          { label: '내 블로그', href: '/blog/me', iconName: 'user' },
         ]}
       />
     </AppFrame>

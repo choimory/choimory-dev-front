@@ -12,6 +12,9 @@
 - [검증 결과](#검증-결과)
 - [남은 범위](#남은-범위)
 - [추가사항2 구현사항](#추가사항2-구현사항)
+- [추가사항3 구현사항](#추가사항3-구현사항)
+- [추가사항4 구현사항](#추가사항4-구현사항)
+- [대화 중 추가 수정사항](#대화-중-추가-수정사항)
 
 ---
 
@@ -238,3 +241,258 @@
 - 실제 팔로우/언팔로우 동작
 - 검색어 입력에 따른 서버/클라이언트 필터링 정책 결정
 - `/blog/users/[nickname]`의 nickname별 실제 데이터 바인딩
+
+---
+
+# 추가사항3 구현사항
+
+`plan3.md`의 `추가사항3` 기준으로 blog 라우트 구조와 상세 화면 UI를 추가 개선했다.
+
+## 공개 유저 blog 라우트 변경
+
+공개 유저 blog 주소를 `/blog/users/{nickname}` 중심에서 `/blog/{nickname}` 중심으로 변경했다.
+
+구현 내용:
+
+- `/blog/[nickname]` 라우트를 추가했다.
+- `/blog/[nickname]`에서 `BlogUserBlogContainer`를 재사용하도록 구성했다.
+- 기존 `/blog/users/[nickname]`는 `/blog/[nickname]`로 redirect 처리했다.
+- README 라우트 표에 `/blog/[nickname]` 공개 유저 blog 메인과 `/blog/users/[nickname]` 호환 라우트를 반영했다.
+
+## 내 blog 설정/관리 화면 복구
+
+`/blog/me`를 redirect 라우트가 아니라 내 blog 설정/관리 화면으로 복구했다.
+
+구현 내용:
+
+- `BlogMeSettingsContainer`를 추가했다.
+- `BlogMeSettingsView`를 추가했다.
+- 하단 네비게이션의 `내 블로그` 링크를 `/blog/me`로 복구했다.
+- `/blog/me` 상단에 내 프로필 카드 링크를 배치했다.
+- 내 프로필 카드 클릭 시 `/blog/mory.dev` 공개 유저 blog로 이동하도록 구성했다.
+- `/blog?auth=member`의 글 작성 진입 영역과 유사한 `무슨 생각을 공유할까요?` 카드를 배치했다.
+- 블로그 공개 여부, 기본 댓글 허용 범위, 태그 추천 설정 mock 카드를 추가했다.
+- 플랫폼 홈의 blog 관련 내 활동 링크도 `/blog/me`로 복구했다.
+
+## 유저 blog 팔로워/팔로잉 모달 개선
+
+유저 blog 메인 화면의 팔로워/팔로잉 모달 사용성을 개선했다.
+
+구현 내용:
+
+- 팔로워/팔로잉 mock 데이터를 6개씩으로 확장했다.
+- 모달 내부에 3개 단위 paging을 추가했다.
+- 이전/다음 화살표 버튼을 추가했다.
+- 현재 페이지와 전체 페이지 수를 표시했다.
+- 모달 바깥 overlay 클릭 시 모달이 닫히도록 처리했다.
+- 모달 내부 카드 클릭 시 닫히지 않도록 `stopPropagation`을 적용했다.
+
+## 게시글 상세 화면 개선
+
+블로그 게시글 상세 화면의 댓글과 본문 UI를 개선했다.
+
+구현 내용:
+
+- 댓글 mock 데이터에 `authorInitial`을 추가했다.
+- 대댓글 mock 데이터에도 `authorInitial`을 추가했다.
+- 댓글 목록에 작성자 프로필 이니셜 아바타를 표시했다.
+- 대댓글 목록에도 작성자 프로필 이니셜 아바타를 표시했다.
+- 게시글 본문 위아래 간격을 더 넓혔다.
+- 내가 쓴 글 mock 조건을 `post.authorName === 'mory.dev'`로 두고 `수정` 버튼을 표시했다.
+
+## README 갱신
+
+현재 라우트와 blog 화면 설명을 `추가사항3` 구현 내용에 맞게 갱신했다.
+
+반영 내용:
+
+- `/blog/[nickname]` 공개 유저 blog 메인 설명 추가
+- `/blog/me` 내 blog 설정/관리 설명 추가
+- `/blog/users/[nickname]` 호환 redirect 설명으로 변경
+- 내 blog 설정/관리 화면 요소 설명 추가
+- 유저 blog 팔로워/팔로잉 modal paging 설명 추가
+- 게시글 상세의 내 글 수정 버튼, 댓글 아바타 설명 추가
+
+## 추가 변경 파일
+
+- `README.md`
+- `.agents/histories/2026/09/19/detail-page-and-screen-structure/plan3.md`
+- `src/app/blog/[nickname]/page.tsx`
+- `src/app/blog/me/page.tsx`
+- `src/app/blog/users/[nickname]/page.tsx`
+- `src/features/blog/components/BlogMeSettingsView.tsx`
+- `src/features/blog/container/BlogMeSettingsContainer.tsx`
+- `src/features/blog/components/BlogUserBlogView.tsx`
+- `src/features/blog/components/BlogPostDetailView.tsx`
+- `src/features/blog/components/BlogView.tsx`
+- `src/features/blog/components/BlogMenuView.tsx`
+- `src/features/platform/components/MemberServiceFeedSection.tsx`
+
+## 추가 검증 결과
+
+다음 검증을 모두 통과했다.
+
+- `npx tsc --noEmit`
+- `npm run lint`
+- `git diff --check`
+- `npm run build`
+
+## 추가 남은 범위
+
+- 실제 내 blog 설정 API 연동
+- 실제 글 작성 폼 구현
+- 실제 글 수정 화면 또는 수정 모달 구현
+- 공개 유저 blog의 nickname별 실제 데이터 바인딩
+- `/blog/[nickname]` reserved path 처리 정책 구체화
+
+---
+
+# 추가사항4 구현사항
+
+`plan3.md`의 `추가사항4` 기준으로 `/blog/me` 내 blog 설정/관리 화면에 실제 조작 가능한 모달 폼을 추가했다.
+
+## 내 blog 설정/관리 화면 client 전환
+
+`BlogMeSettingsView`에서 모달 상태를 관리해야 하므로 client component로 전환했다.
+
+구현 내용:
+
+- `BlogMeSettingsView.tsx`에 `'use client'`를 추가했다.
+- `useState`로 글작성 모달 열림 상태를 관리했다.
+- `useState`로 현재 수정 중인 설정 항목을 관리했다.
+- 공통 modal shell을 같은 파일 안에 구성했다.
+
+## 글작성 모달 구현
+
+글작성 카드의 `무슨 생각을 공유할까요?` 버튼을 누르면 글작성 모달이 열리도록 구현했다.
+
+구현 내용:
+
+- 글제목 입력 필드 추가
+- 글내용 textarea 추가
+- 공개여부 segmented option 추가
+  - 전체
+  - 팔로워
+  - 비공개
+- 댓글허용여부 segmented option 추가
+  - 전체
+  - 팔로워
+  - 비허용
+- 태그 입력 필드 추가
+- 사진첨부 mock 버튼 추가
+- 취소 버튼 추가
+- 저장 버튼 추가
+- 저장 버튼은 현재 mock 동작으로 모달을 닫도록 처리했다.
+
+## 설정 변경 모달 구현
+
+설정 카드를 누르면 해당 설정을 변경하는 모달이 열리도록 구현했다.
+
+구현 내용:
+
+- `블로그 공개 여부` 설정 변경 모달 추가
+  - 전체 공개
+  - 팔로워 공개
+  - 비공개
+- `기본 댓글 허용 범위` 설정 변경 모달 추가
+  - 전체
+  - 팔로워
+  - 비허용
+- `태그 추천` 설정 변경 모달 추가
+  - 켜짐
+  - 꺼짐
+- 선택 중인 옵션을 강조 표시했다.
+- 선택 중인 옵션에 `star` 아이콘을 표시했다.
+- 취소 버튼과 저장 버튼을 추가했다.
+- 저장 버튼은 현재 mock 동작으로 모달을 닫도록 처리했다.
+
+## 모달 동작
+
+공통 모달 shell에 기본적인 닫기 동작을 구현했다.
+
+구현 내용:
+
+- 모달 바깥 overlay 클릭 시 닫기
+- 모달 내부 클릭 시 `stopPropagation`으로 닫힘 방지
+- 우측 상단 닫기 버튼 추가
+- 긴 폼을 고려해 modal body에 최대 높이와 스크롤을 적용했다.
+
+## README 갱신
+
+내 blog 설정/관리 화면 설명을 새 구현 내용에 맞게 갱신했다.
+
+반영 내용:
+
+- 내 blog 설정/관리 화면 설명을 프로필 링크 카드, 글작성 모달, 설정 변경 모달 기준으로 수정
+
+## 추가 변경 파일
+
+- `README.md`
+- `src/features/blog/components/BlogMeSettingsView.tsx`
+
+## 추가 검증 결과
+
+다음 검증을 모두 통과했다.
+
+- `npx tsc --noEmit`
+- `npm run lint`
+- `git diff --check`
+- `npm run build`
+
+## 추가 남은 범위
+
+- 실제 글 작성 API 연동
+- 실제 사진 첨부 처리
+- 실제 설정 변경 API 연동
+- 저장 후 화면 상태 갱신 또는 toast 피드백
+
+---
+
+# 대화 중 추가 수정사항
+
+`추가사항4` 구현 이후 대화로 요청한 세부 UI 수정사항을 추가 반영했다.
+
+## 포스트 상세 본문 간격 되돌림
+
+블로그 포스트 상세보기에서 본문 위아래 간격을 다시 이전 밀도에 가깝게 조정했다.
+
+구현 내용:
+
+- 본문 `py-3` 여백을 제거했다.
+- 본문 `leading-7`을 `leading-6`으로 되돌렸다.
+
+## 설정 변경 모달 선택 UI 수정
+
+`/blog/me` 설정 변경 모달의 선택 표시를 별표 아이콘에서 일반적인 radio 형태로 변경했다.
+
+구현 내용:
+
+- 선택 항목의 `star` 아이콘을 제거했다.
+- 선택 여부를 둥근 radio outer circle과 inner dot으로 표시했다.
+- 선택되지 않은 항목은 border만 있는 radio circle로 표시했다.
+
+## 글작성 사진첨부 기능 보강
+
+글작성 모달의 사진첨부를 실제 여러 장 선택 흐름에 맞게 보강했다.
+
+구현 내용:
+
+- 사진첨부 input에 `type="file"`을 적용했다.
+- `accept="image/*"`로 이미지 파일 선택을 제한했다.
+- `multiple`을 적용해 여러 장 선택을 지원했다.
+- 사진 선택 시 파일명만이 아니라 이미지 미리보기를 표시했다.
+- 선택한 사진의 현재 순서를 표시했다.
+- 위/아래 버튼으로 사진 순서를 변경할 수 있게 했다.
+- 사진 제거 버튼을 추가했다.
+- 사진을 다시 선택하면 기존 목록을 덮어쓰지 않고 뒤에 추가되도록 변경했다.
+- 같은 파일을 다시 선택할 수 있도록 file input value를 초기화했다.
+
+## 추가 검증 결과
+
+다음 검증을 통과했다.
+
+- `npx tsc --noEmit`
+- `npm run lint`
+- `git diff --check`
+
+`npm run build`는 이번 세부 수정 이후에는 별도로 다시 실행하지 않았다.

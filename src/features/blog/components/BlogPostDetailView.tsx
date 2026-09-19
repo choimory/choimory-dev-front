@@ -24,16 +24,18 @@ const POST_DETAIL_COMMENTS = [
   {
     id: 'comment-1',
     authorName: 'mory.dev',
+    authorInitial: 'M',
     content: '이 구조면 상세 화면을 붙이기 쉬워 보입니다.',
     likeCount: 8,
     timeText: '3분 전',
     replies: [
-      { id: 'reply-1', authorName: 'jin.note', content: '@mory.dev 메뉴별 상단 카드까지 들어가면 더 자연스러울 듯합니다.', likeCount: 3, timeText: '1분 전' },
+      { id: 'reply-1', authorName: 'jin.note', authorInitial: 'J', content: '@mory.dev 메뉴별 상단 카드까지 들어가면 더 자연스러울 듯합니다.', likeCount: 3, timeText: '1분 전' },
     ],
   },
   {
     id: 'comment-2',
     authorName: 'jin.note',
+    authorInitial: 'J',
     content: '하단 메뉴별 화면도 같은 패턴으로 가면 좋겠네요.',
     likeCount: 5,
     timeText: '12분 전',
@@ -49,6 +51,7 @@ const POST_DETAIL_COMMENTS = [
  */
 export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps) {
   const [replyingCommentId, setReplyingCommentId] = useState<string | null>(null);
+  const isOwnPost = post.authorName === 'mory.dev';
 
   return (
     <AppFrame>
@@ -104,6 +107,11 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
               <button className="grid size-9 place-items-center rounded-[10px]" type="button" aria-label="저장">
                 <Icon name="bookmark" />
               </button>
+              {isOwnPost && (
+                <button className="h-9 rounded-[10px] bg-surface-strong px-3 text-xs font-bold text-primary" type="button">
+                  수정
+                </button>
+              )}
             </div>
             <p className="text-sm font-bold text-foreground">
               좋아요 {post.likeCount}개 · 댓글 {post.commentCount}개
@@ -138,7 +146,10 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
           </div>
           {POST_DETAIL_COMMENTS.map((comment) => (
             <article key={comment.id} className="rounded-2xl border border-border bg-surface p-3">
-              <div className="flex items-start justify-between gap-3">
+              <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
+                <div className="grid size-9 place-items-center rounded-full bg-primary-soft text-xs font-bold text-primary">
+                  {comment.authorInitial}
+                </div>
                 <div className="min-w-0">
                   <h3 className="text-sm font-bold text-foreground">{comment.authorName}</h3>
                   <p className="mt-1 text-sm leading-5 text-muted">{comment.content}</p>
@@ -166,7 +177,10 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
                 <div className="mt-3 grid gap-2 border-l border-border pl-3">
                   {comment.replies.map((reply) => (
                     <article key={reply.id} className="rounded-2xl bg-surface-strong p-3">
-                      <div className="flex items-start justify-between gap-3">
+                      <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
+                        <div className="grid size-8 place-items-center rounded-full bg-surface text-xs font-bold text-primary">
+                          {reply.authorInitial}
+                        </div>
                         <div className="min-w-0">
                           <h4 className="text-sm font-bold text-foreground">{reply.authorName}</h4>
                           <p className="mt-1 text-sm leading-5 text-muted">{reply.content}</p>
@@ -193,7 +207,7 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
           { label: '홈', href: '/blog', iconName: 'home', isActive: true },
           { label: '인기', href: '/blog/popular', iconName: 'trophy' },
           { label: '팔로잉', href: '/blog/following', iconName: 'heart' },
-          { label: '내 블로그', href: '/blog/users/mory.dev', iconName: 'user' },
+          { label: '내 블로그', href: '/blog/me', iconName: 'user' },
         ]}
       />
     </AppFrame>

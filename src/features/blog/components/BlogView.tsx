@@ -52,7 +52,7 @@ export function BlogView({ viewModel }: BlogViewProps) {
           { label: '홈', href: '/blog', iconName: 'home', isActive: true },
           { label: '인기', href: '/blog/popular', iconName: 'trophy' },
           { label: '팔로잉', href: '/blog/following', iconName: 'heart' },
-          { label: '내 블로그', href: '/blog/users/mory.dev', iconName: 'user' },
+          { label: '내 블로그', href: '/blog/me', iconName: 'user' },
         ]}
       />
     </AppFrame>

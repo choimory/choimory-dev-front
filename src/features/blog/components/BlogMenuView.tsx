@@ -416,7 +416,7 @@ export function BlogMenuView({ menuKind, viewModel }: BlogMenuViewProps) {
           { label: '홈', href: '/blog', iconName: 'home' },
           { label: '인기', href: '/blog/popular', iconName: 'trophy', isActive: menuKind === 'popular' },
           { label: '팔로잉', href: '/blog/following', iconName: 'heart', isActive: menuKind === 'following' },
-          { label: '내 블로그', href: '/blog/users/mory.dev', iconName: 'user' },
+          { label: '내 블로그', href: '/blog/me', iconName: 'user' },
         ]}
       />
     </AppFrame>
