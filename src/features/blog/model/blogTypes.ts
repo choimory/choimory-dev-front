@@ -2,7 +2,7 @@
 export type BlogAuthStatus = 'guest' | 'member';
 
 /** blog 하단 메뉴 종류 */
-export type BlogMenuKind = 'popular' | 'following' | 'me';
+export type BlogMenuKind = 'popular' | 'following';
 
 /** blog 피드 필터 */
 export type BlogFeedTab = {
@@ -17,6 +17,7 @@ export type BlogPost = {
   authorInitial: string; // 작성자 아바타 이니셜
   meta: string;        // 게시글 부가 정보
   content: string;     // 게시글 본문
+  tags: string[];      // 게시글 태그 목록
   likeCount: number;   // 좋아요 수
   commentCount: number; // 댓글 수
   hasMedia: boolean;   // 이미지 영역 표시 여부
@@ -46,6 +47,7 @@ export const blogViewModel: BlogViewModel = {
       meta: '프론트 구성 기획 · 8분 전',
       content:
         'PC에서도 좌우를 꽉 채우지 않고, 중앙 피드 폭을 고정하면 지금 프로젝트의 모바일 앱 같은 느낌을 유지할 수 있음.',
+      tags: ['frontend', 'layout', 'mobile-ui'],
       likeCount: 128,
       commentCount: 24,
       hasMedia: true,
@@ -57,6 +59,7 @@ export const blogViewModel: BlogViewModel = {
       meta: '개발 노트 · 32분 전',
       content:
         '전역 메뉴는 상단이나 작은 레일 정도만 두고, 서비스 내부 화면은 모바일처럼 길쭉하게 유지하는 쪽이 깔끔함.',
+      tags: ['platform', 'navigation', 'blog'],
       likeCount: 42,
       commentCount: 7,
       hasMedia: false,

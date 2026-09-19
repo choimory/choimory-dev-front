@@ -1,21 +1,10 @@
-import { BlogMenuContainer } from '@/features/blog/container/BlogMenuContainer';
-import { getMockAuthStatus, type PageSearchParams } from '@/shared/model/mockAuth';
+import { redirect } from 'next/navigation';
 
 /**
- * 내 blog 화면 Props입니다.
- */
-type BlogMePageProps = {
-  searchParams: Promise<PageSearchParams>; // URL query
-};
-
-/**
- * 내 blog 화면의 라우팅 진입점입니다.
+ * 내 blog 호환 라우팅 진입점입니다.
  *
- * @param props 화면 Props
- * @returns 내 blog 화면
+ * @returns 유저 blog 화면으로 이동
  */
-export default async function BlogMePage({ searchParams }: BlogMePageProps) {
-  const authStatus = getMockAuthStatus(await searchParams);
-
-  return <BlogMenuContainer authStatus={authStatus} menuKind="me" />;
+export default function BlogMePage() {
+  redirect('/blog/users/mory.dev');
 }

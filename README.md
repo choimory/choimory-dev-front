@@ -49,6 +49,7 @@ src/
 │   ├── blog/me/page.tsx
 │   ├── blog/popular/page.tsx
 │   ├── blog/posts/[postId]/page.tsx
+│   ├── blog/users/[nickname]/page.tsx
 │   ├── feed/page.tsx
 │   ├── feed/activities/[activityId]/page.tsx
 │   ├── feed/me/page.tsx
@@ -108,8 +109,9 @@ src/
 | `/blog` | 인스타그램 같은 글, 이미지, 댓글, 팔로우 중심의 blog 서비스 피드 |
 | `/blog/popular` | blog 인기 글 메뉴 |
 | `/blog/following` | blog 팔로잉 피드 메뉴 |
-| `/blog/me` | 내 blog 메뉴 |
 | `/blog/posts/[postId]` | blog 게시글 상세 |
+| `/blog/users/[nickname]` | nickname 기반 유저 blog 메인 |
+| `/blog/me` | `/blog/users/mory.dev`로 이동하는 호환 라우트 |
 | `/feed` | 스트리머 활동 알림과 가격 알림을 모아보는 feed 서비스 |
 | `/feed/popular` | feed 인기 알림 메뉴 |
 | `/feed/observations` | feed 관찰 목록 |
@@ -137,8 +139,12 @@ src/
   - 피드 필터
   - 글 작성 진입 영역
   - 게시글 카드
-  - 인기, 팔로잉, 내 blog 메뉴 화면
-  - 게시글 액션, 댓글 작성, 대댓글 입력 예시를 포함한 게시글 상세 화면
+  - 인기, 팔로잉, 유저 blog 메인 화면
+  - 인기 화면 상단 검색어, 멘션, 팔로워, 태그 탭형 5개 실시간 랭킹 카드
+  - 팔로잉 화면 상단 팔로워/팔로잉 탭, 검색 버튼, 화살표 paging, 관계 액션 버튼
+  - 유저 blog 메인 화면의 nickname 기반 프로필 카드
+  - 유저 blog 메인 화면의 팔로워, 팔로잉 카운트 클릭 모달
+  - 게시글 액션, 태그 링크, 댓글 작성, 대댓글 입력 예시를 포함한 게시글 상세 화면
   - 애니메이션 없는 브랜드 로고를 활용한 서비스 depth 라벨
   - 서비스 내부 하단 네비게이션
 - feed

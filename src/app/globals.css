@@ -108,9 +108,29 @@ body {
   white-space: nowrap;
 }
 
+@keyframes blog-ranking-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.blog-ranking-enter {
+  animation: blog-ranking-enter 260ms ease both;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .brand-logo-typewriter {
+  .brand-logo-typewriter,
+  .blog-ranking-enter {
     animation: none;
+  }
+
+  .brand-logo-typewriter {
     border-right: 0;
     max-width: none;
   }

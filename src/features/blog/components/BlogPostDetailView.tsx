@@ -109,6 +109,17 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
               좋아요 {post.likeCount}개 · 댓글 {post.commentCount}개
             </p>
             <p className="text-sm leading-6 text-foreground">{post.content}</p>
+            <div className="flex flex-wrap gap-2" aria-label="게시글 태그">
+              {post.tags.map((tag) => (
+                <Link
+                  key={tag}
+                  className="rounded-xl bg-surface-strong px-3 py-1.5 text-xs font-bold text-primary"
+                  href={`/blog/popular?tag=${tag}`}
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
           </div>
         </article>
 
@@ -182,7 +193,7 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
           { label: '홈', href: '/blog', iconName: 'home', isActive: true },
           { label: '인기', href: '/blog/popular', iconName: 'trophy' },
           { label: '팔로잉', href: '/blog/following', iconName: 'heart' },
-          { label: '내 블로그', href: '/blog/me', iconName: 'user' },
+          { label: '내 블로그', href: '/blog/users/mory.dev', iconName: 'user' },
         ]}
       />
     </AppFrame>

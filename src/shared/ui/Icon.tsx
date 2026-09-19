@@ -19,7 +19,8 @@ export type IconName =
   | 'star'
   | 'tag'
   | 'trophy'
-  | 'user';
+  | 'user'
+  | 'x';
 
 /**
  * 공통 아이콘 컴포넌트의 Props
@@ -175,6 +176,12 @@ export function Icon({ name, className = 'size-5' }: IconProps) {
         <svg {...commonProps}>
           <circle cx="12" cy="8" r="4" strokeWidth={2} />
           <path d="M4 21a8 8 0 0 1 16 0" strokeLinecap="round" strokeWidth={2} />
+        </svg>
+      );
+    case 'x':
+      return (
+        <svg {...commonProps}>
+          <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" strokeWidth={2} />
         </svg>
       );
   }

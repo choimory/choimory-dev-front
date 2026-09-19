@@ -54,16 +54,16 @@ const MEMBER_SERVICE_FEED_CARDS: MemberServiceFeedCard[] = [
     id: 'blog-feed',
     serviceId: 'blog',
     metrics: [
-      { label: '내가 쓴 글', value: '12', href: '/blog/me' },
-      { label: '내가 쓴 댓글', value: '48', href: '/blog/me' },
-      { label: '팔로워 수', value: '128', href: '/blog/me' },
+      { label: '내가 쓴 글', value: '12', href: '/blog/users/mory.dev' },
+      { label: '내가 쓴 댓글', value: '48', href: '/blog/users/mory.dev' },
+      { label: '팔로워 수', value: '128', href: '/blog/users/mory.dev' },
       { label: '팔로잉 수', value: '36', href: '/blog/following' },
     ],
     notifications: [
       { id: 'blog-notice-1', title: '새 댓글이 달렸습니다', timeText: '방금', href: '/blog/posts/post-1' },
       { id: 'blog-notice-2', title: '팔로잉한 사용자가 글을 올렸습니다', timeText: '14분 전', href: '/blog/following' },
       { id: 'blog-notice-3', title: '내 글이 인기 목록에 올랐습니다', timeText: '38분 전', href: '/blog/popular' },
-      { id: 'blog-notice-4', title: '새 팔로워가 생겼습니다', timeText: '1시간 전', href: '/blog/me' },
+      { id: 'blog-notice-4', title: '새 팔로워가 생겼습니다', timeText: '1시간 전', href: '/blog/users/mory.dev' },
     ],
   },
   {
