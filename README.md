@@ -54,9 +54,11 @@ src/
 │   ├── feed/page.tsx
 │   ├── feed/activities/[activityId]/page.tsx
 │   ├── feed/me/page.tsx
+│   ├── feed/me/targets/[targetId]/page.tsx
 │   ├── feed/observations/page.tsx
 │   ├── feed/observations/[observationId]/page.tsx
 │   ├── feed/popular/page.tsx
+│   ├── feed/targets/[targetId]/page.tsx
 │   ├── favicon.ico
 │   ├── globals.css
 │   ├── layout.tsx
@@ -114,12 +116,14 @@ src/
 | `/blog/[nickname]` | nickname 기반 공개 유저 blog 메인 |
 | `/blog/me` | 내 blog 설정/관리 |
 | `/blog/users/[nickname]` | `/blog/[nickname]`로 이동하는 호환 라우트 |
-| `/feed` | 스트리머 활동 알림과 가격 알림을 모아보는 feed 서비스 |
-| `/feed/popular` | feed 인기 알림 메뉴 |
-| `/feed/observations` | feed 관찰 목록 |
-| `/feed/observations/[observationId]` | feed 관찰 상세 |
+| `/feed` | 아이템, 스트리머, 아티스트 관찰 알림을 모아보는 feed 서비스 |
+| `/feed/popular` | feed 인기 관찰 대상 랭킹 |
+| `/feed/observations` | feed 관찰 대상 목록 |
+| `/feed/observations/[observationId]` | feed 구버전 관찰 상세 |
 | `/feed/activities/[activityId]` | feed 알림 상세 |
-| `/feed/me` | 내 feed 메뉴 |
+| `/feed/targets/[targetId]` | feed 관찰 대상 공통 상세 |
+| `/feed/me` | 내 feed 관리 홈 |
+| `/feed/me/targets/[targetId]` | 내 feed 관찰 대상 설정 상세 |
 | `/login` | 로그인 화면 |
 | `/signup` | 회원가입 화면 |
 | `/me` | 개인정보와 사이트 설정을 관리하는 마이페이지 |
@@ -151,13 +155,17 @@ src/
   - 애니메이션 없는 브랜드 로고를 활용한 서비스 depth 라벨
   - 서비스 내부 하단 네비게이션
 - feed
-  - 스트리머 활동 알림 소개
-  - 가격 알림 소개
+  - 아이템 가격 알림 소개
+  - 스트리머 방송/이벤트 알림 소개
+  - 아티스트 신곡/앨범/참여곡 알림 소개
   - 애니메이션 없는 브랜드 로고를 활용한 서비스 depth 라벨
-  - 로그인 사용자용 관심 피드 요약 뼈대
-  - 관찰 목록과 관찰 상세 화면
-  - 최근 알림 목록 뼈대
-  - 인기, 내 feed 메뉴 화면
+  - 로그인 사용자용 관찰 대상 요약 카드
+  - 아이템, 스트리머, 아티스트가 섞인 관찰 대상 목록
+  - 전체, 아이템, 스트리머, 아티스트 탭과 순차 등장 애니메이션을 포함한 인기 관찰 대상 랭킹 화면
+  - 기간 선택 가격 그래프, 방송 기록, 3D 앨범 carousel, 원본 링크, 관련 뉴스/커뮤니티 글을 포함한 관찰 대상 공통 상세 화면
+  - 가격 그래프 hover/click tooltip, 방송 기록 popover, 앨범/트랙 상세 modal
+  - 관찰대상 등록 modal과 저장 버튼이 있는 내 feed 관리 홈과 대상별 알림 설정 상세
+  - 기존 관찰 상세와 알림 상세 호환 화면
   - 알림 상세 화면
   - 서비스 내부 하단 네비게이션
 - 인증
@@ -182,7 +190,7 @@ src/
 - `choimory.dev`는 여러 하위 서비스를 담는 플랫폼으로 본다.
 - 첫 화면은 특정 서비스의 피드가 아니라 서비스 포털/런처 역할을 한다.
 - blog 기능은 플랫폼 자체가 아니라 하위 서비스 중 하나로 분리한다.
-- feed 기능은 스트리머 활동 알림과 가격 알림을 모아보는 핵심 하위 서비스로 둔다.
+- feed 기능은 아이템 가격, 스트리머 활동, 아티스트 신곡 알림을 관찰 대상별로 관리하는 핵심 하위 서비스로 둔다.
 - memo, account-book, schedule은 미래 계획 서비스로 두고 현재는 준비 중 상태로 표시한다.
 - 플랫폼 홈, blog, 마이페이지 같은 서비스 화면은 `768px` 기준의 태블릿형 중앙 폭을 기본으로 사용한다.
 - 로그인, 회원가입처럼 폼 중심의 특수 화면은 별도 좁은 중앙 폼 레이아웃을 사용할 수 있다.
@@ -210,9 +218,9 @@ src/
 - 서비스 화면의 중앙 콘텐츠는 `shared/ui/AppContent.tsx`를 사용한다.
 - `AppContent`의 기본 variant는 `wide`이며, 기본 폭은 `max-w-[768px]`이다.
 - `AppTopBar`와 `BottomNavigation`의 기본 폭도 wide 기준이다.
-- 상단바 액션은 `shared/ui/TopBarActions.tsx`에서 검색, 알림, 로그인/로그아웃 UI를 담당한다.
+- 상단바 액션은 `shared/ui/TopBarActions.tsx`에서 검색, 알림, 서비스 popover, 로그인/로그아웃 UI를 담당한다.
 - 검색 오버레이는 `document.body` portal 기반으로 렌더링하여 화면 전체 기준으로 표시한다.
-- 알림 팝오버도 `document.body` portal 기반으로 렌더링하여 화면 빈 영역 클릭으로 닫히게 한다.
+- 알림과 서비스 팝오버도 `document.body` portal 기반으로 렌더링하여 화면 빈 영역 클릭으로 닫히게 한다.
 - 브랜드 로고는 `shared/ui/BrandLogo.tsx`를 사용하며 화면별로 애니메이션 여부를 조정한다.
 - 좁은 레이아웃은 로그인/회원가입 같은 예외 화면에만 제한적으로 사용한다.
 - 개발 확인용 공통 모델은 `shared/model`에 둔다.

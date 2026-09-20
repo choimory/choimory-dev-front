@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { platformHomeViewModel } from '@/features/platform/model/platformHomeTypes';
+
 import { BrandLogo } from './BrandLogo';
 import { Icon } from './Icon';
 
@@ -63,6 +65,7 @@ const SEARCH_FORM_CLASS_NAME = [
 export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isServiceOpen, setIsServiceOpen] = useState(false);
   const [notificationTab, setNotificationTab] = useState<NotificationTab>('all');
   const filteredNotificationItems = notificationTab === 'all' ? NOTIFICATION_ITEMS : NOTIFICATION_ITEMS.filter((item) => item.service === notificationTab);
 
@@ -72,7 +75,11 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
         className="hidden size-10 place-items-center rounded-[10px] text-foreground min-[380px]:grid"
         type="button"
         aria-label="검색"
-        onClick={() => setIsSearchOpen(true)}
+        onClick={() => {
+          setIsServiceOpen(false);
+          setIsNotificationOpen(false);
+          setIsSearchOpen(true);
+        }}
       >
         <Icon name="search" />
       </button>
@@ -80,9 +87,23 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
         className="hidden size-10 place-items-center rounded-[10px] text-foreground min-[380px]:grid"
         type="button"
         aria-label="알림"
-        onClick={() => setIsNotificationOpen((current) => !current)}
+        onClick={() => {
+          setIsServiceOpen(false);
+          setIsNotificationOpen((current) => !current);
+        }}
       >
         <Icon name="bell" />
+      </button>
+      <button
+        className="hidden size-10 place-items-center rounded-[10px] text-foreground transition hover:bg-surface-strong min-[380px]:grid"
+        type="button"
+        aria-label="서비스"
+        onClick={() => {
+          setIsNotificationOpen(false);
+          setIsServiceOpen((current) => !current);
+        }}
+      >
+        <Icon name="grid" />
       </button>
       <Link className="grid h-9 shrink-0 place-items-center rounded-full bg-primary px-3 text-sm font-bold text-primary-foreground min-[380px]:px-4" href={isLoggedIn ? '/' : '/login'}>
         {isLoggedIn ? '로그아웃' : '로그인'}
@@ -110,6 +131,41 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
                   <p className="mt-1 text-xs text-muted">{item.meta}</p>
                 </article>
               ))}
+            </div>
+          </section>
+        </div>,
+        document.body,
+      )}
+
+      {isServiceOpen && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-30 bg-transparent" role="presentation" onClick={() => setIsServiceOpen(false)}>
+          <section className="absolute right-4 top-16 w-[min(calc(100vw-2rem),320px)] rounded-2xl border border-border bg-surface p-3 shadow-[0_18px_50px_rgba(0,0,0,0.28)] min-[768px]:right-[max(1rem,calc((100vw-768px)/2))]" aria-label="서비스" onClick={(event) => event.stopPropagation()}>
+            <div className="grid grid-cols-3 gap-2">
+              {platformHomeViewModel.services.map((service) => {
+                const serviceContent = (
+                  <>
+                    <span className="grid size-11 place-items-center rounded-2xl bg-surface-strong text-primary">
+                      <Icon name={service.iconName} />
+                    </span>
+                    <span className="mt-2 block truncate text-xs font-bold text-foreground">{service.name}</span>
+                    <span className="mt-0.5 block truncate text-[11px] text-muted">{service.status === 'active' ? '이동' : '준비 중'}</span>
+                  </>
+                );
+
+                if (service.status === 'planned') {
+                  return (
+                    <Link key={service.id} className="grid justify-items-center rounded-xl p-2 text-center opacity-75 transition hover:bg-surface-strong" href="/services" onClick={() => setIsServiceOpen(false)}>
+                      {serviceContent}
+                    </Link>
+                  );
+                }
+
+                return (
+                  <Link key={service.id} className="grid justify-items-center rounded-xl p-2 text-center transition hover:bg-surface-strong" href={service.href} onClick={() => setIsServiceOpen(false)}>
+                    {serviceContent}
+                  </Link>
+                );
+              })}
             </div>
           </section>
         </div>,
