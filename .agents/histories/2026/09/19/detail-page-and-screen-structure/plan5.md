@@ -40,6 +40,13 @@
     - [앨범 상세 모달](#앨범-상세-모달)
     - [상단바 서비스 버튼 popover](#상단바-서비스-버튼-popover)
     - [추가사항2 추천 구현 순서](#추가사항2-추천-구현-순서)
+- [추가사항3](#추가사항3)
+  - [추가사항3 분석](#추가사항3-분석)
+    - [상세페이지 카드 분리](#상세페이지-카드-분리)
+    - [가격 그래프 pinned tooltip 해제](#가격-그래프-pinned-tooltip-해제)
+    - [방송추이 바둑알 hover 정확도](#방송추이-바둑알-hover-정확도)
+    - [아티스트 앨범 modal 중앙 정렬](#아티스트-앨범-modal-중앙-정렬)
+    - [추가사항3 구현 대상](#추가사항3-구현-대상)
 
 ---
 
@@ -612,3 +619,53 @@ type FeedArtistTrack = {
 - 아이템 상세페이지 가격변동 그래프에서 점 눌렀을때 점을 다시 눌러야만 해제되는거 말고, 다른 그래프 화면 눌렀을때도 해제되도록
 - 스트리머 방송추이 바둑알 마우스오버가 정확하게 안됨
 - 아티스트 앨범 눌렀을때 모달이 화면 정중아에 오게 (지금은 너무 상단에 있음)
+
+## 추가사항3 분석
+
+### 상세페이지 카드 분리
+
+- 현재 `ItemDetailSection`, `StreamerDetailSection`, `ArtistDetailSection`은 각각 하나의 큰 카드 안에 여러 요소를 넣고 있다.
+- 아이템 상세는 가격 요약, 가격 변화 설명, 기간 탭, 그래프, 원본 링크가 한 카드에 묶여 있다.
+- 스트리머 상세는 방송 요약, 추이 설명, 원본 채널, 방송 기록, 채팅 기록, 최근 이벤트가 한 카드에 묶여 있다.
+- 아티스트 상세는 신곡 요약, 발매 추이 설명, 앨범 carousel이 한 카드에 묶여 있다.
+- 구현 방향:
+  - type별 상세 section을 하나의 큰 카드가 아니라 여러 `section` 카드로 분리한다.
+  - 아이템 상세는 가격 요약 카드, 가격 변동 그래프 카드, 원본 링크 카드로 분리한다.
+  - 스트리머 상세는 방송 요약 카드, 원본 채널 카드, 방송 기록 카드, 채팅 기록 카드, 최근 방송/이벤트 카드로 분리한다.
+  - 아티스트 상세는 신곡 요약 카드와 앨범 carousel 카드로 분리한다.
+  - 공통 `최근 알림`, `관련 소식` 카드는 기존 구조를 유지한다.
+
+### 가격 그래프 pinned tooltip 해제
+
+- 현재 가격 그래프는 점을 클릭하면 `pinnedPointId`가 설정된다.
+- 고정된 tooltip은 같은 점을 다시 클릭해야만 해제된다.
+- 요청 방향은 그래프의 다른 영역을 클릭해도 pinned tooltip이 해제되는 것이다.
+- 구현 방향:
+  - 그래프 배경 또는 SVG 빈 영역 클릭 시 `pinnedPointId`를 `null`로 해제한다.
+  - 점 클릭 이벤트는 `event.stopPropagation()`으로 배경 클릭과 충돌하지 않게 한다.
+  - keyboard focus tooltip 동작은 유지한다.
+
+### 방송추이 바둑알 hover 정확도
+
+- 현재 방송 기록 바둑알은 `span size-3`를 hover 대상으로 사용한다.
+- hit area가 작아서 mouse hover가 정확하게 잡히지 않을 수 있다.
+- popover가 graph 내부 absolute로 표시되기 때문에 마우스 이동 중 hover가 끊길 수 있다.
+- 구현 방향:
+  - 각 바둑알을 `button`으로 변경한다.
+  - button은 `size-5` 정도의 hit area를 가지고, 내부에 실제 시각 점 `size-3`을 둔다.
+  - hover/focus 대상은 큰 button이 담당한다.
+  - popover는 active cell 기준으로 유지하되, hover 진입 영역을 넓혀 정확도를 높인다.
+
+### 아티스트 앨범 modal 중앙 정렬
+
+- 현재 앨범 상세 modal overlay는 `px-4 py-6`만 있고 modal section은 `mx-auto` 중심이라 화면 상단에 가깝게 보인다.
+- 요청 방향은 modal이 화면 정중앙에 표시되는 것이다.
+- 구현 방향:
+  - overlay를 `grid place-items-center` 또는 `flex items-center justify-center` 구조로 변경한다.
+  - modal의 `max-h-[calc(100vh-3rem)]`와 overflow 처리는 유지한다.
+  - 모바일에서도 상하 여백이 생기도록 overlay padding은 유지한다.
+
+### 추가사항3 구현 대상
+
+- `src/features/feed/components/FeedTargetDetailView.tsx`
+- 구현 후 `README.md`, `task5.md`

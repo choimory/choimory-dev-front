@@ -118,51 +118,63 @@ function ItemDetailSection({ target }: { target: FeedWatchTarget }) {
   const activePoint = activeRange.points.find((point) => point.id === activePointId);
 
   return (
-    <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-item-detail-title">
-      <h2 id="feed-item-detail-title" className="text-base font-bold text-foreground">가격 관찰</h2>
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <SummaryCard label="현재 가격" value={detail.currentPrice} />
-        <SummaryCard label="목표 가격" value={detail.targetPrice} />
-      </div>
-      <p className="mt-3 text-sm leading-6 text-muted">{detail.priceChangeText}</p>
-      <div className="mt-4 grid grid-cols-5 gap-1 rounded-2xl bg-surface-strong p-1" role="tablist" aria-label="가격 추이 기간">
-        {detail.priceRanges.map((range) => {
-          const isActive = activeRange.id === range.id;
+    <>
+      <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-item-summary-title">
+        <h2 id="feed-item-summary-title" className="text-base font-bold text-foreground">가격 관찰</h2>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <SummaryCard label="현재 가격" value={detail.currentPrice} />
+          <SummaryCard label="목표 가격" value={detail.targetPrice} />
+        </div>
+        <p className="mt-3 text-sm leading-6 text-muted">{detail.priceChangeText}</p>
+      </section>
 
-          return (
-            <button
-              key={range.id}
-              className={`h-9 rounded-xl text-xs font-black transition ${isActive ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => {
-                setActiveRangeId(range.id);
-                setHoveredPointId(null);
-                setPinnedPointId(null);
-              }}
-            >
-              {range.label}
-            </button>
-          );
-        })}
-      </div>
-      <MiniLineChart
-        activePoint={activePoint}
-        label="가격 변동"
-        pinnedPointId={pinnedPointId}
-        points={activeRange.points}
-        onHoverPoint={setHoveredPointId}
-        onTogglePinPoint={(pointId) => setPinnedPointId((current) => (current === pointId ? null : pointId))}
-      />
-      <div className="mt-4 rounded-2xl bg-surface-strong p-3">
+      <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-item-chart-title">
+        <h2 id="feed-item-chart-title" className="text-base font-bold text-foreground">가격 변동 그래프</h2>
+        <div className="mt-4 grid grid-cols-5 gap-1 rounded-2xl bg-surface-strong p-1" role="tablist" aria-label="가격 추이 기간">
+          {detail.priceRanges.map((range) => {
+            const isActive = activeRange.id === range.id;
+
+            return (
+              <button
+                key={range.id}
+                className={`h-9 rounded-xl text-xs font-black transition ${isActive ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => {
+                  setActiveRangeId(range.id);
+                  setHoveredPointId(null);
+                  setPinnedPointId(null);
+                }}
+              >
+                {range.label}
+              </button>
+            );
+          })}
+        </div>
+        <MiniLineChart
+          activePoint={activePoint}
+          label="가격 변동"
+          pinnedPointId={pinnedPointId}
+          points={activeRange.points}
+          onClearPinnedPoint={() => {
+            setPinnedPointId(null);
+            setHoveredPointId(null);
+          }}
+          onHoverPoint={setHoveredPointId}
+          onTogglePinPoint={(pointId) => setPinnedPointId((current) => (current === pointId ? null : pointId))}
+        />
+      </section>
+
+      <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-item-source-title">
+        <h2 id="feed-item-source-title" className="text-base font-bold text-foreground">원본 링크</h2>
         <p className="text-xs font-bold text-muted">원본 링크</p>
         <a className="mt-2 block truncate text-sm font-bold text-primary" href={detail.sourceUrl} target="_blank" rel="noreferrer">
           {detail.sourceName}
         </a>
         <p className="mt-1 truncate text-xs text-muted">{detail.sourceUrl}</p>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
@@ -174,24 +186,30 @@ function StreamerDetailSection({ target }: { target: FeedWatchTarget }) {
   }
 
   return (
-    <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-streamer-detail-title">
-      <h2 id="feed-streamer-detail-title" className="text-base font-bold text-foreground">방송 관찰</h2>
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <SummaryCard label="방송 상태" value={detail.broadcastStatus === 'live' ? 'LIVE' : '대기'} />
-        <SummaryCard label="이벤트" value={target.metricText} />
-      </div>
-      <p className="mt-3 text-sm leading-6 text-muted">{detail.broadcastTrendText}</p>
-      <p className="mt-1 text-sm leading-6 text-muted">{detail.eventTrendText}</p>
-      <div className="mt-4 rounded-2xl bg-surface-strong p-3">
+    <>
+      <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-streamer-summary-title">
+        <h2 id="feed-streamer-summary-title" className="text-base font-bold text-foreground">방송 관찰</h2>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <SummaryCard label="방송 상태" value={detail.broadcastStatus === 'live' ? 'LIVE' : '대기'} />
+          <SummaryCard label="이벤트" value={target.metricText} />
+        </div>
+        <p className="mt-3 text-sm leading-6 text-muted">{detail.broadcastTrendText}</p>
+        <p className="mt-1 text-sm leading-6 text-muted">{detail.eventTrendText}</p>
+      </section>
+
+      <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-streamer-source-title">
+        <h2 id="feed-streamer-source-title" className="text-base font-bold text-foreground">원본 채널</h2>
         <p className="text-xs font-bold text-muted">원본 채널</p>
         <a className="mt-2 block truncate text-sm font-bold text-primary" href={detail.channelUrl} target="_blank" rel="noreferrer">
           {detail.channelName}
         </a>
         <p className="mt-1 truncate text-xs text-muted">{detail.channelUrl}</p>
-      </div>
+      </section>
+
       <BroadcastContributionGraph days={detail.broadcastDays} />
-      <div className="mt-4">
-        <p className="text-xs font-bold text-muted">채팅 기록</p>
+
+      <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-streamer-chat-title">
+        <h2 id="feed-streamer-chat-title" className="text-base font-bold text-foreground">채팅 기록</h2>
         <div className="mt-2 grid gap-2">
           {detail.chatMessages.map((message) => (
             <article key={message.id} className="rounded-xl bg-surface-strong px-3 py-2">
@@ -203,9 +221,10 @@ function StreamerDetailSection({ target }: { target: FeedWatchTarget }) {
             </article>
           ))}
         </div>
-      </div>
+      </section>
+
       <ListPanel items={detail.recentEvents} title="최근 방송/이벤트" />
-    </section>
+    </>
   );
 }
 
@@ -225,22 +244,29 @@ function ArtistDetailSection({ target }: { target: FeedWatchTarget }) {
   };
 
   return (
-    <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-artist-detail-title">
-      <h2 id="feed-artist-detail-title" className="text-base font-bold text-foreground">신곡 관찰</h2>
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <SummaryCard label="최근 신곡" value={detail.latestReleaseTitle} />
-        <SummaryCard label="예정 발매" value={detail.upcomingReleaseText} />
-      </div>
-      <p className="mt-3 text-sm leading-6 text-muted">{detail.releaseTrendText}</p>
-      <AlbumCarousel3d
-        activeAlbumIndex={activeAlbumIndex}
-        albums={detail.albums}
-        onMoveAlbum={handleMoveAlbum}
-        onOpenAlbum={(albumId) => {
-          setSelectedAlbumId(albumId);
-          setSelectedTrackId(null);
-        }}
-      />
+    <>
+      <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-artist-summary-title">
+        <h2 id="feed-artist-summary-title" className="text-base font-bold text-foreground">신곡 관찰</h2>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <SummaryCard label="최근 신곡" value={detail.latestReleaseTitle} />
+          <SummaryCard label="예정 발매" value={detail.upcomingReleaseText} />
+        </div>
+        <p className="mt-3 text-sm leading-6 text-muted">{detail.releaseTrendText}</p>
+      </section>
+
+      <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-artist-album-title">
+        <h2 id="feed-artist-album-title" className="text-base font-bold text-foreground">최근 앨범</h2>
+        <AlbumCarousel3d
+          activeAlbumIndex={activeAlbumIndex}
+          albums={detail.albums}
+          onMoveAlbum={handleMoveAlbum}
+          onOpenAlbum={(albumId) => {
+            setSelectedAlbumId(albumId);
+            setSelectedTrackId(null);
+          }}
+        />
+      </section>
+
       {selectedAlbum && typeof document !== 'undefined' && createPortal(
         <AlbumDetailModal
           album={selectedAlbum}
@@ -253,7 +279,7 @@ function ArtistDetailSection({ target }: { target: FeedWatchTarget }) {
         />,
         document.body,
       )}
-    </section>
+    </>
   );
 }
 
@@ -269,6 +295,7 @@ function SummaryCard({ label, value }: { label: string; value: string }) {
 function MiniLineChart({
   activePoint,
   label,
+  onClearPinnedPoint,
   onHoverPoint,
   onTogglePinPoint,
   pinnedPointId,
@@ -276,6 +303,7 @@ function MiniLineChart({
 }: {
   activePoint?: FeedPricePoint;
   label: string;
+  onClearPinnedPoint: () => void;
   onHoverPoint: (pointId: string | null) => void;
   onTogglePinPoint: (pointId: string) => void;
   pinnedPointId: string | null;
@@ -299,7 +327,7 @@ function MiniLineChart({
     <div className="mt-4" aria-label={label}>
       <p className="text-xs font-bold text-muted">{label}</p>
       <div className="mt-2 rounded-2xl bg-surface-strong px-0 py-3">
-        <svg className="h-64 w-full overflow-visible" viewBox="0 0 340 168" role="img" aria-label={`${label} 라인그래프`}>
+        <svg className="h-64 w-full overflow-visible" viewBox="0 0 340 168" role="img" aria-label={`${label} 라인그래프`} onClick={onClearPinnedPoint}>
           <line className="text-border" stroke="currentColor" strokeWidth="1" x1="28" x2="320" y1="136" y2="136" />
           <line className="text-border" stroke="currentColor" strokeWidth="1" x1="28" x2="28" y1="18" y2="136" />
           <text className="fill-muted text-[8px]" x="2" y="22">{maxPriceText}</text>
@@ -313,7 +341,10 @@ function MiniLineChart({
                 r={pinnedPointId === point.id ? '6' : '4.5'}
                 className={pinnedPointId === point.id ? 'fill-primary stroke-primary-foreground' : 'fill-primary'}
                 strokeWidth="2"
-                onClick={() => onTogglePinPoint(point.id)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onTogglePinPoint(point.id);
+                }}
                 onMouseEnter={() => onHoverPoint(point.id)}
                 onMouseLeave={() => onHoverPoint(null)}
                 onFocus={() => onHoverPoint(point.id)}
@@ -354,13 +385,16 @@ function BroadcastContributionGraph({ days }: { days: NonNullable<FeedWatchTarge
   const monthLabels = weeks.map((week) => week[0]?.dateText ?? '');
   const activeDay = days.find((day) => day.id === activeDayId);
   const activeSessions = activeDay ? getBroadcastSessions(activeDay) : [];
+  const activeDayIndex = activeDay ? days.findIndex((day) => day.id === activeDay.id) : -1;
+  const activeWeekIndex = activeDayIndex >= 0 ? Math.floor(activeDayIndex / 7) : 0;
+  const activeWeekdayIndex = activeDayIndex >= 0 ? activeDayIndex % 7 : 0;
 
   return (
-    <div className="mt-4">
-      <p className="text-xs font-bold text-muted">방송 기록</p>
+    <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-streamer-broadcast-title">
+      <h2 id="feed-streamer-broadcast-title" className="text-base font-bold text-foreground">방송 기록</h2>
       <div className="mt-2 overflow-x-auto rounded-2xl bg-surface-strong p-3">
         <div className="relative min-w-max">
-          <div className="grid gap-1" style={{ gridTemplateColumns: `28px repeat(${weekCount}, 14px)` }}>
+          <div className="grid gap-1" style={{ gridTemplateColumns: `28px repeat(${weekCount}, 20px)` }}>
             <span />
             {monthLabels.map((label, index) => (
               <span key={`${label}-${index}`} className="h-4 text-[10px] leading-4 text-muted">
@@ -369,29 +403,39 @@ function BroadcastContributionGraph({ days }: { days: NonNullable<FeedWatchTarge
             ))}
             {(['월', '화', '수', '목', '금', '토', '일'] as const).map((dayLabel, dayIndex) => (
               <div key={dayLabel} className="contents">
-                <span className={`h-3 text-[10px] leading-3 text-muted ${dayIndex % 2 === 1 ? 'opacity-0' : ''}`}>
+                <span className={`h-5 text-[10px] leading-5 text-muted ${dayIndex % 2 === 1 ? 'opacity-0' : ''}`}>
                   {dayLabel}
                 </span>
                 {weeks.map((week, weekIndex) => {
                   const day = week[dayIndex];
 
                   return (
-                    <span
+                    <button
                       key={day?.id ?? `${weekIndex}-${dayIndex}`}
-                      className={`size-3 rounded-[3px] ${day ? getBroadcastIntensityClassName(day.intensity) : 'bg-surface'}`}
+                      className="grid size-5 place-items-center rounded-[5px] outline-none focus:ring-2 focus:ring-primary"
+                      type="button"
+                      aria-label={day ? `${day.dateText} 방송 기록` : '방송 기록 없음'}
+                      disabled={!day}
                       onBlur={() => setActiveDayId(null)}
                       onFocus={() => day && setActiveDayId(day.id)}
                       onMouseEnter={() => day && setActiveDayId(day.id)}
                       onMouseLeave={() => setActiveDayId(null)}
-                      tabIndex={day ? 0 : -1}
-                    />
+                    >
+                      <span className={`size-3 rounded-[3px] ${day ? getBroadcastIntensityClassName(day.intensity) : 'bg-surface'}`} />
+                    </button>
                   );
                 })}
               </div>
             ))}
           </div>
           {activeDay && (
-            <div className="absolute left-8 top-8 z-10 w-48 rounded-xl border border-border bg-surface p-3 shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
+            <div
+              className="absolute z-10 w-48 rounded-xl border border-border bg-surface p-3 shadow-[0_18px_40px_rgba(0,0,0,0.35)]"
+              style={{
+                left: `${Math.max(28, 28 + activeWeekIndex * 24 - 12)}px`,
+                top: `${Math.max(22, 20 + activeWeekdayIndex * 24)}px`,
+              }}
+            >
               <p className="text-xs font-bold text-primary">{activeDay.dateText}</p>
               <div className="mt-2 grid gap-2">
                 {activeSessions.map((session) => (
@@ -412,7 +456,7 @@ function BroadcastContributionGraph({ days }: { days: NonNullable<FeedWatchTarge
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -473,8 +517,8 @@ function AlbumDetailModal({ album, onClose, onSelectTrack, selectedTrack }: { al
   const isTrackView = Boolean(selectedTrack);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 px-4 py-6 backdrop-blur-sm" role="presentation" onClick={onClose}>
-      <section className="mx-auto max-h-[calc(100vh-3rem)] w-full max-w-[560px] overflow-y-auto rounded-3xl border border-border bg-surface p-4 shadow-[0_24px_70px_rgba(0,0,0,0.35)]" role="dialog" aria-modal="true" aria-labelledby="feed-album-modal-title" onClick={(event) => event.stopPropagation()}>
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4 backdrop-blur-sm" role="presentation" onClick={onClose}>
+      <section className="max-h-[calc(100vh-3rem)] w-full max-w-[560px] overflow-y-auto rounded-3xl border border-border bg-surface p-4 shadow-[0_24px_70px_rgba(0,0,0,0.35)]" role="dialog" aria-modal="true" aria-labelledby="feed-album-modal-title" onClick={(event) => event.stopPropagation()}>
         <div className="flex items-center justify-between gap-3">
           {isTrackView ? (
             <button className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted" type="button" aria-label="앨범 정보로 돌아가기" onClick={() => onSelectTrack(null)}>
@@ -558,16 +602,16 @@ function getBroadcastIntensityClassName(intensity: 0 | 1 | 2 | 3 | 4) {
 
 function ListPanel({ items, title }: { items: string[]; title: string }) {
   return (
-    <div className="mt-4">
-      <p className="text-xs font-bold text-muted">{title}</p>
-      <div className="mt-2 grid gap-2">
+    <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-streamer-event-title">
+      <h2 id="feed-streamer-event-title" className="text-base font-bold text-foreground">{title}</h2>
+      <div className="mt-3 grid gap-2">
         {items.map((item) => (
           <p key={item} className="rounded-xl bg-surface-strong px-3 py-2 text-sm text-muted">
             {item}
           </p>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
