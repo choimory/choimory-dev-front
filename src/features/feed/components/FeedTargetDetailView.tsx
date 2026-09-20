@@ -380,21 +380,28 @@ function MiniLineChart({
 
 function BroadcastContributionGraph({ days }: { days: NonNullable<FeedWatchTarget['streamerDetail']>['broadcastDays'] }) {
   const [activeDayId, setActiveDayId] = useState<string | null>(null);
+  const [popoverPosition, setPopoverPosition] = useState<{ left: number; top?: number; bottom?: number } | null>(null);
   const weekCount = Math.ceil(days.length / 7);
   const weeks = Array.from({ length: weekCount }, (_, weekIndex) => days.slice(weekIndex * 7, weekIndex * 7 + 7));
   const monthLabels = weeks.map((week) => week[0]?.dateText ?? '');
   const activeDay = days.find((day) => day.id === activeDayId);
   const activeSessions = activeDay ? getBroadcastSessions(activeDay) : [];
   const activeDayIndex = activeDay ? days.findIndex((day) => day.id === activeDay.id) : -1;
-  const activeWeekIndex = activeDayIndex >= 0 ? Math.floor(activeDayIndex / 7) : 0;
   const activeWeekdayIndex = activeDayIndex >= 0 ? activeDayIndex % 7 : 0;
+  const isLowerRow = activeWeekdayIndex >= 4;
 
   return (
     <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-streamer-broadcast-title">
       <h2 id="feed-streamer-broadcast-title" className="text-base font-bold text-foreground">방송 기록</h2>
-      <div className="mt-2 overflow-x-auto rounded-2xl bg-surface-strong p-3">
+      <div
+        className="mt-2 overflow-x-auto rounded-2xl bg-surface-strong p-3"
+        onClick={() => {
+          setActiveDayId(null);
+          setPopoverPosition(null);
+        }}
+      >
         <div className="relative min-w-max">
-          <div className="grid gap-1" style={{ gridTemplateColumns: `28px repeat(${weekCount}, 20px)` }}>
+          <div className="grid gap-1" style={{ gridTemplateColumns: `28px repeat(${weekCount}, 14px)` }}>
             <span />
             {monthLabels.map((label, index) => (
               <span key={`${label}-${index}`} className="h-4 text-[10px] leading-4 text-muted">
@@ -403,7 +410,7 @@ function BroadcastContributionGraph({ days }: { days: NonNullable<FeedWatchTarge
             ))}
             {(['월', '화', '수', '목', '금', '토', '일'] as const).map((dayLabel, dayIndex) => (
               <div key={dayLabel} className="contents">
-                <span className={`h-5 text-[10px] leading-5 text-muted ${dayIndex % 2 === 1 ? 'opacity-0' : ''}`}>
+                <span className={`h-3 text-[10px] leading-3 text-muted ${dayIndex % 2 === 1 ? 'opacity-0' : ''}`}>
                   {dayLabel}
                 </span>
                 {weeks.map((week, weekIndex) => {
@@ -412,41 +419,35 @@ function BroadcastContributionGraph({ days }: { days: NonNullable<FeedWatchTarge
                   return (
                     <button
                       key={day?.id ?? `${weekIndex}-${dayIndex}`}
-                      className="grid size-5 place-items-center rounded-[5px] outline-none focus:ring-2 focus:ring-primary"
+                      className={`size-3 rounded-[3px] ${day ? getBroadcastIntensityClassName(day.intensity) : 'bg-surface'}`}
                       type="button"
                       aria-label={day ? `${day.dateText} 방송 기록` : '방송 기록 없음'}
                       disabled={!day}
-                      onBlur={() => setActiveDayId(null)}
-                      onFocus={() => day && setActiveDayId(day.id)}
-                      onMouseEnter={() => day && setActiveDayId(day.id)}
-                      onMouseLeave={() => setActiveDayId(null)}
-                    >
-                      <span className={`size-3 rounded-[3px] ${day ? getBroadcastIntensityClassName(day.intensity) : 'bg-surface'}`} />
-                    </button>
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        if (!day) return;
+                        if (activeDayId === day.id) {
+                          setActiveDayId(null);
+                          setPopoverPosition(null);
+                          return;
+                        }
+
+                        const rect = event.currentTarget.getBoundingClientRect();
+                        const popoverWidth = 192;
+                        setActiveDayId(day.id);
+                        setPopoverPosition({
+                          left: Math.max(8, Math.min(rect.left, window.innerWidth - popoverWidth - 8)),
+                          ...(isLowerRow
+                            ? { bottom: Math.max(8, window.innerHeight - rect.top + 4) }
+                            : { top: Math.min(window.innerHeight - 8, rect.bottom + 4) }),
+                        });
+                      }}
+                    />
                   );
                 })}
               </div>
             ))}
           </div>
-          {activeDay && (
-            <div
-              className="absolute z-10 w-48 rounded-xl border border-border bg-surface p-3 shadow-[0_18px_40px_rgba(0,0,0,0.35)]"
-              style={{
-                left: `${Math.max(28, 28 + activeWeekIndex * 24 - 12)}px`,
-                top: `${Math.max(22, 20 + activeWeekdayIndex * 24)}px`,
-              }}
-            >
-              <p className="text-xs font-bold text-primary">{activeDay.dateText}</p>
-              <div className="mt-2 grid gap-2">
-                {activeSessions.map((session) => (
-                  <div key={session.id} className="rounded-[10px] bg-surface-strong px-2 py-1.5">
-                    <p className="text-xs font-bold leading-4 text-foreground">{session.title}</p>
-                    <p className="mt-1 text-[11px] leading-4 text-muted">{session.startedAt} 시작 · 총 {session.durationText}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
           <div className="mt-3 flex items-center justify-end gap-1 text-[10px] text-muted">
             <span>Less</span>
             {[0, 1, 2, 3, 4].map((intensity) => (
@@ -456,6 +457,24 @@ function BroadcastContributionGraph({ days }: { days: NonNullable<FeedWatchTarge
           </div>
         </div>
       </div>
+      {activeDay && popoverPosition && typeof document !== 'undefined' && createPortal(
+        <div
+          className="fixed z-50 max-h-[min(60vh,320px)] w-48 overflow-y-auto rounded-xl border border-border bg-surface p-3 shadow-[0_18px_40px_rgba(0,0,0,0.35)]"
+          style={popoverPosition}
+          onClick={(event) => event.stopPropagation()}
+        >
+          <p className="text-xs font-bold text-primary">{activeDay.dateText}</p>
+          <div className="mt-2 grid gap-2">
+            {activeSessions.map((session) => (
+              <div key={session.id} className="rounded-[10px] bg-surface-strong px-2 py-1.5">
+                <p className="text-xs font-bold leading-4 text-foreground">{session.title}</p>
+                <p className="mt-1 text-[11px] leading-4 text-muted">{session.startedAt} 시작 · 총 {session.durationText}</p>
+              </div>
+            ))}
+          </div>
+        </div>,
+        document.body,
+      )}
     </section>
   );
 }
