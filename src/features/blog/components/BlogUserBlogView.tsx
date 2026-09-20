@@ -8,6 +8,8 @@ import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
+import { PageIntroCard } from '@/shared/ui/PageIntroCard';
+import { SectionHeader } from '@/shared/ui/SectionHeader';
 
 import { BLOG_FOLLOWERS, BLOG_FOLLOWINGS, BLOG_USER_PROFILE, BlogProfileCard } from './BlogProfileCard';
 import { BlogPostCard } from './BlogPostCard';
@@ -51,19 +53,12 @@ export function BlogUserBlogView({ isLoggedIn, nickname, posts }: BlogUserBlogVi
       />
 
       <AppContent className="grid gap-3">
-        <section className="px-1" aria-labelledby="blog-user-profile-title">
-          <p className="text-sm font-bold text-primary">blog / @{profile.nickname}</p>
-        </section>
+        <PageIntroCard domainPath={`blog / @${profile.nickname}`} />
 
         <BlogProfileCard headingId="blog-user-profile-title" profile={profile} onSelectRelation={setRelationModal} />
 
         <section className="grid gap-3" aria-labelledby="blog-user-post-title">
-          <div className="px-1">
-            <p className="text-sm font-bold text-primary">blog / post</p>
-            <h2 id="blog-user-post-title" className="mt-1 text-lg font-bold text-foreground">
-              포스트
-            </h2>
-          </div>
+          <SectionHeader domainPath="blog / post" title="포스트" headingId="blog-user-post-title" />
           {posts.map((post) => (
             <BlogPostCard key={post.id} post={post} />
           ))}

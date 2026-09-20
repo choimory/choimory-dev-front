@@ -81,7 +81,7 @@ export function FeedTargetDetailView({ isLoggedIn, target }: FeedTargetDetailVie
 
         <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-target-related-title">
           <h2 id="feed-target-related-title" className="text-base font-bold text-foreground">관련 소식</h2>
-          <p className="mt-2 text-sm leading-6 text-muted">크롤링 연동 전까지 뉴스와 커뮤니티 글의 mock 목록을 표시합니다.</p>
+          <p className="mt-2 text-sm leading-6 text-muted">크롤링 연동 전까지 뉴스와 커뮤니티 글의 mock 목록을 표시하고 있어요.</p>
           <div className="mt-3 grid gap-2">
             {target.relatedArticles.map((article) => (
               <a key={article.id} className="grid gap-1 rounded-xl bg-surface-strong px-3 py-2 transition hover:bg-surface" href={article.href} target="_blank" rel="noreferrer">

@@ -8,6 +8,8 @@ import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
+import { PageIntroCard } from '@/shared/ui/PageIntroCard';
+import { SectionHeader } from '@/shared/ui/SectionHeader';
 
 import type { BlogPost } from '../model/blogTypes';
 
@@ -67,12 +69,7 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
       />
 
       <AppContent className="grid gap-3">
-        <section className="px-1" aria-labelledby="post-section-title">
-          <p className="text-sm font-bold text-primary">blog / post</p>
-          <h1 id="post-section-title" className="mt-1 text-lg font-bold text-foreground">
-            포스트
-          </h1>
-        </section>
+        <PageIntroCard domainPath="blog / post" title={post.title} />
 
         <article className="overflow-hidden rounded-3xl border border-border bg-surface" aria-labelledby="post-detail-title">
           <header className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 p-4">
@@ -132,12 +129,7 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
         </article>
 
         <section className="grid gap-3" aria-labelledby="post-comments-title">
-          <div className="px-1">
-            <p className="text-sm font-bold text-primary">blog / comments</p>
-            <h2 id="post-comments-title" className="mt-1 text-lg font-bold text-foreground">
-              댓글
-            </h2>
-          </div>
+          <SectionHeader domainPath="blog / comments" title="댓글" headingId="post-comments-title" />
           <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-2xl border border-border bg-surface p-3">
             <input className="h-10 min-w-0 rounded-[10px] border border-border bg-surface-strong px-3 text-sm text-foreground" placeholder="댓글을 남겨보세요" />
             <button className="h-10 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">

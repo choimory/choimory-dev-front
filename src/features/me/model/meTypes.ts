@@ -26,33 +26,33 @@ export type MeViewModel = {
 export const meViewModel: MeViewModel = {
   nickname: 'mory.dev',
   email: 'mory@example.com',
-  description: 'choimory.dev의 서비스를 조용히 다듬는 계정입니다.',
+  description: 'choimory.dev의 서비스를 조용히 다듬는 계정이에요.',
   settingItems: [
     {
       id: 'profile',
       title: '개인정보 변경',
-      description: '닉네임, 이메일, 프로필 설명을 관리합니다.',
+      description: '닉네임, 이메일, 프로필 설명을 관리해보세요.',
       iconName: 'user',
       actionLabel: '수정',
     },
     {
       id: 'theme',
       title: '사이트 설정',
-      description: '테마를 라이트, 다크, 시스템 설정 중에서 선택합니다.',
+      description: '테마를 라이트, 다크, 시스템 설정 중에서 선택해보세요.',
       iconName: 'monitor',
       actionLabel: '설정',
     },
     {
       id: 'otp',
       title: '2차 인증',
-      description: '이메일 OTP 또는 모바일 OTP로 계정 보안을 강화합니다.',
+      description: '이메일 OTP 또는 모바일 OTP로 계정 보안을 강화해보세요.',
       iconName: 'bell',
       actionLabel: '관리',
     },
     {
       id: 'delete',
       title: '회원 탈퇴',
-      description: '계정과 서비스 데이터를 정리하는 탈퇴 절차입니다.',
+      description: '계정과 서비스 데이터를 정리하는 탈퇴 절차예요.',
       iconName: 'tag',
       actionLabel: '탈퇴',
       tone: 'danger',

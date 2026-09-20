@@ -34,10 +34,10 @@ export function GuestLandingSection({ services }: GuestLandingSectionProps) {
           <span>/ welcome</span>
         </p>
         <h2 id="guest-landing-title" className="text-2xl font-black leading-tight">
-          블로그와 피드부터 둘러보고, 로그인하면 내 서비스 허브가 열립니다
+          블로그와 피드부터 둘러보고, 로그인하면 내 서비스 허브가 열려요
         </h2>
         <p className="text-sm leading-6 text-muted">
-          비회원은 공개 글과 서비스 구성을 확인할 수 있고, 로그인하면 개인 피드와 알림 요약을 이어서 사용할 수 있습니다.
+          비회원은 공개 글과 서비스 구성을 확인할 수 있고, 로그인하면 개인 피드와 알림 요약을 이어서 사용할 수 있어요.
         </p>
         <div className="flex flex-wrap gap-2">
           <Link className="grid h-10 place-items-center rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" href="/login">

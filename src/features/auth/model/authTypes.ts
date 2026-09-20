@@ -41,7 +41,7 @@ export type SignupViewModel = {
 /** 로그인 화면 임시 데이터 */
 export const loginViewModel: LoginViewModel = {
   title: '로그인',
-  description: 'choimory.dev의 서비스들을 내 계정으로 이어서 사용합니다.',
+  description: 'choimory.dev의 서비스들을 내 계정으로 이어서 사용해요.',
   signupLink: {
     label: '회원가입',
     href: '/signup',
@@ -65,7 +65,7 @@ export const loginViewModel: LoginViewModel = {
 /** 회원가입 화면 임시 데이터 */
 export const signupViewModel: SignupViewModel = {
   title: '회원가입',
-  description: '블로그, 메모, 피드를 하나의 계정으로 사용할 준비를 합니다.',
+  description: '블로그, 메모, 피드를 하나의 계정으로 사용할 준비를 해요.',
   loginLink: {
     label: '로그인',
     href: '/login',

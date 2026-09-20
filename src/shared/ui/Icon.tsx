@@ -20,6 +20,7 @@ export type IconName =
   | 'tag'
   | 'trophy'
   | 'user'
+  | 'users'
   | 'x';
 
 /**
@@ -176,6 +177,17 @@ export function Icon({ name, className = 'size-5' }: IconProps) {
         <svg {...commonProps}>
           <circle cx="12" cy="8" r="4" strokeWidth={2} />
           <path d="M4 21a8 8 0 0 1 16 0" strokeLinecap="round" strokeWidth={2} />
+        </svg>
+      );
+    case 'users':
+      return (
+        <svg {...commonProps}>
+          <circle cx="12" cy="7" r="3" strokeWidth={2} />
+          <path d="M7 20a5 5 0 0 1 10 0" strokeLinecap="round" strokeWidth={2} />
+          <circle cx="5" cy="9" r="2.2" strokeWidth={2} />
+          <path d="M2 20a3.5 3.5 0 0 1 4.5-3.4" strokeLinecap="round" strokeWidth={2} />
+          <circle cx="19" cy="9" r="2.2" strokeWidth={2} />
+          <path d="M22 20a3.5 3.5 0 0 0-4.5-3.4" strokeLinecap="round" strokeWidth={2} />
         </svg>
       );
     case 'x':

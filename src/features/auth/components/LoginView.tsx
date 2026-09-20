@@ -90,7 +90,7 @@ export function LoginView({ viewModel }: LoginViewProps) {
           </div>
 
           <p className="mt-5 text-center text-xs leading-5 text-muted">
-            아직 실제 소셜 로그인 연동 전이며, 버튼은 화면 구성 확인용입니다.
+            아직 실제 소셜 로그인 연동 전이라 버튼은 화면 구성 확인용이에요.
           </p>
         </section>
       </main>

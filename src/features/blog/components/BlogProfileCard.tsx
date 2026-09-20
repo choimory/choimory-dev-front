@@ -20,7 +20,7 @@ export type BlogUserProfile = {
 export const BLOG_USER_PROFILE: BlogUserProfile = {
   nickname: 'mory.dev',
   initial: 'M',
-  description: 'choimory.dev의 서비스 화면과 인터랙션을 차근차근 다듬고 있습니다.',
+  description: 'choimory.dev의 서비스 화면과 인터랙션을 차근차근 다듬고 있어요.',
   postCount: 12,
   followerCount: 128,
   followingCount: 36,

@@ -23,7 +23,7 @@ export function BlogMemberFeedSection({ tabs, posts }: BlogMemberFeedSectionProp
           <div>
             <h1 className="text-xl font-bold">blog</h1>
             <p className="mt-1 text-sm leading-5 text-muted">
-              인스타그램처럼 글, 이미지, 댓글, 팔로우를 다루는 서비스입니다.
+              인스타그램처럼 글, 이미지, 댓글, 팔로우를 다루는 서비스예요.
             </p>
           </div>
           <button className="h-10 shrink-0 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">

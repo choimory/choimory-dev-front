@@ -6,6 +6,7 @@ import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
+import { SectionHeader } from '@/shared/ui/SectionHeader';
 
 import type { FeedTargetType, FeedViewModel, FeedWatchTarget } from '../model/feedTypes';
 
@@ -74,12 +75,7 @@ export function FeedView({ viewModel }: FeedViewProps) {
             </section>
 
             <section className="grid gap-3" aria-labelledby="feed-observation-title">
-              <div className="px-1">
-                <p className="text-sm font-bold text-primary">관찰 중인 대상</p>
-                <h2 id="feed-observation-title" className="mt-1 text-lg font-bold text-foreground">
-                  지금 지켜보는 관심 대상
-                </h2>
-              </div>
+              <SectionHeader domainPath="feed / target" title="관심 대상" headingId="feed-observation-title" />
               <div className="grid gap-3">
                 {featuredTargets.map((target) => (
                   <TargetPreviewLink key={target.id} target={target} href={`/feed/targets/${target.id}`} />
@@ -88,12 +84,7 @@ export function FeedView({ viewModel }: FeedViewProps) {
             </section>
 
             <section className="grid gap-3" aria-labelledby="feed-activity-title">
-              <div className="px-1">
-                <p className="text-sm font-bold text-primary">최근 이벤트</p>
-                <h2 id="feed-activity-title" className="mt-1 text-lg font-bold text-foreground">
-                  방금 들어온 알림
-                </h2>
-              </div>
+              <SectionHeader domainPath="feed / activity" title="최근 알림" headingId="feed-activity-title" />
             <div className="grid gap-3">
               {viewModel.activities.map((activity) => (
                 <Link key={activity.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition hover:bg-surface-strong" href={`/feed/targets/${activity.targetId}`}>
@@ -113,12 +104,7 @@ export function FeedView({ viewModel }: FeedViewProps) {
         ) : (
           <>
             <section className="grid gap-3" aria-labelledby="feed-signal-title">
-              <div className="px-1">
-                <p className="text-sm font-bold text-primary">준비 중인 피드</p>
-                <h2 id="feed-signal-title" className="mt-1 text-lg font-bold text-foreground">
-                  이런 관찰 알림을 한 곳에서 볼 수 있게 준비합니다
-                </h2>
-              </div>
+              <SectionHeader domainPath="feed / preview" title="준비 중인 알림" headingId="feed-signal-title" />
             <div className="grid gap-3">
               {viewModel.signals.map((signal) => (
                 <article key={signal.id} className="rounded-2xl border border-border bg-surface p-4">
@@ -130,12 +116,7 @@ export function FeedView({ viewModel }: FeedViewProps) {
             </section>
 
             <section className="grid gap-3" aria-labelledby="feed-benefit-title">
-              <div className="px-1">
-                <p className="text-sm font-bold text-primary">로그인하면 가능한 것</p>
-                <h2 id="feed-benefit-title" className="mt-1 text-lg font-bold text-foreground">
-                  내 관심사로 피드를 만들기
-                </h2>
-              </div>
+              <SectionHeader domainPath="feed / benefits" title="맞춤 피드" headingId="feed-benefit-title" />
               <div className="grid gap-3">
                 {viewModel.guestBenefits.map((benefit) => (
                   <article key={benefit.id} className="rounded-2xl border border-border bg-surface p-4">

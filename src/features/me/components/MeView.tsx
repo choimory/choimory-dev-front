@@ -113,7 +113,7 @@ export function MeView({ viewModel }: MeViewProps) {
                 <div className="grid gap-3 rounded-2xl border border-border bg-surface-strong p-4">
                   <div>
                     <h3 className="text-base font-bold text-foreground">테마 설정</h3>
-                    <p className="mt-1 text-sm leading-5 text-muted">사이트 전체 테마 표시 방식을 선택합니다.</p>
+                    <p className="mt-1 text-sm leading-5 text-muted">사이트 전체 테마 표시 방식을 선택해보세요.</p>
                   </div>
                   <div className="grid gap-2">
                     {['light', 'dark', 'system'].map((theme) => (
@@ -136,7 +136,7 @@ export function MeView({ viewModel }: MeViewProps) {
                   <div className="grid gap-3 rounded-2xl border border-border bg-surface-strong p-4">
                     <div>
                       <h3 className="text-base font-bold text-foreground">2차 인증 사용 여부</h3>
-                      <p className="mt-1 text-sm leading-5 text-muted">로그인 후 추가 인증을 사용할지 선택합니다.</p>
+                      <p className="mt-1 text-sm leading-5 text-muted">로그인 후 추가 인증을 사용할지 선택해보세요.</p>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-foreground">
@@ -152,7 +152,7 @@ export function MeView({ viewModel }: MeViewProps) {
                   <div className="grid gap-3 rounded-2xl border border-border bg-surface-strong p-4">
                     <div>
                       <h3 className="text-base font-bold text-foreground">인증 방식</h3>
-                      <p className="mt-1 text-sm leading-5 text-muted">2차 인증에 사용할 방식을 선택합니다.</p>
+                      <p className="mt-1 text-sm leading-5 text-muted">2차 인증에 사용할 방식을 선택해보세요.</p>
                     </div>
                     <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-foreground">
                       <span>이메일 인증</span>
@@ -178,7 +178,7 @@ export function MeView({ viewModel }: MeViewProps) {
                 <div className="rounded-2xl border border-accent-red bg-surface-strong p-4">
                   <h3 className="text-base font-bold text-accent-red">회원 탈퇴</h3>
                   <p className="mt-2 text-sm leading-6 text-muted">
-                    계정과 서비스 데이터를 정리하는 위험 작업입니다. 실제 탈퇴 API가 연결되기 전까지는 화면 구조만 표시합니다.
+                    계정과 서비스 데이터를 정리하는 위험한 작업이에요. 실제 탈퇴 API가 연결되기 전까지는 화면 구조만 보여드려요.
                   </p>
                   <button className="mt-4 h-10 rounded-[10px] border border-accent-red px-4 text-sm font-bold text-accent-red" type="button">
                     탈퇴 절차 확인

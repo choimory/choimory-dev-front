@@ -63,8 +63,11 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
 
       <div className="grid gap-2 px-3 pb-4 pt-1">
         <p className="text-sm font-bold">좋아요 {post.likeCount}개</p>
-        <Link className="text-sm leading-6" href={`/blog/posts/${post.id}`}>
-          <strong>{post.authorName}</strong> {post.content}
+        <Link className="block" href={`/blog/posts/${post.id}`}>
+          <h3 className="text-sm font-bold text-foreground">{post.title}</h3>
+          <p className="mt-1 text-sm leading-6">
+            <strong>{post.authorName}</strong> {post.content}
+          </p>
         </Link>
         <Link className="w-fit text-sm text-muted" href={`/blog/posts/${post.id}`}>
           댓글 {post.commentCount}개 모두 보기

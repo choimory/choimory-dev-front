@@ -8,6 +8,8 @@ import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
+import { PageIntroCard } from '@/shared/ui/PageIntroCard';
+import { SectionHeader } from '@/shared/ui/SectionHeader';
 
 import { BLOG_FOLLOWERS, BLOG_FOLLOWINGS, BLOG_USER_PROFILE, BlogProfileCard } from './BlogProfileCard';
 import { BlogRelationModal } from './BlogRelationModal';
@@ -38,21 +40,21 @@ const BLOG_SETTING_ITEMS: BlogSettingItem[] = [
   {
     id: 'visibility',
     title: '블로그 공개 여부',
-    description: '현재 전체 공개 상태입니다.',
+    description: '현재 전체 공개 상태예요.',
     value: '전체 공개',
     options: ['전체 공개', '팔로워 공개', '비공개'],
   },
   {
     id: 'comments',
     title: '기본 댓글 허용 범위',
-    description: '새 글 작성 시 기본 댓글 범위를 정합니다.',
+    description: '새 글 작성 시 기본 댓글 범위를 정해요.',
     value: '전체',
     options: ['전체', '팔로워', '비허용'],
   },
   {
     id: 'tag',
     title: '태그 추천',
-    description: '자주 쓰는 태그를 글 작성에 활용합니다.',
+    description: '자주 쓰는 태그를 글 작성에 활용해요.',
     value: '켜짐',
     options: ['켜짐', '꺼짐'],
   },
@@ -364,9 +366,7 @@ export function BlogMeSettingsView({ isLoggedIn }: BlogMeSettingsViewProps) {
       />
 
       <AppContent className="grid gap-3">
-        <section className="px-1" aria-labelledby="blog-me-profile-title">
-          <p className="text-sm font-bold text-primary">blog / me</p>
-        </section>
+        <PageIntroCard domainPath="blog / me" />
 
         <BlogProfileCard
           headingId="blog-me-profile-title"
@@ -386,12 +386,7 @@ export function BlogMeSettingsView({ isLoggedIn }: BlogMeSettingsViewProps) {
         </section>
 
         <section className="grid gap-2" aria-labelledby="blog-settings-title">
-          <div className="px-1">
-            <p className="text-sm font-bold text-primary">blog / setting</p>
-            <h2 id="blog-settings-title" className="mt-1 text-lg font-bold text-foreground">
-              설정
-            </h2>
-          </div>
+          <SectionHeader domainPath="blog / setting" title="설정" headingId="blog-settings-title" />
           {BLOG_SETTING_ITEMS.map((item) => (
             <button
               key={item.id}

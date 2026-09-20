@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { BrandLogo } from '@/shared/ui/BrandLogo';
+import { SectionHeader } from '@/shared/ui/SectionHeader';
 
 import { BlogPostCard } from './BlogPostCard';
 import type { BlogPost } from '../model/blogTypes';
@@ -27,10 +28,10 @@ export function BlogGuestSection({ posts }: BlogGuestSectionProps) {
           <span>/ blog</span>
         </p>
         <h1 id="blog-guest-title" className="mt-1 text-xl font-bold leading-tight">
-          글과 이미지를 둘러보고, 로그인하면 내 피드를 이어갈 수 있습니다
+          글과 이미지를 둘러보고, 로그인하면 내 피드를 이어갈 수 있어요
         </h1>
         <p className="mt-2 text-sm leading-6 text-muted">
-          비회원은 공개 게시글을 볼 수 있고, 로그인하면 글쓰기, 좋아요, 댓글, 팔로우를 사용할 수 있습니다.
+          비회원은 공개 게시글을 볼 수 있고, 로그인하면 글쓰기, 좋아요, 댓글, 팔로우를 사용할 수 있어요.
         </p>
         <div className="mt-3 grid grid-cols-3 gap-2 border-y border-border py-3 text-center">
           <div>
@@ -57,17 +58,12 @@ export function BlogGuestSection({ posts }: BlogGuestSectionProps) {
       </section>
 
       <section className="grid gap-3" aria-labelledby="blog-public-preview-title">
-        <div className="flex items-end justify-between gap-3 px-1">
-          <div>
-            <p className="text-sm font-bold text-primary">공개 글 미리보기</p>
-            <h2 id="blog-public-preview-title" className="mt-1 text-lg font-bold text-foreground">
-              지금 둘러볼 수 있는 글
-            </h2>
-          </div>
-          <Link className="text-sm font-bold text-primary" href="/login">
-            참여하기
-          </Link>
-        </div>
+        <SectionHeader
+          domainPath="blog / preview"
+          title="둘러보는 글"
+          headingId="blog-public-preview-title"
+          action={{ label: '참여하기', href: '/login' }}
+        />
         {posts.map((post) => (
           <BlogPostCard key={post.id} post={post} />
         ))}

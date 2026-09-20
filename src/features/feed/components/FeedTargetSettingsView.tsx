@@ -67,14 +67,14 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
               <h1 id="feed-target-settings-title" className="mt-1 text-2xl font-black leading-tight text-foreground">
                 {target.name}
               </h1>
-              <p className="mt-2 text-sm leading-6 text-muted">내가 어떻게 알림을 받을지 조정합니다.</p>
+              <p className="mt-2 text-sm leading-6 text-muted">내가 어떻게 알림을 받을지 조정해보세요.</p>
             </div>
           </div>
         </section>
 
         <section className="grid gap-3" aria-label="관찰 기본 설정">
           <SettingToggle
-            description="이 관찰 대상의 모든 알림을 켜거나 끕니다."
+            description="이 관찰 대상의 모든 알림을 켜거나 꺼요."
             isOn={isWatching}
             label="관찰 상태"
             onToggle={() => handleChange(() => setIsWatching((current) => !current))}
@@ -99,7 +99,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
         {target.type === 'item' && (
           <section className="grid gap-3" aria-label="아이템 알림 설정">
             <SettingToggle
-              description="목표 가격 이하로 내려가면 알림을 받습니다."
+              description="목표 가격 이하로 내려가면 알림을 받아요."
               isOn={isPrimaryAlertOn}
               label="가격 알림"
               onToggle={() => handleChange(() => setIsPrimaryAlertOn((current) => !current))}
@@ -119,13 +119,13 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
         {target.type === 'streamer' && (
           <section className="grid gap-3" aria-label="스트리머 알림 설정">
             <SettingToggle
-              description="방송이 시작되면 알림을 받습니다."
+              description="방송이 시작되면 알림을 받아요."
               isOn={isPrimaryAlertOn}
               label="방송 알림"
               onToggle={() => handleChange(() => setIsPrimaryAlertOn((current) => !current))}
             />
             <SettingToggle
-              description="채팅 이벤트와 참여 이벤트 알림을 받습니다."
+              description="채팅 이벤트와 참여 이벤트 알림을 받아요."
               isOn={isSecondaryAlertOn}
               label="채팅/이벤트 알림"
               onToggle={() => handleChange(() => setIsSecondaryAlertOn((current) => !current))}
@@ -136,13 +136,13 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
         {target.type === 'artist' && (
           <section className="grid gap-3" aria-label="아티스트 알림 설정">
             <SettingToggle
-              description="싱글, 앨범, 선공개곡이 나오면 알림을 받습니다."
+              description="싱글, 앨범, 선공개곡이 나오면 알림을 받아요."
               isOn={isPrimaryAlertOn}
               label="신곡/앨범 알림"
               onToggle={() => handleChange(() => setIsPrimaryAlertOn((current) => !current))}
             />
             <SettingToggle
-              description="피처링, OST, 참여곡 발매 알림을 받습니다."
+              description="피처링, OST, 참여곡 발매 알림을 받아요."
               isOn={isSecondaryAlertOn}
               label="피처링/참여곡 알림"
               onToggle={() => handleChange(() => setIsSecondaryAlertOn((current) => !current))}
@@ -154,7 +154,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-bold text-foreground">설정 저장</p>
-              <p className="mt-1 text-sm leading-5 text-muted">{isSaved ? 'mock 설정이 저장되었습니다.' : '변경한 알림 조건을 저장합니다.'}</p>
+              <p className="mt-1 text-sm leading-5 text-muted">{isSaved ? 'mock 설정이 저장됐어요.' : '변경한 알림 조건을 저장해요.'}</p>
             </div>
             <div className="flex shrink-0 gap-2">
               <Link className="grid h-10 place-items-center rounded-[10px] bg-surface-strong px-4 text-sm font-bold text-foreground" href="/feed/me">
@@ -169,7 +169,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
 
         <section className="rounded-2xl border border-border bg-surface p-4" aria-label="위험 작업">
           <p className="text-sm font-bold text-foreground">관찰 대상 삭제</p>
-          <p className="mt-2 text-sm leading-6 text-muted">mock 화면이라 실제 삭제는 진행하지 않습니다. API 연결 후 관찰 목록에서 제거됩니다.</p>
+          <p className="mt-2 text-sm leading-6 text-muted">mock 화면이라 실제 삭제는 진행하지 않아요. API 연결 후 관찰 목록에서 제거돼요.</p>
           <button className="mt-3 h-10 rounded-[10px] bg-surface-strong px-4 text-sm font-bold text-foreground" type="button">
             삭제
           </button>

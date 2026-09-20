@@ -16,6 +16,7 @@ export type BlogPost = {
   authorName: string;  // 작성자 이름
   authorInitial: string; // 작성자 아바타 이니셜
   meta: string;        // 게시글 부가 정보
+  title: string;       // 게시글 제목
   content: string;     // 게시글 본문
   tags: string[];      // 게시글 태그 목록
   likeCount: number;   // 좋아요 수
@@ -45,6 +46,7 @@ export const blogViewModel: BlogViewModel = {
       authorName: 'mory.dev',
       authorInitial: 'M',
       meta: '프론트 구성 기획 · 8분 전',
+      title: '중앙 피드 폭 고정으로 모바일 감성 유지하기',
       content:
         'PC에서도 좌우를 꽉 채우지 않고, 중앙 피드 폭을 고정하면 지금 프로젝트의 모바일 앱 같은 느낌을 유지할 수 있음.',
       tags: ['frontend', 'layout', 'mobile-ui'],
@@ -57,6 +59,7 @@ export const blogViewModel: BlogViewModel = {
       authorName: 'jin.note',
       authorInitial: 'J',
       meta: '개발 노트 · 32분 전',
+      title: '전역 메뉴는 가볍게, 서비스 화면은 길쭉하게',
       content:
         '전역 메뉴는 상단이나 작은 레일 정도만 두고, 서비스 내부 화면은 모바일처럼 길쭉하게 유지하는 쪽이 깔끔함.',
       tags: ['platform', 'navigation', 'blog'],

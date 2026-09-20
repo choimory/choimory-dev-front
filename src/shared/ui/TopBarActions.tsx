@@ -38,9 +38,9 @@ const SEARCH_TARGETS = [
 
 /** 알림 샘플 목록 */
 const NOTIFICATION_ITEMS = [
-  { id: 'notice-1', service: 'blog', title: '블로그에 새 댓글이 달렸습니다', meta: '블로그 · 방금' },
-  { id: 'notice-2', service: 'feed', title: '관심 스트리머 방송이 시작되었습니다', meta: '피드 · 12분 전' },
-  { id: 'notice-3', service: 'feed', title: '관심 상품이 목표가 아래로 내려갔습니다', meta: '피드 · 38분 전' },
+  { id: 'notice-1', service: 'blog', title: '블로그에 새 댓글이 달렸어요', meta: '블로그 · 방금' },
+  { id: 'notice-2', service: 'feed', title: '관심 스트리머 방송이 시작됐어요', meta: '피드 · 12분 전' },
+  { id: 'notice-3', service: 'feed', title: '관심 상품이 목표가 아래로 내려갔어요', meta: '피드 · 38분 전' },
 ] satisfies Array<{ id: string; service: NotificationService; title: string; meta: string }>;
 
 /** 검색 오버레이 중앙 영역 위치 클래스 */

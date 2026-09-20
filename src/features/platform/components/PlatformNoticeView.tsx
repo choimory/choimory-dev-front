@@ -13,16 +13,16 @@ import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 const PLATFORM_NOTICES = [
   {
     id: 'notice-1',
-    title: '서비스 화면 구조를 확장 중입니다',
-    description: '하단 메뉴와 상세 화면을 연결하는 작업을 진행하고 있습니다.',
-    content: '플랫폼, 블로그, 피드의 하단 메뉴를 실제 화면과 상세 화면으로 연결했습니다. 이후에는 메뉴별 상단 카드와 모달 기반 상세 UX를 차례로 다듬습니다.',
+    title: '서비스 화면 구조를 확장하고 있어요',
+    description: '하단 메뉴와 상세 화면을 연결하는 작업을 진행하고 있어요.',
+    content: '플랫폼, 블로그, 피드의 하단 메뉴를 실제 화면과 상세 화면으로 연결했어요. 이후에는 메뉴별 상단 카드와 모달 기반 상세 UX를 차례로 다듬고 있어요.',
     dateText: '2026.09.19',
   },
   {
     id: 'notice-2',
     title: '블로그와 피드 상세 화면 준비',
-    description: '게시글, 관찰 항목, 알림 상세를 먼저 mock 화면으로 구성합니다.',
-    content: '블로그 게시글 상세와 피드 관찰/알림 상세 화면은 현재 mock 데이터 기반입니다. 실제 API 연동 전까지 화면 밀도와 이동 흐름을 먼저 검증합니다.',
+    description: '게시글, 관찰 항목, 알림 상세를 먼저 mock 화면으로 구성하고 있어요.',
+    content: '블로그 게시글 상세와 피드 관찰/알림 상세 화면은 현재 mock 데이터 기반이에요. 실제 API 연동 전까지 화면 밀도와 이동 흐름을 먼저 검증하고 있어요.',
     dateText: '2026.09.19',
   },
 ];
@@ -53,7 +53,7 @@ export function PlatformNoticeView({ isLoggedIn }: PlatformNoticeViewProps) {
         <PageIntroCard
           domainPath="notice"
           title="공지사항"
-          description="플랫폼과 하위 서비스의 변경사항을 모아봅니다."
+          description="플랫폼과 하위 서비스의 변경사항을 모아봐요."
         />
 
         <section className="grid gap-3" aria-label="공지사항 목록">

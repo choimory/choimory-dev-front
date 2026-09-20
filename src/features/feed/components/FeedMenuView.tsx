@@ -10,6 +10,7 @@ import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
 import { PageIntroCard } from '@/shared/ui/PageIntroCard';
+import { SectionHeader } from '@/shared/ui/SectionHeader';
 import { StatCard } from '@/shared/ui/StatCard';
 
 import type { FeedMenuKind, FeedTargetType, FeedViewModel, FeedWatchTarget } from '../model/feedTypes';
@@ -38,18 +39,18 @@ type FeedCreateTabId = FeedTargetType;
 const FEED_MENU_COPY: Record<FeedMenuKind, { eyebrow: string; title: string; description: string }> = {
   popular: {
     eyebrow: 'feed / popular',
-    title: '인기 관찰 대상 랭킹',
-    description: '등록과 반응이 늘고 있는 아이템, 스트리머, 아티스트를 모아봅니다.',
+    title: '실시간 순위',
+    description: '등록과 반응이 늘고 있는 아이템, 스트리머, 아티스트를 모아봐요.',
   },
   observations: {
     eyebrow: 'feed / observations',
-    title: '관찰 목록',
-    description: '가격, 방송, 신곡처럼 계속 지켜볼 대상을 확인합니다.',
+    title: '관찰',
+    description: '가격, 방송, 신곡처럼 계속 지켜볼 대상을 확인해보세요.',
   },
   me: {
     eyebrow: 'feed / me',
     title: '내 피드',
-    description: '내가 등록한 관찰 대상과 알림 설정으로 이동합니다.',
+    description: '내가 등록한 관찰 대상과 알림 설정으로 이동해요.',
   },
 };
 
@@ -57,7 +58,7 @@ const FEED_MENU_COPY: Record<FeedMenuKind, { eyebrow: string; title: string; des
 const FEED_ME_PROFILE = {
   nickname: 'mory.dev',
   initial: 'M',
-  description: '관심 상품, 스트리머, 아티스트를 등록해 알림 조건을 관리합니다.',
+  description: '관심 상품, 스트리머, 아티스트를 등록해 알림 조건을 관리해요.',
 };
 
 /** feed 인기 랭킹 탭 목록 */
@@ -207,12 +208,7 @@ function PopularTargetSection({ targets }: { targets: FeedWatchTarget[] }) {
 function PopularTargetEventSection({ activities }: { activities: FeedViewModel['activities'] }) {
   return (
     <section className="grid gap-3" aria-labelledby="feed-popular-event-title">
-      <div className="px-1">
-        <p className="text-sm font-bold text-primary">feed / event</p>
-        <h2 id="feed-popular-event-title" className="mt-1 text-lg font-bold text-foreground">
-          인기 대상 최근 이벤트
-        </h2>
-      </div>
+      <SectionHeader domainPath="feed / event" title="최근 이벤트" headingId="feed-popular-event-title" />
       <div className="grid gap-3">
         {activities.map((activity) => (
           <Link key={activity.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition hover:bg-surface-strong" href={`/feed/targets/${activity.targetId}`}>
@@ -240,12 +236,7 @@ function ObservationTargetSection({ targets }: { targets: FeedWatchTarget[] }) {
         <StatCard label="스트리머" value={`${targets.filter((target) => target.type === 'streamer').length}`} />
         <StatCard label="아티스트" value={`${targets.filter((target) => target.type === 'artist').length}`} />
       </div>
-      <div className="px-1">
-        <p className="text-sm font-bold text-primary">feed / target</p>
-        <h2 id="feed-watching-target-title" className="mt-1 text-lg font-bold text-foreground">
-          내가 관찰 중인 대상
-        </h2>
-      </div>
+      <SectionHeader domainPath="feed / target" title="관찰 중인 대상" headingId="feed-watching-target-title" />
       <div className="grid gap-3">
         {targets.map((target) => (
           <TargetListLink
@@ -265,6 +256,8 @@ function MyFeedManageSection({ summaries, targets }: { summaries: FeedViewModel[
 
   return (
     <>
+      <PageIntroCard domainPath="feed / me" />
+
       <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="feed-me-profile-title">
         <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
           <div className="grid size-16 place-items-center rounded-3xl bg-primary text-xl font-black text-primary-foreground">
@@ -309,12 +302,7 @@ function MyFeedManageSection({ summaries, targets }: { summaries: FeedViewModel[
       )}
 
       <section className="grid gap-3" aria-labelledby="feed-my-target-title">
-        <div className="px-1">
-          <p className="text-sm font-bold text-primary">feed / settings</p>
-          <h2 id="feed-my-target-title" className="mt-1 text-lg font-bold text-foreground">
-            내 알림 설정
-          </h2>
-        </div>
+        <SectionHeader domainPath="feed / settings" title="내 알림 설정" headingId="feed-my-target-title" />
         <div className="grid gap-3">
           {targets.map((target) => (
             <TargetListLink
@@ -369,7 +357,7 @@ function FeedTargetCreateForm() {
         <h2 id="feed-create-target-title" className="mt-1 text-base font-bold text-foreground">
           관찰 대상 등록
         </h2>
-        <p className="mt-2 text-sm leading-6 text-muted">API 연결 전까지 화면에 필요한 입력 형태만 먼저 확인합니다.</p>
+        <p className="mt-2 text-sm leading-6 text-muted">API 연결 전까지 화면에 필요한 입력 형태만 먼저 확인하고 있어요.</p>
       </div>
 
       <div className="mt-4 grid grid-cols-3 gap-1 rounded-2xl bg-surface-strong p-1" role="tablist" aria-label="관찰 대상 등록 종류">
@@ -423,7 +411,7 @@ function FeedTargetCreateForm() {
       </div>
 
       <div className="mt-4 flex items-center justify-between gap-3">
-        <p className="text-sm text-muted">{isSubmitted ? '등록 준비가 완료되었습니다.' : '저장 전 mock 입력값은 목록에 추가하지 않습니다.'}</p>
+        <p className="text-sm text-muted">{isSubmitted ? '등록 준비가 완료됐어요.' : '저장 전 mock 입력값은 목록에 추가하지 않아요.'}</p>
         <button className="h-10 shrink-0 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button" onClick={handleSubmit}>
           {isSubmitted ? '준비 완료' : '등록'}
         </button>

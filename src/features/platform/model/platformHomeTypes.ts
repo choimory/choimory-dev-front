@@ -63,6 +63,16 @@ export const platformHomeViewModel: PlatformHomeViewModel = {
       meta: '알림 모아보기',
     },
     {
+      id: 'community',
+      name: '커뮤니티',
+      description: '자유롭게 이야기 나누는 공용 게시판',
+      href: '/services',
+      iconName: 'users',
+      tone: 'green',
+      status: 'planned',
+      meta: '준비 중',
+    },
+    {
       id: 'memo',
       name: '메모',
       description: '아이디어와 작업 메모',

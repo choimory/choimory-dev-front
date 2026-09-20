@@ -38,8 +38,8 @@ export function PlatformServicesView({ isLoggedIn, services }: PlatformServicesV
       <AppContent className="grid gap-4">
         <PageIntroCard
           domainPath="services"
-          title="사용할 서비스를 선택하세요"
-          description="현재 열린 서비스와 준비 중인 서비스를 한 화면에서 확인합니다."
+          title="서비스"
+          description="현재 열린 서비스와 준비 중인 서비스를 한 화면에서 확인해보세요."
         />
 
         <section className="grid gap-3" aria-label="서비스 목록">

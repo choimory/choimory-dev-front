@@ -59,7 +59,7 @@ export function FeedObservationDetailView({ isLoggedIn, observation }: FeedObser
         <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="observation-rule-title">
           <h2 id="observation-rule-title" className="text-base font-bold text-foreground">관찰 조건</h2>
           <p className="mt-2 text-sm leading-6 text-muted">
-            실제 연동 전까지는 mock 조건을 표시합니다. 이후 스트리머 활동, 가격 조건, 콘텐츠 업로드 조건을 이 화면에서 관리합니다.
+            실제 연동 전까지는 mock 조건을 표시하고 있어요. 이후 스트리머 활동, 가격 조건, 콘텐츠 업로드 조건을 이 화면에서 관리할 예정이에요.
           </p>
         </section>
       </AppContent>

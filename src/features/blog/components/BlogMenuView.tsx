@@ -70,13 +70,13 @@ type BlogNetworkUser = {
 const BLOG_MENU_COPY: Record<BlogMenuKind, { eyebrow: string; title: string; description: string }> = {
   popular: {
     eyebrow: 'blog / popular',
-    title: '지금 인기 있는 글',
-    description: '검색어, 멘션, 팔로워, 태그 흐름을 기준으로 많이 움직이는 글을 모아봅니다.',
+    title: '실시간 순위',
+    description: '검색어, 멘션, 팔로워, 태그 흐름을 기준으로 많이 움직이는 글을 모아봐요.',
   },
   following: {
     eyebrow: 'blog / following',
-    title: '팔로잉 피드',
-    description: '팔로워와 팔로잉 목록을 확인하고 필요한 사용자를 빠르게 찾습니다.',
+    title: '팔로잉',
+    description: '팔로워와 팔로잉 목록을 확인하고 필요한 사용자를 빠르게 찾아요.',
   },
 };
 
@@ -97,32 +97,32 @@ const BLOG_RELATION_TABS: BlogRelationTab[] = [
 /** blog 인기 랭킹 mock 데이터 */
 const BLOG_RANKING_ITEMS: Record<BlogRankingTabId, BlogRankingItem[]> = {
   search: [
-    { id: 'search-1', rank: 1, label: '프론트 화면 구조', description: '상세 화면과 메뉴 연결 검색이 늘었습니다.', valueText: '12', trend: 'up' },
-    { id: 'search-2', rank: 2, label: '피드 관찰 UX', description: '관찰 목록과 알림 설정 글이 주목받고 있습니다.', valueText: 'NEW', trend: 'new' },
-    { id: 'search-3', rank: 3, label: '블로그 댓글 개선', description: '댓글, 대댓글, 멘션 UI 논의가 이어집니다.', valueText: '2', trend: 'down' },
-    { id: 'search-4', rank: 4, label: '유저 블로그 라우팅', description: '내 블로그를 유저 페이지로 합치는 흐름이 검색됩니다.', valueText: '6', trend: 'up' },
-    { id: 'search-5', rank: 5, label: '팔로잉 목록 검색', description: '관계 목록을 빠르게 찾는 UI가 함께 언급됩니다.', valueText: '1', trend: 'same' },
+    { id: 'search-1', rank: 1, label: '프론트 화면 구조', description: '상세 화면과 메뉴 연결 검색이 늘었어요.', valueText: '12', trend: 'up' },
+    { id: 'search-2', rank: 2, label: '피드 관찰 UX', description: '관찰 목록과 알림 설정 글이 주목받고 있어요.', valueText: 'NEW', trend: 'new' },
+    { id: 'search-3', rank: 3, label: '블로그 댓글 개선', description: '댓글, 대댓글, 멘션 UI 논의가 이어지고 있어요.', valueText: '2', trend: 'down' },
+    { id: 'search-4', rank: 4, label: '유저 블로그 라우팅', description: '내 블로그를 유저 페이지로 합치는 흐름이 검색되고 있어요.', valueText: '6', trend: 'up' },
+    { id: 'search-5', rank: 5, label: '팔로잉 목록 검색', description: '관계 목록을 빠르게 찾는 UI가 함께 언급돼요.', valueText: '1', trend: 'same' },
   ],
   mention: [
-    { id: 'mention-1', rank: 1, label: '@mory.dev', description: '화면 구조 글에서 가장 많이 언급되었습니다.', valueText: '18회', trend: 'up' },
-    { id: 'mention-2', rank: 2, label: '@jin.note', description: '개발 노트 댓글에서 멘션이 늘었습니다.', valueText: '11회', trend: 'up' },
-    { id: 'mention-3', rank: 3, label: '@ui.archive', description: '상세보기 개선 글에 자주 연결됩니다.', valueText: '7회', trend: 'same' },
-    { id: 'mention-4', rank: 4, label: '@nav.lab', description: '서비스 내비게이션 글에서 새로 언급됩니다.', valueText: '5회', trend: 'new' },
-    { id: 'mention-5', rank: 5, label: '@feed.watch', description: '관찰 피드 사례와 함께 멘션됩니다.', valueText: '2회', trend: 'down' },
+    { id: 'mention-1', rank: 1, label: '@mory.dev', description: '화면 구조 글에서 가장 많이 언급됐어요.', valueText: '18회', trend: 'up' },
+    { id: 'mention-2', rank: 2, label: '@jin.note', description: '개발 노트 댓글에서 멘션이 늘었어요.', valueText: '11회', trend: 'up' },
+    { id: 'mention-3', rank: 3, label: '@ui.archive', description: '상세보기 개선 글에 자주 연결돼요.', valueText: '7회', trend: 'same' },
+    { id: 'mention-4', rank: 4, label: '@nav.lab', description: '서비스 내비게이션 글에서 새로 언급돼요.', valueText: '5회', trend: 'new' },
+    { id: 'mention-5', rank: 5, label: '@feed.watch', description: '관찰 피드 사례와 함께 멘션돼요.', valueText: '2회', trend: 'down' },
   ],
   follower: [
-    { id: 'follower-1', rank: 1, label: 'mory.dev', description: '최근 화면 기획 글 이후 팔로워가 늘었습니다.', valueText: '24명', trend: 'up' },
-    { id: 'follower-2', rank: 2, label: 'jin.note', description: '짧은 개발 메모가 꾸준히 저장되고 있습니다.', valueText: '15명', trend: 'up' },
-    { id: 'follower-3', rank: 3, label: 'ui.archive', description: 'UI 패턴 아카이브 유입이 안정적입니다.', valueText: '9명', trend: 'same' },
-    { id: 'follower-4', rank: 4, label: 'nav.lab', description: '메뉴 구조 정리 글 이후 팔로워가 늘었습니다.', valueText: '7명', trend: 'up' },
-    { id: 'follower-5', rank: 5, label: 'feed.watch', description: '가격 알림 사례가 다시 읽히고 있습니다.', valueText: '3명', trend: 'down' },
+    { id: 'follower-1', rank: 1, label: 'mory.dev', description: '최근 화면 기획 글 이후 팔로워가 늘었어요.', valueText: '24명', trend: 'up' },
+    { id: 'follower-2', rank: 2, label: 'jin.note', description: '짧은 개발 메모가 꾸준히 저장되고 있어요.', valueText: '15명', trend: 'up' },
+    { id: 'follower-3', rank: 3, label: 'ui.archive', description: 'UI 패턴 아카이브 유입이 안정적이에요.', valueText: '9명', trend: 'same' },
+    { id: 'follower-4', rank: 4, label: 'nav.lab', description: '메뉴 구조 정리 글 이후 팔로워가 늘었어요.', valueText: '7명', trend: 'up' },
+    { id: 'follower-5', rank: 5, label: 'feed.watch', description: '가격 알림 사례가 다시 읽히고 있어요.', valueText: '3명', trend: 'down' },
   ],
   tag: [
-    { id: 'tag-1', rank: 1, label: '#frontend', description: '상세 화면과 레이아웃 글에서 클릭이 많습니다.', valueText: '42회', trend: 'up' },
-    { id: 'tag-2', rank: 2, label: '#feed', description: 'feed 서비스 화면과 함께 자주 이동합니다.', valueText: '29회', trend: 'up' },
-    { id: 'tag-3', rank: 3, label: '#comment', description: '댓글 UX 개선 글에서 반복 클릭됩니다.', valueText: '16회', trend: 'new' },
-    { id: 'tag-4', rank: 4, label: '#profile', description: '유저 블로그 프로필 카드에서 클릭됩니다.', valueText: '12회', trend: 'up' },
-    { id: 'tag-5', rank: 5, label: '#following', description: '관계 목록 개선 글에서 함께 쓰입니다.', valueText: '8회', trend: 'same' },
+    { id: 'tag-1', rank: 1, label: '#frontend', description: '상세 화면과 레이아웃 글에서 클릭이 많아요.', valueText: '42회', trend: 'up' },
+    { id: 'tag-2', rank: 2, label: '#feed', description: 'feed 서비스 화면과 함께 자주 이동해요.', valueText: '29회', trend: 'up' },
+    { id: 'tag-3', rank: 3, label: '#comment', description: '댓글 UX 개선 글에서 반복 클릭돼요.', valueText: '16회', trend: 'new' },
+    { id: 'tag-4', rank: 4, label: '#profile', description: '유저 블로그 프로필 카드에서 클릭돼요.', valueText: '12회', trend: 'up' },
+    { id: 'tag-5', rank: 5, label: '#following', description: '관계 목록 개선 글에서 함께 쓰여요.', valueText: '8회', trend: 'same' },
   ],
 };
 
@@ -274,7 +274,7 @@ function BlogFollowingManageSection() {
             관계 목록
           </h2>
           <p className="mt-2 text-sm leading-6 text-muted">
-            팔로워와 팔로잉을 탭으로 나누고 필요한 사용자를 빠르게 찾습니다.
+            팔로워와 팔로잉을 탭으로 나누고 필요한 사용자를 빠르게 찾아요.
           </p>
         </div>
         <button
@@ -338,7 +338,7 @@ function BlogFollowingManageSection() {
         ))}
         {pageUsers.length === 0 && (
           <p className="rounded-2xl bg-surface-strong p-4 text-center text-sm text-muted">
-            검색 결과가 없습니다.
+            검색 결과가 없어요.
           </p>
         )}
       </div>

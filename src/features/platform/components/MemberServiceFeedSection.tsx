@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { Icon } from '@/shared/ui/Icon';
+import { SectionHeader } from '@/shared/ui/SectionHeader';
 
 import type { PlatformService } from '../model/platformHomeTypes';
 
@@ -60,10 +61,10 @@ const MEMBER_SERVICE_FEED_CARDS: MemberServiceFeedCard[] = [
       { label: '팔로잉 수', value: '36', href: '/blog/following' },
     ],
     notifications: [
-      { id: 'blog-notice-1', title: '새 댓글이 달렸습니다', timeText: '방금', href: '/blog/posts/post-1' },
-      { id: 'blog-notice-2', title: '팔로잉한 사용자가 글을 올렸습니다', timeText: '14분 전', href: '/blog/following' },
-      { id: 'blog-notice-3', title: '내 글이 인기 목록에 올랐습니다', timeText: '38분 전', href: '/blog/popular' },
-      { id: 'blog-notice-4', title: '새 팔로워가 생겼습니다', timeText: '1시간 전', href: '/blog/me' },
+      { id: 'blog-notice-1', title: '새 댓글이 달렸어요', timeText: '방금', href: '/blog/posts/post-1' },
+      { id: 'blog-notice-2', title: '팔로잉한 사용자가 글을 올렸어요', timeText: '14분 전', href: '/blog/following' },
+      { id: 'blog-notice-3', title: '내 글이 인기 목록에 올랐어요', timeText: '38분 전', href: '/blog/popular' },
+      { id: 'blog-notice-4', title: '새 팔로워가 생겼어요', timeText: '1시간 전', href: '/blog/me' },
     ],
   },
   {
@@ -74,25 +75,25 @@ const MEMBER_SERVICE_FEED_CARDS: MemberServiceFeedCard[] = [
       { label: '관찰 중인 스트리머', value: '7', href: '/feed/observations' },
     ],
     notifications: [
-      { id: 'feed-notice-1', title: '관심 스트리머 방송이 시작되었습니다', timeText: '12분 전', href: '/feed/activities/activity-1' },
-      { id: 'feed-notice-2', title: '관심 상품이 목표가 아래로 내려갔습니다', timeText: '22분 전', href: '/feed/activities/activity-2' },
-      { id: 'feed-notice-3', title: '새 가격 변동이 감지되었습니다', timeText: '46분 전', href: '/feed/activities/activity-3' },
-      { id: 'feed-notice-4', title: '관찰 목록에 새 업데이트가 있습니다', timeText: '2시간 전', href: '/feed/observations' },
+      { id: 'feed-notice-1', title: '관심 스트리머 방송이 시작됐어요', timeText: '12분 전', href: '/feed/activities/activity-1' },
+      { id: 'feed-notice-2', title: '관심 상품이 목표가 아래로 내려갔어요', timeText: '22분 전', href: '/feed/activities/activity-2' },
+      { id: 'feed-notice-3', title: '새 가격 변동이 감지됐어요', timeText: '46분 전', href: '/feed/activities/activity-3' },
+      { id: 'feed-notice-4', title: '관찰 목록에 새 업데이트가 있어요', timeText: '2시간 전', href: '/feed/observations' },
     ],
   },
 ];
 
 /** 준비 중 서비스 알림 안내 */
 const PLANNED_SERVICE_NOTIFICATIONS: MemberServiceFeedNotification[] = [
-  { id: 'planned-1', title: '서비스 데이터 구조를 준비 중입니다', timeText: '예정', href: '/services' },
-  { id: 'planned-2', title: '활성화 후 개인 피드가 표시됩니다', timeText: '예정', href: '/services' },
+  { id: 'planned-1', title: '서비스 데이터 구조를 준비하고 있어요', timeText: '예정', href: '/services' },
+  { id: 'planned-2', title: '활성화 후 개인 피드가 표시돼요', timeText: '예정', href: '/services' },
 ];
 
 /** 플랫폼 홈 프로필 임시 데이터 */
 const MEMBER_PROFILE = {
   nickname: 'mory.dev',
   email: 'mory@example.com',
-  description: 'choimory.dev의 서비스를 조용히 다듬는 계정입니다.',
+  description: 'choimory.dev의 서비스를 조용히 다듬는 계정이에요.',
 };
 
 /**
@@ -105,12 +106,7 @@ export function MemberServiceFeedSection({ services }: MemberServiceFeedSectionP
   return (
     <section className="grid gap-4" aria-label="내 서비스 피드">
       <section className="grid gap-3" aria-labelledby="member-profile-section-title">
-        <div className="px-1">
-          <p className="text-sm font-bold text-primary">/me</p>
-          <h2 id="member-profile-section-title" className="mt-1 text-xl font-bold leading-tight text-foreground">
-            나를 소개하세요
-          </h2>
-        </div>
+        <SectionHeader domainPath="platform / me" title="내 프로필" headingId="member-profile-section-title" />
 
         <article className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="member-profile-title">
           <div className="flex items-center justify-between gap-3">
@@ -132,12 +128,7 @@ export function MemberServiceFeedSection({ services }: MemberServiceFeedSectionP
       </section>
 
       <section className="grid gap-3" aria-labelledby="service-feed-card-title">
-        <div className="px-1">
-          <p className="text-sm font-bold text-primary">/services</p>
-          <h2 id="service-feed-card-title" className="mt-1 text-xl font-bold leading-tight text-foreground">
-            나의 현황을 서비스별로 확인하세요
-          </h2>
-        </div>
+        <SectionHeader domainPath="platform / services" title="서비스 현황" headingId="service-feed-card-title" />
 
         <div className="grid gap-4">
           {services.map((service) => {
