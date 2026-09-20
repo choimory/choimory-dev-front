@@ -9,6 +9,9 @@ import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
 
+import { BLOG_FOLLOWERS, BLOG_FOLLOWINGS, BLOG_USER_PROFILE, BlogProfileCard } from './BlogProfileCard';
+import { BlogRelationModal } from './BlogRelationModal';
+
 /**
  * 내 blog 설정/관리 화면 컴포넌트의 Props
  */
@@ -53,6 +56,13 @@ const BLOG_SETTING_ITEMS: BlogSettingItem[] = [
     value: '켜짐',
     options: ['켜짐', '꺼짐'],
   },
+];
+
+/** 내 활동 카운팅 mock 데이터 */
+const BLOG_ME_ACTIVITY_STATS = [
+  { label: '내 댓글', value: '47' },
+  { label: '좋아요', value: '96' },
+  { label: '북마크', value: '18' },
 ];
 
 /** 글 공개 범위 옵션 */
@@ -338,6 +348,7 @@ function BlogSettingEditModal({ item, onClose }: BlogSettingEditModalProps) {
 export function BlogMeSettingsView({ isLoggedIn }: BlogMeSettingsViewProps) {
   const [isPostCreateModalOpen, setIsPostCreateModalOpen] = useState(false);
   const [editingSettingItem, setEditingSettingItem] = useState<BlogSettingItem | null>(null);
+  const [relationModal, setRelationModal] = useState<'followers' | 'following' | null>(null);
 
   return (
     <AppFrame>
@@ -353,27 +364,17 @@ export function BlogMeSettingsView({ isLoggedIn }: BlogMeSettingsViewProps) {
       />
 
       <AppContent className="grid gap-3">
-        <section className="px-1" aria-labelledby="blog-me-title">
+        <section className="px-1" aria-labelledby="blog-me-profile-title">
           <p className="text-sm font-bold text-primary">blog / me</p>
-          <h1 id="blog-me-title" className="mt-1 text-lg font-bold text-foreground">
-            내 블로그
-          </h1>
         </section>
 
-        <Link className="rounded-3xl border border-border bg-surface p-5" href="/blog/mory.dev" aria-label="내 공개 blog로 이동">
-          <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4">
-            <div className="grid size-16 place-items-center rounded-3xl bg-primary text-xl font-black text-primary-foreground">
-              M
-            </div>
-            <div className="min-w-0">
-              <h2 className="text-2xl font-black leading-tight text-foreground">mory.dev</h2>
-              <p className="mt-2 text-sm leading-6 text-muted">
-                내 공개 블로그 페이지로 이동해 프로필과 글 목록을 확인합니다.
-              </p>
-            </div>
-            <Icon className="size-5 rotate-180 text-muted" name="chevronLeft" />
-          </div>
-        </Link>
+        <BlogProfileCard
+          headingId="blog-me-profile-title"
+          profile={BLOG_USER_PROFILE}
+          onSelectRelation={setRelationModal}
+          profileHref="/blog/mory.dev"
+          extraStats={BLOG_ME_ACTIVITY_STATS}
+        />
 
         <section className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-border bg-surface p-3" aria-label="글 작성">
           <div className="grid size-10 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
@@ -415,6 +416,12 @@ export function BlogMeSettingsView({ isLoggedIn }: BlogMeSettingsViewProps) {
       )}
       {editingSettingItem && (
         <BlogSettingEditModal item={editingSettingItem} onClose={() => setEditingSettingItem(null)} />
+      )}
+      {relationModal === 'followers' && (
+        <BlogRelationModal title="팔로워" users={BLOG_FOLLOWERS} onClose={() => setRelationModal(null)} />
+      )}
+      {relationModal === 'following' && (
+        <BlogRelationModal title="팔로잉" users={BLOG_FOLLOWINGS} onClose={() => setRelationModal(null)} />
       )}
 
       <BottomNavigation

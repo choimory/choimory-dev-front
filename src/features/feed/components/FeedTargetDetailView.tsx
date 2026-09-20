@@ -9,6 +9,7 @@ import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
+import { StatCard } from '@/shared/ui/StatCard';
 
 import type { FeedArtistAlbum, FeedArtistTrack, FeedBroadcastDay, FeedPricePoint, FeedPriceRangeId, FeedTargetType, FeedWatchTarget } from '../model/feedTypes';
 
@@ -58,9 +59,9 @@ export function FeedTargetDetailView({ isLoggedIn, target }: FeedTargetDetailVie
         </section>
 
         <section className="grid grid-cols-3 gap-2" aria-label="target 요약">
-          <SummaryCard label="상태" value={target.statusText} />
-          <SummaryCard label="지표" value={target.metricText} />
-          <SummaryCard label="추이" value={target.trendText} />
+          <StatCard size="sm" label="상태" value={target.statusText} />
+          <StatCard size="sm" label="지표" value={target.metricText} />
+          <StatCard size="sm" label="추이" value={target.trendText} />
         </section>
 
         {target.type === 'item' && target.itemDetail && <ItemDetailSection target={target} />}
@@ -122,8 +123,8 @@ function ItemDetailSection({ target }: { target: FeedWatchTarget }) {
       <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-item-summary-title">
         <h2 id="feed-item-summary-title" className="text-base font-bold text-foreground">가격 관찰</h2>
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <SummaryCard label="현재 가격" value={detail.currentPrice} />
-          <SummaryCard label="목표 가격" value={detail.targetPrice} />
+          <StatCard size="sm" label="현재 가격" value={detail.currentPrice} />
+          <StatCard size="sm" label="목표 가격" value={detail.targetPrice} />
         </div>
         <p className="mt-3 text-sm leading-6 text-muted">{detail.priceChangeText}</p>
       </section>
@@ -190,8 +191,8 @@ function StreamerDetailSection({ target }: { target: FeedWatchTarget }) {
       <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-streamer-summary-title">
         <h2 id="feed-streamer-summary-title" className="text-base font-bold text-foreground">방송 관찰</h2>
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <SummaryCard label="방송 상태" value={detail.broadcastStatus === 'live' ? 'LIVE' : '대기'} />
-          <SummaryCard label="이벤트" value={target.metricText} />
+          <StatCard size="sm" label="방송 상태" value={detail.broadcastStatus === 'live' ? 'LIVE' : '대기'} />
+          <StatCard size="sm" label="이벤트" value={target.metricText} />
         </div>
         <p className="mt-3 text-sm leading-6 text-muted">{detail.broadcastTrendText}</p>
         <p className="mt-1 text-sm leading-6 text-muted">{detail.eventTrendText}</p>
@@ -248,8 +249,8 @@ function ArtistDetailSection({ target }: { target: FeedWatchTarget }) {
       <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-artist-summary-title">
         <h2 id="feed-artist-summary-title" className="text-base font-bold text-foreground">신곡 관찰</h2>
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <SummaryCard label="최근 신곡" value={detail.latestReleaseTitle} />
-          <SummaryCard label="예정 발매" value={detail.upcomingReleaseText} />
+          <StatCard size="sm" label="최근 신곡" value={detail.latestReleaseTitle} />
+          <StatCard size="sm" label="예정 발매" value={detail.upcomingReleaseText} />
         </div>
         <p className="mt-3 text-sm leading-6 text-muted">{detail.releaseTrendText}</p>
       </section>
@@ -280,15 +281,6 @@ function ArtistDetailSection({ target }: { target: FeedWatchTarget }) {
         document.body,
       )}
     </>
-  );
-}
-
-function SummaryCard({ label, value }: { label: string; value: string }) {
-  return (
-    <article className="rounded-2xl border border-border bg-surface-strong p-3">
-      <p className="text-sm font-black text-foreground">{value}</p>
-      <p className="mt-1 text-xs leading-4 text-muted">{label}</p>
-    </article>
   );
 }
 

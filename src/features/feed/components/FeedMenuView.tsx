@@ -9,6 +9,8 @@ import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
+import { PageIntroCard } from '@/shared/ui/PageIntroCard';
+import { StatCard } from '@/shared/ui/StatCard';
 
 import type { FeedMenuKind, FeedTargetType, FeedViewModel, FeedWatchTarget } from '../model/feedTypes';
 
@@ -49,6 +51,13 @@ const FEED_MENU_COPY: Record<FeedMenuKind, { eyebrow: string; title: string; des
     title: '내 피드',
     description: '내가 등록한 관찰 대상과 알림 설정으로 이동합니다.',
   },
+};
+
+/** 내 피드 프로필 mock 데이터 */
+const FEED_ME_PROFILE = {
+  nickname: 'mory.dev',
+  initial: 'M',
+  description: '관심 상품, 스트리머, 아티스트를 등록해 알림 조건을 관리합니다.',
 };
 
 /** feed 인기 랭킹 탭 목록 */
@@ -100,13 +109,13 @@ export function FeedMenuView({ menuKind, viewModel }: FeedMenuViewProps) {
       />
 
       <AppContent className="grid gap-3">
-        <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="feed-menu-title">
-          <p className="text-sm font-bold text-primary">{copy.eyebrow}</p>
-          <h1 id="feed-menu-title" className="mt-1 text-2xl font-black leading-tight text-foreground">
-            {copy.title}
-          </h1>
-          <p className="mt-2 text-sm leading-6 text-muted">{copy.description}</p>
-        </section>
+        {menuKind !== 'me' && (
+          <PageIntroCard
+            domainPath={copy.eyebrow}
+            title={copy.title}
+            description={copy.description}
+          />
+        )}
 
         {menuKind === 'popular' && (
           <>
@@ -226,10 +235,10 @@ function ObservationTargetSection({ targets }: { targets: FeedWatchTarget[] }) {
   return (
     <section className="grid gap-3" aria-labelledby="feed-watching-target-title">
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="관찰 대상 요약">
-        <SummaryCard label="관찰 중" value={`${targets.length}`} />
-        <SummaryCard label="아이템" value={`${targets.filter((target) => target.type === 'item').length}`} />
-        <SummaryCard label="스트리머" value={`${targets.filter((target) => target.type === 'streamer').length}`} />
-        <SummaryCard label="아티스트" value={`${targets.filter((target) => target.type === 'artist').length}`} />
+        <StatCard label="관찰 중" value={`${targets.length}`} />
+        <StatCard label="아이템" value={`${targets.filter((target) => target.type === 'item').length}`} />
+        <StatCard label="스트리머" value={`${targets.filter((target) => target.type === 'streamer').length}`} />
+        <StatCard label="아티스트" value={`${targets.filter((target) => target.type === 'artist').length}`} />
       </div>
       <div className="px-1">
         <p className="text-sm font-bold text-primary">feed / target</p>
@@ -256,25 +265,33 @@ function MyFeedManageSection({ summaries, targets }: { summaries: FeedViewModel[
 
   return (
     <>
-      <section className="grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="내 피드 요약">
-        {summaries.map((summary) => (
-          <SummaryCard key={summary.label} label={summary.label} value={summary.value} />
-        ))}
+      <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="feed-me-profile-title">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
+          <div className="grid size-16 place-items-center rounded-3xl bg-primary text-xl font-black text-primary-foreground">
+            {FEED_ME_PROFILE.initial}
+          </div>
+          <div className="min-w-0">
+            <h1 id="feed-me-profile-title" className="text-2xl font-black leading-tight text-foreground">
+              {FEED_ME_PROFILE.nickname}
+            </h1>
+            <p className="mt-2 text-sm leading-6 text-muted">{FEED_ME_PROFILE.description}</p>
+          </div>
+        </div>
+
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="내 피드 요약">
+          {summaries.map((summary) => (
+            <StatCard key={summary.label} label={summary.label} value={summary.value} />
+          ))}
+        </div>
       </section>
 
-      <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-add-target-title">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-sm font-bold text-primary">feed / add</p>
-            <h2 id="feed-add-target-title" className="mt-1 text-base font-bold text-foreground">
-              관찰 대상 추가
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-muted">아이템, 스트리머, 아티스트를 등록해 알림 조건을 관리합니다.</p>
-          </div>
-          <button className="grid size-10 shrink-0 place-items-center rounded-[10px] bg-primary text-primary-foreground" type="button" aria-label="관찰 대상 추가" onClick={() => setIsCreateFormOpen(true)}>
-            <Icon name="plus" />
-          </button>
+      <section className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-border bg-surface p-3" aria-label="관찰 대상 추가">
+        <div className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground">
+          <Icon name="plus" />
         </div>
+        <button className="h-10 rounded-[10px] bg-surface-strong px-3 text-left text-sm text-muted" type="button" onClick={() => setIsCreateFormOpen(true)}>
+          관찰할 아이템, 스트리머, 아티스트를 등록하세요
+        </button>
       </section>
 
       {isCreateFormOpen && typeof document !== 'undefined' && createPortal(
@@ -432,15 +449,6 @@ function TogglePreview({ label }: { label: string }) {
         <span className="size-5 rounded-full bg-white shadow-sm" />
       </span>
     </div>
-  );
-}
-
-function SummaryCard({ label, value }: { label: string; value: string }) {
-  return (
-    <article className="rounded-2xl border border-border bg-surface p-3 text-center">
-      <p className="text-2xl font-black text-foreground">{value}</p>
-      <p className="mt-1 text-xs leading-4 text-muted">{label}</p>
-    </article>
   );
 }
 

@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
-import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
+import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 
 import type { PlatformService } from '../model/platformHomeTypes';
 
@@ -36,18 +36,11 @@ export function PlatformServicesView({ isLoggedIn, services }: PlatformServicesV
     <AppFrame>
       <AppTopBar isLoggedIn={isLoggedIn} />
       <AppContent className="grid gap-4">
-        <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="services-title">
-          <p className="flex items-center gap-1 text-sm font-bold text-primary">
-            <BrandLogo size="sm" isAnimated={false} />
-            <span>/ services</span>
-          </p>
-          <h1 id="services-title" className="mt-1 text-2xl font-black leading-tight text-foreground">
-            사용할 서비스를 선택하세요
-          </h1>
-          <p className="mt-2 text-sm leading-6 text-muted">
-            현재 열린 서비스와 준비 중인 서비스를 한 화면에서 확인합니다.
-          </p>
-        </section>
+        <PageIntroCard
+          domainPath="services"
+          title="사용할 서비스를 선택하세요"
+          description="현재 열린 서비스와 준비 중인 서비스를 한 화면에서 확인합니다."
+        />
 
         <section className="grid gap-3" aria-label="서비스 목록">
           {services.map((service) => {

@@ -8,6 +8,7 @@ import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Icon } from '@/shared/ui/Icon';
+import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 
 import { BlogPostCard } from './BlogPostCard';
 import type { BlogMenuKind, BlogViewModel } from '../model/blogTypes';
@@ -393,13 +394,11 @@ export function BlogMenuView({ menuKind, viewModel }: BlogMenuViewProps) {
       />
 
       <AppContent className="grid gap-3">
-        <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="blog-menu-title">
-          <p className="text-sm font-bold text-primary">{copy.eyebrow}</p>
-          <h1 id="blog-menu-title" className="mt-1 text-2xl font-black leading-tight text-foreground">
-            {copy.title}
-          </h1>
-          <p className="mt-2 text-sm leading-6 text-muted">{copy.description}</p>
-        </section>
+        <PageIntroCard
+          domainPath={copy.eyebrow}
+          title={copy.title}
+          description={copy.description}
+        />
 
         {menuKind === 'popular' && <BlogPopularInsightSection />}
         {menuKind === 'following' && <BlogFollowingManageSection />}

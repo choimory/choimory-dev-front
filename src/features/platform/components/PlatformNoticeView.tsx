@@ -7,6 +7,7 @@ import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 
 /** 공지사항 임시 데이터 */
 const PLATFORM_NOTICES = [
@@ -49,18 +50,11 @@ export function PlatformNoticeView({ isLoggedIn }: PlatformNoticeViewProps) {
     <AppFrame>
       <AppTopBar isLoggedIn={isLoggedIn} />
       <AppContent className="grid gap-4">
-        <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="notice-title">
-          <p className="flex items-center gap-1 text-sm font-bold text-primary">
-            <BrandLogo size="sm" isAnimated={false} />
-            <span>/ notice</span>
-          </p>
-          <h1 id="notice-title" className="mt-1 text-2xl font-black leading-tight text-foreground">
-            공지사항
-          </h1>
-          <p className="mt-2 text-sm leading-6 text-muted">
-            플랫폼과 하위 서비스의 변경사항을 모아봅니다.
-          </p>
-        </section>
+        <PageIntroCard
+          domainPath="notice"
+          title="공지사항"
+          description="플랫폼과 하위 서비스의 변경사항을 모아봅니다."
+        />
 
         <section className="grid gap-3" aria-label="공지사항 목록">
           {PLATFORM_NOTICES.map((notice) => (
