@@ -1,0 +1,678 @@
+<div id="choimory-community-mock" aria-label="choimory-dev 커뮤니티 서비스 화면 목업">
+  <style>
+    #choimory-community-mock {
+      color-scheme: light dark;
+      --comm-page: light-dark(#eef2f6, #101418);
+      --comm-shell: light-dark(#f8fafc, #161b22);
+      --comm-surface: light-dark(#ffffff, #1d232b);
+      --comm-surface-strong: light-dark(#f2f6fa, #252c35);
+      --comm-text: light-dark(#17202a, #ecf2f8);
+      --comm-muted: light-dark(#657386, #aeb8c5);
+      --comm-border: light-dark(#d9e1ea, #343d49);
+      --comm-primary: light-dark(#2563eb, #7aa2ff);
+      --comm-primary-soft: light-dark(#e8f0ff, #1c2b4a);
+      --comm-green: light-dark(#0f8b6d, #60d7b2);
+      --comm-red: light-dark(#d64545, #ff8f8f);
+      --comm-orange: light-dark(#cf6d17, #ffb26f);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    #choimory-community-mock * {
+      box-sizing: border-box;
+    }
+
+    #choimory-community-mock .comm-window {
+      min-height: 760px;
+      background: var(--comm-page);
+      color: var(--comm-text);
+      border: 1px solid var(--comm-border);
+      border-radius: 22px;
+      overflow: hidden;
+    }
+
+    #choimory-community-mock .comm-topbar {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 24px;
+      background: var(--comm-shell);
+      border-bottom: 1px solid var(--comm-border);
+    }
+
+    #choimory-community-mock .comm-brand {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    #choimory-community-mock .comm-breadcrumb {
+      color: var(--comm-muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    #choimory-community-mock .comm-search {
+      flex: 1;
+      max-width: 420px;
+      height: 38px;
+      margin-left: auto;
+      border: 1px solid var(--comm-border);
+      background: var(--comm-surface);
+      color: var(--comm-muted);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+
+    #choimory-community-mock .comm-icon-button,
+    #choimory-community-mock .comm-avatar {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--comm-border);
+      background: var(--comm-surface);
+      color: var(--comm-text);
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #choimory-community-mock .comm-avatar {
+      border-radius: 999px;
+      border-color: transparent;
+      background: var(--comm-primary);
+      color: light-dark(#ffffff, #06111f);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    #choimory-community-mock .comm-layout {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr) 300px;
+      min-height: 696px;
+    }
+
+    #choimory-community-mock .comm-sidebar,
+    #choimory-community-mock .comm-rightbar {
+      background: var(--comm-shell);
+      padding: 18px 14px;
+    }
+
+    #choimory-community-mock .comm-sidebar {
+      border-right: 1px solid var(--comm-border);
+    }
+
+    #choimory-community-mock .comm-rightbar {
+      border-left: 1px solid var(--comm-border);
+    }
+
+    #choimory-community-mock .comm-nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    #choimory-community-mock .comm-nav-title {
+      color: var(--comm-muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 10px 4px;
+    }
+
+    #choimory-community-mock .comm-nav button {
+      border: 0;
+      background: transparent;
+      color: var(--comm-muted);
+      min-height: 42px;
+      border-radius: 10px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      font: inherit;
+    }
+
+    #choimory-community-mock .comm-nav button[aria-current="page"] {
+      background: var(--comm-primary-soft);
+      color: var(--comm-primary);
+      font-weight: 700;
+    }
+
+    #choimory-community-mock .comm-main {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    #choimory-community-mock h1,
+    #choimory-community-mock h2,
+    #choimory-community-mock h3,
+    #choimory-community-mock p {
+      margin: 0;
+    }
+
+    #choimory-community-mock h1 {
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    #choimory-community-mock h2 {
+      font-size: 16px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    #choimory-community-mock h3 {
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    #choimory-community-mock .comm-muted {
+      color: var(--comm-muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    #choimory-community-mock .comm-service-head {
+      background: var(--comm-surface);
+      border: 1px solid var(--comm-border);
+      border-radius: 16px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    #choimory-community-mock .comm-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    #choimory-community-mock .comm-tab {
+      border: 1px solid var(--comm-border);
+      background: var(--comm-surface);
+      color: var(--comm-muted);
+      min-height: 34px;
+      border-radius: 999px;
+      padding: 0 12px;
+      font: inherit;
+      font-size: 14px;
+    }
+
+    #choimory-community-mock .comm-tab[aria-selected="true"] {
+      background: var(--comm-primary);
+      border-color: transparent;
+      color: light-dark(#ffffff, #06111f);
+      font-weight: 700;
+    }
+
+    #choimory-community-mock .comm-primary-action {
+      border: 0;
+      background: var(--comm-primary);
+      color: light-dark(#ffffff, #06111f);
+      min-height: 42px;
+      border-radius: 10px;
+      padding: 0 14px;
+      font: inherit;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    #choimory-community-mock .comm-composer,
+    #choimory-community-mock .comm-post,
+    #choimory-community-mock .comm-panel {
+      background: var(--comm-surface);
+      border: 1px solid var(--comm-border);
+      border-radius: 16px;
+    }
+
+    #choimory-community-mock .comm-composer {
+      padding: 14px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    #choimory-community-mock .comm-compose-box {
+      min-height: 42px;
+      border-radius: 10px;
+      background: var(--comm-surface-strong);
+      color: var(--comm-muted);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+
+    #choimory-community-mock .comm-post {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    #choimory-community-mock .comm-post-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #choimory-community-mock .comm-profile {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--comm-surface-strong);
+      color: var(--comm-primary);
+      font-weight: 700;
+    }
+
+    #choimory-community-mock .comm-media-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 8px;
+    }
+
+    #choimory-community-mock .comm-media {
+      min-height: 190px;
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--comm-primary) 72%, transparent), transparent),
+        linear-gradient(45deg, color-mix(in srgb, var(--comm-orange) 55%, transparent), color-mix(in srgb, var(--comm-green) 50%, transparent));
+    }
+
+    #choimory-community-mock .comm-media.small {
+      min-height: 91px;
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--comm-green) 68%, transparent), transparent),
+        linear-gradient(45deg, color-mix(in srgb, var(--comm-primary) 44%, transparent), color-mix(in srgb, var(--comm-red) 45%, transparent));
+    }
+
+    #choimory-community-mock .comm-media-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    #choimory-community-mock .comm-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #choimory-community-mock .comm-action {
+      border: 0;
+      background: var(--comm-surface-strong);
+      color: var(--comm-muted);
+      min-height: 34px;
+      border-radius: 999px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font: inherit;
+      font-size: 13px;
+    }
+
+    #choimory-community-mock .comm-action.strong {
+      color: var(--comm-red);
+    }
+
+    #choimory-community-mock .comm-panel {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    #choimory-community-mock .comm-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    #choimory-community-mock .comm-list-item {
+      display: grid;
+      gap: 4px;
+      padding: 10px;
+      background: var(--comm-surface-strong);
+      border-radius: 10px;
+    }
+
+    #choimory-community-mock .comm-user-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #choimory-community-mock .comm-follow {
+      border: 1px solid var(--comm-border);
+      background: var(--comm-surface);
+      color: var(--comm-primary);
+      min-height: 32px;
+      border-radius: 8px;
+      padding: 0 10px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    #choimory-community-mock .comm-mobile-nav {
+      display: none;
+    }
+
+    #choimory-community-mock svg {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+    }
+
+    @media (max-width: 980px) {
+      #choimory-community-mock .comm-layout {
+        grid-template-columns: 190px minmax(0, 1fr);
+      }
+
+      #choimory-community-mock .comm-rightbar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      #choimory-community-mock .comm-window {
+        border-radius: 18px;
+      }
+
+      #choimory-community-mock .comm-topbar {
+        padding: 0 16px;
+      }
+
+      #choimory-community-mock .comm-breadcrumb,
+      #choimory-community-mock .comm-search {
+        display: none;
+      }
+
+      #choimory-community-mock .comm-layout {
+        grid-template-columns: 1fr;
+      }
+
+      #choimory-community-mock .comm-sidebar {
+        display: none;
+      }
+
+      #choimory-community-mock .comm-main {
+        padding: 14px 14px 86px;
+      }
+
+      #choimory-community-mock .comm-service-head {
+        grid-template-columns: 1fr;
+      }
+
+      #choimory-community-mock .comm-primary-action {
+        width: 100%;
+      }
+
+      #choimory-community-mock .comm-mobile-nav {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+        padding: 8px 10px;
+        background: var(--comm-shell);
+        border-top: 1px solid var(--comm-border);
+      }
+
+      #choimory-community-mock .comm-mobile-nav button {
+        border: 0;
+        background: transparent;
+        color: var(--comm-muted);
+        min-height: 50px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        gap: 2px;
+        font: inherit;
+        font-size: 12px;
+      }
+
+      #choimory-community-mock .comm-mobile-nav button[aria-current="page"] {
+        color: var(--comm-primary);
+        background: var(--comm-primary-soft);
+      }
+    }
+
+    @media (max-width: 480px) {
+      #choimory-community-mock .comm-media-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #choimory-community-mock .comm-media,
+      #choimory-community-mock .comm-media.small {
+        min-height: 150px;
+      }
+
+      #choimory-community-mock .comm-post-head {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      #choimory-community-mock .comm-post-head time {
+        grid-column: 2;
+      }
+    }
+  </style>
+
+  <div class="comm-window">
+    <header class="comm-topbar">
+      <div class="comm-brand">choimory-dev</div>
+      <div class="comm-breadcrumb">/ 커뮤니티</div>
+      <div class="comm-search" aria-label="커뮤니티 검색">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="m21 21-4.35-4.35" stroke-width="2" stroke-linecap="round"></path>
+          <circle cx="11" cy="11" r="7" stroke-width="2"></circle>
+        </svg>
+        게시글, 사람, 태그 검색
+      </div>
+      <button class="comm-icon-button" type="button" aria-label="플랫폼 홈">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z" stroke-width="2" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+      <div class="comm-avatar" aria-label="내 프로필">C</div>
+    </header>
+
+    <div class="comm-layout">
+      <aside class="comm-sidebar" aria-label="커뮤니티 메뉴">
+        <nav class="comm-nav">
+          <div class="comm-nav-title">커뮤니티</div>
+          <button type="button" aria-current="page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M4 6h16M4 12h16M4 18h10" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+            피드
+          </button>
+          <button type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.9z" stroke-width="2" stroke-linejoin="round"></path>
+            </svg>
+            인기
+          </button>
+          <button type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <circle cx="12" cy="8" r="4" stroke-width="2"></circle>
+              <path d="M4 21a8 8 0 0 1 16 0" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+            팔로잉
+          </button>
+          <button type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M7 8h10M7 12h7M6 20l-2 2v-5a8 8 0 1 1 2 3z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            내 글
+          </button>
+        </nav>
+      </aside>
+
+      <main class="comm-main">
+        <section class="comm-service-head">
+          <div>
+            <h1>커뮤니티</h1>
+            <p class="comm-muted" style="margin-top: 6px;">플랫폼 안의 SNS 서비스. 글, 사진, 댓글, 팔로우는 여기 안에서만 깊게 다룬다.</p>
+            <div class="comm-tabs" role="tablist" aria-label="피드 필터">
+              <button class="comm-tab" type="button" role="tab" aria-selected="true">추천</button>
+              <button class="comm-tab" type="button" role="tab" aria-selected="false">팔로잉</button>
+              <button class="comm-tab" type="button" role="tab" aria-selected="false">최신</button>
+              <button class="comm-tab" type="button" role="tab" aria-selected="false">내 주변</button>
+            </div>
+          </div>
+          <button class="comm-primary-action" type="button">글쓰기</button>
+        </section>
+
+        <section class="comm-composer" aria-label="글 작성">
+          <div class="comm-profile" aria-hidden="true">C</div>
+          <div class="comm-compose-box">오늘 공유할 내용을 작성하세요</div>
+        </section>
+
+        <article class="comm-post">
+          <header class="comm-post-head">
+            <div class="comm-profile" aria-hidden="true">M</div>
+            <div>
+              <h3>mory.dev</h3>
+              <p class="comm-muted">프론트 구성 기획 · #서비스설계</p>
+            </div>
+            <time class="comm-muted">8분 전</time>
+          </header>
+          <p>choimory-dev는 홈에서 전체 서비스를 훑고, 커뮤니티 안으로 들어오면 피드에 집중하는 구조가 좋아 보임. 전역 검색과 서비스 내부 검색은 분리하는 쪽이 깔끔함.</p>
+          <div class="comm-media-grid" aria-label="게시글 이미지 영역">
+            <div class="comm-media"></div>
+            <div class="comm-media-stack">
+              <div class="comm-media small"></div>
+              <div class="comm-media small"></div>
+            </div>
+          </div>
+          <div class="comm-actions">
+            <button class="comm-action strong" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 1 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6z" stroke-width="2" stroke-linejoin="round"></path>
+              </svg>
+              128
+            </button>
+            <button class="comm-action" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" stroke-width="2" stroke-linejoin="round"></path>
+              </svg>
+              댓글 24
+            </button>
+            <button class="comm-action" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              공유
+            </button>
+          </div>
+        </article>
+
+        <article class="comm-post">
+          <header class="comm-post-head">
+            <div class="comm-profile" aria-hidden="true">J</div>
+            <div>
+              <h3>jin.note</h3>
+              <p class="comm-muted">개발 노트 · #메모장</p>
+            </div>
+            <time class="comm-muted">32분 전</time>
+          </header>
+          <p>메모장에서 쓴 내용을 커뮤니티 글로 전환할 수 있으면 좋을 듯. 단, 개인 메모와 공개 글의 경계는 명확해야 함.</p>
+          <div class="comm-actions">
+            <button class="comm-action" type="button">좋아요 42</button>
+            <button class="comm-action" type="button">댓글 7</button>
+            <button class="comm-action" type="button">저장</button>
+          </div>
+        </article>
+      </main>
+
+      <aside class="comm-rightbar" aria-label="커뮤니티 보조 정보">
+        <section class="comm-panel">
+          <h2>인기 태그</h2>
+          <div class="comm-list">
+            <div class="comm-list-item">
+              <h3>#서비스설계</h3>
+              <p class="comm-muted">오늘 18개 글</p>
+            </div>
+            <div class="comm-list-item">
+              <h3>#프론트엔드</h3>
+              <p class="comm-muted">오늘 13개 글</p>
+            </div>
+            <div class="comm-list-item">
+              <h3>#가격알림</h3>
+              <p class="comm-muted">오늘 6개 글</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="comm-panel" style="margin-top: 14px;">
+          <h2>추천 사용자</h2>
+          <div class="comm-list">
+            <div class="comm-user-row">
+              <div class="comm-profile" aria-hidden="true">A</div>
+              <div>
+                <h3>api.log</h3>
+                <p class="comm-muted">백엔드 설계</p>
+              </div>
+              <button class="comm-follow" type="button">팔로우</button>
+            </div>
+            <div class="comm-user-row">
+              <div class="comm-profile" aria-hidden="true">U</div>
+              <div>
+                <h3>ux.note</h3>
+                <p class="comm-muted">화면 구조</p>
+              </div>
+              <button class="comm-follow" type="button">팔로우</button>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <nav class="comm-mobile-nav" aria-label="커뮤니티 모바일 메뉴">
+      <button type="button" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h10" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        피드
+      </button>
+      <button type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.9z" stroke-width="2" stroke-linejoin="round"></path>
+        </svg>
+        인기
+      </button>
+      <button type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        작성
+      </button>
+      <button type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <circle cx="12" cy="8" r="4" stroke-width="2"></circle>
+          <path d="M4 21a8 8 0 0 1 16 0" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        팔로잉
+      </button>
+      <button type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z" stroke-width="2" stroke-linejoin="round"></path>
+        </svg>
+        홈
+      </button>
+    </nav>
+  </div>
+</div>

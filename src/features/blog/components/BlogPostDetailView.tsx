@@ -1,0 +1,211 @@
+'use client';
+
+import Link from 'next/link';
+import { useState } from 'react';
+
+import { AppContent } from '@/shared/ui/AppContent';
+import { AppFrame } from '@/shared/ui/AppFrame';
+import { AppTopBar } from '@/shared/ui/AppTopBar';
+import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Button } from '@/shared/ui/Button';
+import { Card } from '@/shared/ui/Card';
+import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { IconButton } from '@/shared/ui/IconButton';
+import { PageIntroCard } from '@/shared/ui/PageIntroCard';
+import { SectionHeader } from '@/shared/ui/SectionHeader';
+
+import type { BlogPost } from '../model/blogTypes';
+
+/**
+ * blog 게시글 상세 화면 컴포넌트의 Props
+ */
+type BlogPostDetailViewProps = {
+  isLoggedIn: boolean; // 로그인 여부
+  post: BlogPost;     // 표시할 게시글
+};
+
+/** 게시글 상세 댓글 임시 데이터 */
+const POST_DETAIL_COMMENTS = [
+  {
+    id: 'comment-1',
+    authorName: 'mory.dev',
+    authorInitial: 'M',
+    content: '이 구조면 상세 화면을 붙이기 쉬워 보입니다.',
+    likeCount: 8,
+    timeText: '3분 전',
+    replies: [
+      { id: 'reply-1', authorName: 'jin.note', authorInitial: 'J', content: '@mory.dev 메뉴별 상단 카드까지 들어가면 더 자연스러울 듯합니다.', likeCount: 3, timeText: '1분 전' },
+    ],
+  },
+  {
+    id: 'comment-2',
+    authorName: 'jin.note',
+    authorInitial: 'J',
+    content: '하단 메뉴별 화면도 같은 패턴으로 가면 좋겠네요.',
+    likeCount: 5,
+    timeText: '12분 전',
+    replies: [],
+  },
+];
+
+/**
+ * blog 게시글 상세 화면입니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns blog 게시글 상세 화면
+ */
+export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps) {
+  const [replyingCommentId, setReplyingCommentId] = useState<string | null>(null);
+  const isOwnPost = post.authorName === 'mory.dev';
+
+  return (
+    <AppFrame>
+      <AppTopBar
+        isLoggedIn={isLoggedIn}
+        serviceName="blog"
+        serviceHref="/blog"
+        leading={
+          <Link className="grid size-10 place-items-center rounded-[10px] text-foreground" href="/blog" aria-label="blog 홈으로 돌아가기">
+            <Icon name="chevronLeft" />
+          </Link>
+        }
+      />
+
+      <AppContent className="grid gap-3">
+        <PageIntroCard domainPath="blog / post" title={post.title} />
+
+        <article className="overflow-hidden rounded-3xl border border-border bg-surface" aria-labelledby="post-detail-title">
+          <header className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 p-4">
+            <IconBadge size="xl" tone="strong" className="text-sm font-bold">
+              {post.authorInitial}
+            </IconBadge>
+            <div className="min-w-0">
+              <h1 id="post-detail-title" className="text-base font-bold text-foreground">{post.authorName}</h1>
+              <p className="mt-1 text-xs leading-5 text-muted">{post.meta}</p>
+            </div>
+          </header>
+
+          {post.hasMedia && (
+            <div
+              className="aspect-[4/5] bg-[linear-gradient(135deg,color-mix(in_srgb,var(--color-primary)_72%,transparent),transparent),linear-gradient(45deg,color-mix(in_srgb,var(--color-accent-green)_55%,transparent),color-mix(in_srgb,var(--color-accent-red)_40%,transparent))]"
+              aria-label="게시글 이미지"
+            />
+          )}
+
+          <div className="grid gap-4 p-4">
+            <div className="flex items-center gap-1">
+              <IconButton ariaLabel="좋아요" tone="ghost" className="text-accent-red">
+                <Icon name="heart" />
+              </IconButton>
+              <IconButton ariaLabel="댓글" tone="ghost">
+                <Icon name="chat" />
+              </IconButton>
+              <IconButton ariaLabel="공유" tone="ghost">
+                <Icon name="share" />
+              </IconButton>
+              <span className="flex-1" />
+              <IconButton ariaLabel="저장" tone="ghost">
+                <Icon name="bookmark" />
+              </IconButton>
+              {isOwnPost && (
+                <button className="h-9 rounded-[10px] bg-surface-strong px-3 text-xs font-bold text-primary" type="button">
+                  수정
+                </button>
+              )}
+            </div>
+            <p className="text-sm font-bold text-foreground">
+              좋아요 {post.likeCount}개 · 댓글 {post.commentCount}개
+            </p>
+            <p className="text-sm leading-6 text-foreground">{post.content}</p>
+            <div className="flex flex-wrap gap-2" aria-label="게시글 태그">
+              {post.tags.map((tag) => (
+                <Link
+                  key={tag}
+                  className="rounded-xl bg-surface-strong px-3 py-1.5 text-xs font-bold text-primary"
+                  href={`/blog/popular?tag=${tag}`}
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </article>
+
+        <section className="grid gap-3" aria-labelledby="post-comments-title">
+          <SectionHeader domainPath="blog / comments" title="댓글" headingId="post-comments-title" />
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-2xl border border-border bg-surface p-3">
+            <input className="h-10 min-w-0 rounded-[10px] border border-border bg-surface-strong px-3 text-sm text-foreground" placeholder="댓글을 남겨보세요" />
+            <Button>
+              작성
+            </Button>
+          </div>
+          {POST_DETAIL_COMMENTS.map((comment) => (
+            <Card as="article" padding="sm" key={comment.id}>
+              <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
+                <IconBadge size="md" className="text-xs font-bold">
+                  {comment.authorInitial}
+                </IconBadge>
+                <div className="min-w-0">
+                  <h3 className="text-sm font-bold text-foreground">{comment.authorName}</h3>
+                  <p className="mt-1 text-sm leading-5 text-muted">{comment.content}</p>
+                </div>
+                <IconButton ariaLabel="댓글 좋아요" size="sm" tone="ghost" className="shrink-0 text-muted">
+                  <Icon className="size-4" name="heart" />
+                </IconButton>
+              </div>
+              <div className="mt-2 flex items-center gap-3 text-xs text-muted">
+                <time>{comment.timeText}</time>
+                <span>좋아요 {comment.likeCount}개</span>
+                <button className="font-bold" type="button" onClick={() => setReplyingCommentId((currentId) => (currentId === comment.id ? null : comment.id))}>
+                  답글 달기
+                </button>
+              </div>
+              {replyingCommentId === comment.id && (
+                <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-2xl bg-surface-strong p-3">
+                  <input className="h-10 min-w-0 rounded-[10px] border border-border bg-surface px-3 text-sm text-foreground" placeholder={`@${comment.authorName} 답글을 남겨보세요`} />
+                  <Button>
+                    작성
+                  </Button>
+                </div>
+              )}
+              {comment.replies.length > 0 && (
+                <div className="mt-3 grid gap-2 border-l border-border pl-3">
+                  {comment.replies.map((reply) => (
+                    <article key={reply.id} className="rounded-2xl bg-surface-strong p-3">
+                      <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
+                        <IconBadge size="sm" tone="surface" className="text-xs font-bold">
+                          {reply.authorInitial}
+                        </IconBadge>
+                        <div className="min-w-0">
+                          <h4 className="text-sm font-bold text-foreground">{reply.authorName}</h4>
+                          <p className="mt-1 text-sm leading-5 text-muted">{reply.content}</p>
+                        </div>
+                        <IconButton ariaLabel="대댓글 좋아요" size="sm" tone="ghost" className="shrink-0 text-muted">
+                          <Icon className="size-4" name="heart" />
+                        </IconButton>
+                      </div>
+                      <div className="mt-2 flex items-center gap-3 text-xs text-muted">
+                        <time>{reply.timeText}</time>
+                        <span>좋아요 {reply.likeCount}개</span>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </Card>
+          ))}
+        </section>
+      </AppContent>
+
+      <BottomNavigation
+        items={[
+          { label: '홈', href: '/blog', iconName: 'home', isActive: true },
+          { label: '인기', href: '/blog/popular', iconName: 'trophy' },
+          { label: '팔로잉', href: '/blog/following', iconName: 'heart' },
+          { label: '내 블로그', href: '/blog/me', iconName: 'user' },
+        ]}
+      />
+    </AppFrame>
+  );
+}
