@@ -4,6 +4,12 @@ import { StatCard } from '@/shared/ui/StatCard';
 import { TargetListLink } from './TargetListLink';
 import type { FeedWatchTarget } from '../model/feedTypes';
 
+/**
+ * 관찰 중인 대상의 종류별 요약 카운팅과 대상 목록을 보여줍니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 관찰 대상 섹션
+ */
 export function ObservationTargetSection({ targets }: { targets: FeedWatchTarget[] }) {
   return (
     <section className="grid gap-3" aria-labelledby="feed-watching-target-title">

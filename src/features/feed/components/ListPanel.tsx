@@ -1,5 +1,11 @@
 import { Card } from '@/shared/ui/Card';
 
+/**
+ * 제목과 문자열 목록을 카드 안에 나열하는 패널입니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 목록 패널
+ */
 export function ListPanel({ items, title }: { items: string[]; title: string }) {
   return (
     <Card as="section" aria-labelledby="feed-streamer-event-title">

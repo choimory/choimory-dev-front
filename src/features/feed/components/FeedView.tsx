@@ -6,14 +6,13 @@ import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Card } from '@/shared/ui/Card';
-import { Chip } from '@/shared/ui/Chip';
 import { Icon } from '@/shared/ui/Icon';
 import { IconBadge } from '@/shared/ui/IconBadge';
 import { ListRow } from '@/shared/ui/ListRow';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
 
-import { getTargetTypeLabel, getTargetIconName, getTargetToneClassName } from '../model/feedTargetView';
-import type { FeedViewModel, FeedWatchTarget } from '../model/feedTypes';
+import { TargetPreviewLink } from './TargetPreviewLink';
+import type { FeedViewModel } from '../model/feedTypes';
 
 /**
  * feed 화면 컴포넌트의 Props
@@ -149,27 +148,5 @@ export function FeedView({ viewModel }: FeedViewProps) {
         ]}
       />
     </AppFrame>
-  );
-}
-
-function TargetPreviewLink({ href, target }: { href: string; target: FeedWatchTarget }) {
-  return (
-    <ListRow
-      href={href}
-      leading={(
-        <span className={`grid size-10 place-items-center rounded-full ${getTargetToneClassName(target.type)}`}>
-          <Icon className="size-5" name={getTargetIconName(target.type)} />
-        </span>
-      )}
-      trailing={<span className="text-xs font-bold text-primary">{target.trendText}</span>}
-    >
-      <span className="min-w-0">
-        <span className="flex items-center gap-2">
-          <span className="truncate text-sm font-bold text-foreground">{target.name}</span>
-          <Chip size="sm" className="shrink-0">{getTargetTypeLabel(target.type)}</Chip>
-        </span>
-        <span className="mt-1 block truncate text-xs text-muted">{target.statusText} · {target.metricText}</span>
-      </span>
-    </ListRow>
   );
 }

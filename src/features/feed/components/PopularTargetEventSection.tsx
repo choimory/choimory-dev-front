@@ -5,6 +5,12 @@ import { SectionHeader } from '@/shared/ui/SectionHeader';
 
 import type { FeedViewModel } from '../model/feedTypes';
 
+/**
+ * 인기 대상의 최근 이벤트 목록을 보여줍니다. 항목을 누르면 해당 대상 상세로 이동합니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 최근 이벤트 섹션
+ */
 export function PopularTargetEventSection({ activities }: { activities: FeedViewModel['activities'] }) {
   return (
     <section className="grid gap-3" aria-labelledby="feed-popular-event-title">

@@ -5,6 +5,12 @@ import { BroadcastContributionGraph } from './BroadcastContributionGraph';
 import { ListPanel } from './ListPanel';
 import type { FeedWatchTarget } from '../model/feedTypes';
 
+/**
+ * 스트리머 관찰 대상의 상세 정보(방송 상태, 방송 기여도, 이벤트 목록)를 보여줍니다. 스트리머 상세 데이터가 없으면 아무것도 표시하지 않습니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 스트리머 상세 섹션
+ */
 export function StreamerDetailSection({ target }: { target: FeedWatchTarget }) {
   const detail = target.streamerDetail;
 

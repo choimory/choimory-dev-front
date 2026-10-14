@@ -9,6 +9,12 @@ import { AlbumCarousel3d } from './AlbumCarousel3d';
 import { AlbumDetailModal } from './AlbumDetailModal';
 import type { FeedWatchTarget } from '../model/feedTypes';
 
+/**
+ * 아티스트 관찰 대상의 상세 정보(앨범 캐러셀, 앨범/트랙 상세 모달)를 보여줍니다. 아티스트 상세 데이터가 없으면 아무것도 표시하지 않습니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 아티스트 상세 섹션
+ */
 export function ArtistDetailSection({ target }: { target: FeedWatchTarget }) {
   const detail = target.artistDetail;
   const [activeAlbumIndex, setActiveAlbumIndex] = useState(0);

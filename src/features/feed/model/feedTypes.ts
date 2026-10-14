@@ -186,6 +186,7 @@ export type FeedViewModel = {
   activities: FeedActivity[];      // 최근 알림 목록
 };
 
+/** 키보드 아이템 기간별 가격 mock 데이터 */
 const KEYBOARD_PRICE_RANGES: FeedPriceRange[] = [
   {
     id: 'week',
@@ -249,6 +250,7 @@ const KEYBOARD_PRICE_RANGES: FeedPriceRange[] = [
   },
 ];
 
+/** GPU 아이템 기간별 가격 mock 데이터 */
 const GPU_PRICE_RANGES: FeedPriceRange[] = [
   {
     id: 'week',

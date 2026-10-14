@@ -40,6 +40,12 @@ const TARGET_TREND_ICON: Record<FeedWatchTarget['trendDirection'], string> = {
   same: '-',
 };
 
+/**
+ * 관찰 대상 실시간 랭킹을 종류별 탭으로 전환하며 보여줍니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 관찰 대상 랭킹 섹션
+ */
 export function PopularTargetSection({ targets }: { targets: FeedWatchTarget[] }) {
   const [activeTabId, setActiveTabId] = useState<FeedRankingTabId>('all');
   const rankingTargets = activeTabId === 'all' ? targets : targets.filter((target) => target.type === activeTabId);

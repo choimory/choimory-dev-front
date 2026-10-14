@@ -2,6 +2,12 @@
 
 import type { FeedPricePoint } from '../model/feedTypes';
 
+/**
+ * 가격 변동을 작은 꺾은선 그래프로 보여줍니다. 지점에 마우스를 올리면 값을 안내하고, 지점을 누르면 고정/해제합니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 가격 변동 꺾은선 그래프
+ */
 export function MiniLineChart({
   activePoint,
   label,

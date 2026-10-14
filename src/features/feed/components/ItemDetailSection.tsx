@@ -9,6 +9,12 @@ import { StatCard } from '@/shared/ui/StatCard';
 import { MiniLineChart } from './MiniLineChart';
 import type { FeedPriceRangeId, FeedWatchTarget } from '../model/feedTypes';
 
+/**
+ * 아이템 관찰 대상의 상세 정보(가격 요약, 기간별 가격 변동 그래프, 출처)를 보여줍니다. 아이템 상세 데이터가 없으면 아무것도 표시하지 않습니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 아이템 상세 섹션
+ */
 export function ItemDetailSection({ target }: { target: FeedWatchTarget }) {
   const detail = target.itemDetail;
   const [activeRangeId, setActiveRangeId] = useState<FeedPriceRangeId>('week');

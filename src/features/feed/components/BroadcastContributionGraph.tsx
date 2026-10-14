@@ -7,6 +7,12 @@ import { Card } from '@/shared/ui/Card';
 
 import type { FeedBroadcastDay, FeedWatchTarget } from '../model/feedTypes';
 
+/**
+ * 스트리머의 일자별 방송 기여도를 주 단위 격자 그래프로 보여주고, 날짜를 누르면 방송 세션 목록을 팝오버로 표시합니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 방송 기여도 그래프
+ */
 export function BroadcastContributionGraph({ days }: { days: NonNullable<FeedWatchTarget['streamerDetail']>['broadcastDays'] }) {
   const [activeDayId, setActiveDayId] = useState<string | null>(null);
   const [popoverPosition, setPopoverPosition] = useState<{ left: number; top?: number; bottom?: number } | null>(null);
@@ -108,6 +114,12 @@ export function BroadcastContributionGraph({ days }: { days: NonNullable<FeedWat
   );
 }
 
+/**
+ * 방송 일자의 방송 세션 목록을 반환합니다. 세션 정보가 없으면 일자 정보로 단일 세션을 만들어 반환합니다.
+ *
+ * @param day 방송 일자 데이터
+ * @returns 방송 세션 목록
+ */
 function getBroadcastSessions(day: FeedBroadcastDay) {
   if (day.broadcasts && day.broadcasts.length > 0) {
     return day.broadcasts;
@@ -120,6 +132,12 @@ function getBroadcastSessions(day: FeedBroadcastDay) {
   return [{ id: `${day.id}-session`, startedAt: day.startedAt, title: day.title, durationText: day.durationText }];
 }
 
+/**
+ * 방송 강도(0~4)에 맞는 격자 칸 배경 클래스를 반환합니다.
+ *
+ * @param intensity 방송 강도
+ * @returns 강도별 배경 클래스
+ */
 function getBroadcastIntensityClassName(intensity: 0 | 1 | 2 | 3 | 4) {
   switch (intensity) {
     case 0:

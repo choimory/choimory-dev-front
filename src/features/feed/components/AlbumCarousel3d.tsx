@@ -5,6 +5,12 @@ import { IconButton } from '@/shared/ui/IconButton';
 
 import type { FeedArtistAlbum } from '../model/feedTypes';
 
+/**
+ * 아티스트 앨범을 3D 캐러셀로 보여주고, 이전/다음 이동과 앨범 선택을 처리합니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 앨범 캐러셀
+ */
 export function AlbumCarousel3d({
   activeAlbumIndex,
   albums,

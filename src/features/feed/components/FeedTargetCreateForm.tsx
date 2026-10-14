@@ -14,6 +14,11 @@ import type { FeedTargetType } from '../model/feedTypes';
 /** 관찰 대상 등록 탭 종류 */
 type FeedCreateTabId = FeedTargetType;
 
+/**
+ * 관찰 대상 등록 폼입니다. 아이템, 스트리머, 아티스트 종류별 입력 형태를 탭으로 전환해 보여주고, 등록 시 완료 상태로 바꿉니다.
+ *
+ * @returns 관찰 대상 등록 폼
+ */
 export function FeedTargetCreateForm() {
   const [activeTabId, setActiveTabId] = useState<FeedCreateTabId>('item');
   const [isSubmitted, setIsSubmitted] = useState(false);

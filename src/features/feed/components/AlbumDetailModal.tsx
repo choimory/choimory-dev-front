@@ -6,6 +6,12 @@ import { Modal } from '@/shared/ui/Modal';
 
 import type { FeedArtistAlbum, FeedArtistTrack } from '../model/feedTypes';
 
+/**
+ * 선택한 앨범의 정보와 트랙 목록을 보여주는 모달입니다. 트랙을 선택하면 트랙 상세로 전환합니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 앨범 상세 모달
+ */
 export function AlbumDetailModal({ album, onClose, onSelectTrack, selectedTrack }: { album: FeedArtistAlbum; onClose: () => void; onSelectTrack: (trackId: string | null) => void; selectedTrack?: FeedArtistTrack }) {
   const isTrackView = Boolean(selectedTrack);
 

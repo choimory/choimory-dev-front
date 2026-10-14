@@ -22,6 +22,12 @@ const FEED_ME_PROFILE = {
   description: '관심 상품, 스트리머, 아티스트를 등록해 알림 조건을 관리해요.',
 };
 
+/**
+ * 내 피드 관리 화면입니다. 프로필 카드, 요약 카운팅, 관찰 대상 추가 행과 내 관찰 대상 목록을 보여줍니다.
+ *
+ * @param props 컴포넌트 Props
+ * @returns 내 피드 관리 섹션
+ */
 export function MyFeedManageSection({ summaries, targets }: { summaries: FeedViewModel['summaries']; targets: FeedWatchTarget[] }) {
   const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
 
