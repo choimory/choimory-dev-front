@@ -8,6 +8,7 @@ import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Button } from '@/shared/ui/Button';
+import { Modal } from '@/shared/ui/Modal';
 
 import { MeSettingCard } from './MeSettingCard';
 import type { MeSettingItem, MeViewModel } from '../model/meTypes';
@@ -68,127 +69,125 @@ export function MeView({ viewModel }: MeViewProps) {
       />
 
       {selectedSetting && (
-        <div className="fixed inset-0 z-50 grid place-items-end bg-black/60 px-4 py-5 backdrop-blur-sm sm:place-items-center" role="presentation" onClick={() => setSelectedSetting(null)}>
-          <section className="w-full max-w-[560px] rounded-3xl border border-border bg-surface p-5 shadow-[0_24px_80px_rgba(0,0,0,0.34)]" role="dialog" aria-modal="true" aria-labelledby="me-setting-dialog-title" onClick={(event) => event.stopPropagation()}>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-bold text-primary">me / settings</p>
-                <h2 id="me-setting-dialog-title" className="mt-1 text-xl font-black leading-tight text-foreground">
-                  {selectedSetting.title}
-                </h2>
-              </div>
-              <button className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-surface-strong text-sm font-bold text-muted" type="button" onClick={() => setSelectedSetting(null)}>
-                닫기
-              </button>
+        <Modal labelledBy="me-setting-dialog-title" onClose={() => setSelectedSetting(null)} placement="bottom" overlay="dark" size="md" padding="lg">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-bold text-primary">me / settings</p>
+              <h2 id="me-setting-dialog-title" className="mt-1 text-xl font-black leading-tight text-foreground">
+                {selectedSetting.title}
+              </h2>
             </div>
+            <button className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-surface-strong text-sm font-bold text-muted" type="button" onClick={() => setSelectedSetting(null)}>
+              닫기
+            </button>
+          </div>
 
-            <div className="mt-5">
-              {selectedSetting.id === 'profile' && (
-                <div className="grid gap-3">
-                  <label className="grid gap-1 text-sm font-bold text-foreground">
-                    이메일
-                    <input className="h-11 rounded-[10px] border border-border bg-surface-strong px-3 text-sm font-normal text-muted" disabled value={viewModel.email} readOnly />
-                  </label>
-                  <label className="grid gap-1 text-sm font-bold text-foreground">
-                    닉네임
-                    <span className="grid grid-cols-[minmax(0,1fr)_auto] gap-2">
-                      <input className="h-11 min-w-0 rounded-[10px] border border-border bg-surface px-3 text-sm font-normal text-foreground" defaultValue={viewModel.nickname} />
-                      <button className="h-11 rounded-[10px] bg-surface-strong px-3 text-sm font-bold text-foreground" type="button">
-                        중복체크
-                      </button>
-                    </span>
-                  </label>
-                  <label className="grid gap-1 text-sm font-bold text-foreground">
-                    자기소개
-                    <textarea className="min-h-24 resize-none rounded-[10px] border border-border bg-surface px-3 py-3 text-sm font-normal leading-6 text-foreground" defaultValue={viewModel.description} />
-                  </label>
-                  <div className="flex justify-end pt-2">
-                    <Button>
-                      수정하기
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {selectedSetting.id === 'theme' && (
-                <div className="grid gap-3 rounded-2xl border border-border bg-surface-strong p-4">
-                  <div>
-                    <h3 className="text-base font-bold text-foreground">테마 설정</h3>
-                    <p className="mt-1 text-sm leading-5 text-muted">사이트 전체 테마 표시 방식을 선택해보세요.</p>
-                  </div>
-                  <div className="grid gap-2">
-                    {['light', 'dark', 'system'].map((theme) => (
-                      <label key={theme} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-foreground">
-                        <span>{theme}</span>
-                        <input name="theme" type="radio" defaultChecked={theme === 'system'} />
-                      </label>
-                    ))}
-                  </div>
-                  <div className="flex justify-end pt-1">
-                    <Button>
-                      저장
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {selectedSetting.id === 'otp' && (
-                <div className="grid gap-3">
-                  <div className="grid gap-3 rounded-2xl border border-border bg-surface-strong p-4">
-                    <div>
-                      <h3 className="text-base font-bold text-foreground">2차 인증 사용 여부</h3>
-                      <p className="mt-1 text-sm leading-5 text-muted">로그인 후 추가 인증을 사용할지 선택해보세요.</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-foreground">
-                        <span>사용</span>
-                        <input name="otp-enabled" type="radio" defaultChecked />
-                      </label>
-                      <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-foreground">
-                        <span>미사용</span>
-                        <input name="otp-enabled" type="radio" />
-                      </label>
-                    </div>
-                  </div>
-                  <div className="grid gap-3 rounded-2xl border border-border bg-surface-strong p-4">
-                    <div>
-                      <h3 className="text-base font-bold text-foreground">인증 방식</h3>
-                      <p className="mt-1 text-sm leading-5 text-muted">2차 인증에 사용할 방식을 선택해보세요.</p>
-                    </div>
-                    <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-foreground">
-                      <span>이메일 인증</span>
-                      <input name="otp" type="radio" defaultChecked />
-                    </label>
-                    <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-muted">
-                      <span>모바일 앱 인증</span>
-                      <span className="flex items-center gap-2">
-                        <span className="rounded-full bg-surface-strong px-2.5 py-1 text-xs">미구현</span>
-                        <input name="otp" type="radio" disabled />
-                      </span>
-                    </label>
-                  </div>
-                  <div className="flex justify-end pt-1">
-                    <Button>
-                      저장
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {selectedSetting.id === 'delete' && (
-                <div className="rounded-2xl border border-accent-red bg-surface-strong p-4">
-                  <h3 className="text-base font-bold text-accent-red">회원 탈퇴</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">
-                    계정과 서비스 데이터를 정리하는 위험한 작업이에요. 실제 탈퇴 API가 연결되기 전까지는 화면 구조만 보여드려요.
-                  </p>
-                  <Button variant="outline-danger" className="mt-4">
-                    탈퇴 절차 확인
+          <div className="mt-5">
+            {selectedSetting.id === 'profile' && (
+              <div className="grid gap-3">
+                <label className="grid gap-1 text-sm font-bold text-foreground">
+                  이메일
+                  <input className="h-11 rounded-[10px] border border-border bg-surface-strong px-3 text-sm font-normal text-muted" disabled value={viewModel.email} readOnly />
+                </label>
+                <label className="grid gap-1 text-sm font-bold text-foreground">
+                  닉네임
+                  <span className="grid grid-cols-[minmax(0,1fr)_auto] gap-2">
+                    <input className="h-11 min-w-0 rounded-[10px] border border-border bg-surface px-3 text-sm font-normal text-foreground" defaultValue={viewModel.nickname} />
+                    <button className="h-11 rounded-[10px] bg-surface-strong px-3 text-sm font-bold text-foreground" type="button">
+                      중복체크
+                    </button>
+                  </span>
+                </label>
+                <label className="grid gap-1 text-sm font-bold text-foreground">
+                  자기소개
+                  <textarea className="min-h-24 resize-none rounded-[10px] border border-border bg-surface px-3 py-3 text-sm font-normal leading-6 text-foreground" defaultValue={viewModel.description} />
+                </label>
+                <div className="flex justify-end pt-2">
+                  <Button>
+                    수정하기
                   </Button>
                 </div>
-              )}
-            </div>
-          </section>
-        </div>
+              </div>
+            )}
+
+            {selectedSetting.id === 'theme' && (
+              <div className="grid gap-3 rounded-2xl border border-border bg-surface-strong p-4">
+                <div>
+                  <h3 className="text-base font-bold text-foreground">테마 설정</h3>
+                  <p className="mt-1 text-sm leading-5 text-muted">사이트 전체 테마 표시 방식을 선택해보세요.</p>
+                </div>
+                <div className="grid gap-2">
+                  {['light', 'dark', 'system'].map((theme) => (
+                    <label key={theme} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-foreground">
+                      <span>{theme}</span>
+                      <input name="theme" type="radio" defaultChecked={theme === 'system'} />
+                    </label>
+                  ))}
+                </div>
+                <div className="flex justify-end pt-1">
+                  <Button>
+                    저장
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {selectedSetting.id === 'otp' && (
+              <div className="grid gap-3">
+                <div className="grid gap-3 rounded-2xl border border-border bg-surface-strong p-4">
+                  <div>
+                    <h3 className="text-base font-bold text-foreground">2차 인증 사용 여부</h3>
+                    <p className="mt-1 text-sm leading-5 text-muted">로그인 후 추가 인증을 사용할지 선택해보세요.</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-foreground">
+                      <span>사용</span>
+                      <input name="otp-enabled" type="radio" defaultChecked />
+                    </label>
+                    <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-foreground">
+                      <span>미사용</span>
+                      <input name="otp-enabled" type="radio" />
+                    </label>
+                  </div>
+                </div>
+                <div className="grid gap-3 rounded-2xl border border-border bg-surface-strong p-4">
+                  <div>
+                    <h3 className="text-base font-bold text-foreground">인증 방식</h3>
+                    <p className="mt-1 text-sm leading-5 text-muted">2차 인증에 사용할 방식을 선택해보세요.</p>
+                  </div>
+                  <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-foreground">
+                    <span>이메일 인증</span>
+                    <input name="otp" type="radio" defaultChecked />
+                  </label>
+                  <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 text-sm font-bold text-muted">
+                    <span>모바일 앱 인증</span>
+                    <span className="flex items-center gap-2">
+                      <span className="rounded-full bg-surface-strong px-2.5 py-1 text-xs">미구현</span>
+                      <input name="otp" type="radio" disabled />
+                    </span>
+                  </label>
+                </div>
+                <div className="flex justify-end pt-1">
+                  <Button>
+                    저장
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {selectedSetting.id === 'delete' && (
+              <div className="rounded-2xl border border-accent-red bg-surface-strong p-4">
+                <h3 className="text-base font-bold text-accent-red">회원 탈퇴</h3>
+                <p className="mt-2 text-sm leading-6 text-muted">
+                  계정과 서비스 데이터를 정리하는 위험한 작업이에요. 실제 탈퇴 API가 연결되기 전까지는 화면 구조만 보여드려요.
+                </p>
+                <Button variant="outline-danger" className="mt-4">
+                  탈퇴 절차 확인
+                </Button>
+              </div>
+            )}
+          </div>
+        </Modal>
       )}
     </AppFrame>
   );

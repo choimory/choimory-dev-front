@@ -12,7 +12,8 @@ import { IconBadge } from '@/shared/ui/IconBadge';
 import { ListRow } from '@/shared/ui/ListRow';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
 
-import type { FeedTargetType, FeedViewModel, FeedWatchTarget } from '../model/feedTypes';
+import { getTargetTypeLabel, getTargetIconName, getTargetToneClassName } from '../model/feedTargetView';
+import type { FeedViewModel, FeedWatchTarget } from '../model/feedTypes';
 
 /**
  * feed 화면 컴포넌트의 Props
@@ -171,37 +172,4 @@ function TargetPreviewLink({ href, target }: { href: string; target: FeedWatchTa
       </span>
     </ListRow>
   );
-}
-
-function getTargetTypeLabel(type: FeedTargetType) {
-  switch (type) {
-    case 'item':
-      return '아이템';
-    case 'streamer':
-      return '스트리머';
-    case 'artist':
-      return '아티스트';
-  }
-}
-
-function getTargetIconName(type: FeedTargetType) {
-  switch (type) {
-    case 'item':
-      return 'tag';
-    case 'streamer':
-      return 'monitor';
-    case 'artist':
-      return 'star';
-  }
-}
-
-function getTargetToneClassName(type: FeedTargetType) {
-  switch (type) {
-    case 'item':
-      return 'bg-accent-orange-soft text-accent-orange';
-    case 'streamer':
-      return 'bg-primary-soft text-primary';
-    case 'artist':
-      return 'bg-surface-strong text-foreground';
-  }
 }

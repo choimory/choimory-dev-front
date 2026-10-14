@@ -47,17 +47,17 @@ export function FeedObservationDetailView({ isLoggedIn, observation }: FeedObser
         </section>
 
         <section className="grid grid-cols-2 gap-2" aria-label="관찰 상태 요약">
- <Card as="article">
+          <Card as="article">
             <p className="text-2xl font-black text-foreground">ON</p>
             <p className="mt-1 text-xs text-muted">관찰 상태</p>
           </Card>
- <Card as="article">
+          <Card as="article">
             <p className="text-2xl font-black text-foreground">9</p>
             <p className="mt-1 text-xs text-muted">최근 알림</p>
           </Card>
         </section>
 
- <Card as="section" aria-labelledby="observation-rule-title">
+        <Card as="section" aria-labelledby="observation-rule-title">
           <h2 id="observation-rule-title" className="text-base font-bold text-foreground">관찰 조건</h2>
           <p className="mt-2 text-sm leading-6 text-muted">
             실제 연동 전까지는 mock 조건을 표시하고 있어요. 이후 스트리머 활동, 가격 조건, 콘텐츠 업로드 조건을 이 화면에서 관리할 예정이에요.

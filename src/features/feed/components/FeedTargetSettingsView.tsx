@@ -11,7 +11,8 @@ import { Button } from '@/shared/ui/Button';
 import { Card } from '@/shared/ui/Card';
 import { Icon } from '@/shared/ui/Icon';
 
-import type { FeedTargetType, FeedWatchTarget } from '../model/feedTypes';
+import { getTargetTypeLabel, getTargetIconName, getTargetToneClassName } from '../model/feedTargetView';
+import type { FeedWatchTarget } from '../model/feedTypes';
 
 /**
  * feed target 설정 화면 컴포넌트의 Props
@@ -81,7 +82,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
             label="관찰 상태"
             onToggle={() => handleChange(() => setIsWatching((current) => !current))}
           />
- <Card>
+          <Card>
             <p className="text-sm font-bold text-foreground">알림 주기</p>
             <div className="mt-3 grid grid-cols-3 gap-2">
               {['즉시', '하루 요약', '주간 요약'].map((option) => (
@@ -106,7 +107,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
               label="가격 알림"
               onToggle={() => handleChange(() => setIsPrimaryAlertOn((current) => !current))}
             />
- <Card>
+            <Card>
               <label className="text-sm font-bold text-foreground" htmlFor="feed-target-price">목표 가격</label>
               <input
                 id="feed-target-price"
@@ -152,7 +153,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
           </section>
         )}
 
- <Card as="section" aria-label="설정 저장">
+        <Card as="section" aria-label="설정 저장">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-bold text-foreground">설정 저장</p>
@@ -169,7 +170,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
           </div>
         </Card>
 
- <Card as="section" aria-label="위험 작업">
+        <Card as="section" aria-label="위험 작업">
           <p className="text-sm font-bold text-foreground">관찰 대상 삭제</p>
           <p className="mt-2 text-sm leading-6 text-muted">mock 화면이라 실제 삭제는 진행하지 않아요. API 연결 후 관찰 목록에서 제거돼요.</p>
           <Button variant="secondary" className="mt-3">
@@ -202,37 +203,4 @@ function SettingToggle({ description, isOn, label, onToggle }: { description: st
       </span>
     </button>
   );
-}
-
-function getTargetTypeLabel(type: FeedTargetType) {
-  switch (type) {
-    case 'item':
-      return '아이템';
-    case 'streamer':
-      return '스트리머';
-    case 'artist':
-      return '아티스트';
-  }
-}
-
-function getTargetIconName(type: FeedTargetType) {
-  switch (type) {
-    case 'item':
-      return 'tag';
-    case 'streamer':
-      return 'monitor';
-    case 'artist':
-      return 'star';
-  }
-}
-
-function getTargetToneClassName(type: FeedTargetType) {
-  switch (type) {
-    case 'item':
-      return 'bg-accent-orange-soft text-accent-orange';
-    case 'streamer':
-      return 'bg-primary-soft text-primary';
-    case 'artist':
-      return 'bg-surface-strong text-foreground';
-  }
 }

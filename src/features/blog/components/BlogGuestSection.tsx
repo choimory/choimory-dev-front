@@ -23,7 +23,7 @@ type BlogGuestSectionProps = {
 export function BlogGuestSection({ posts }: BlogGuestSectionProps) {
   return (
     <div className="grid gap-3">
- <Card as="section" aria-labelledby="blog-guest-title">
+      <Card as="section" aria-labelledby="blog-guest-title">
         <p className="flex items-center gap-1 text-sm font-bold text-primary">
           <BrandLogo size="sm" isAnimated={false} />
           <span>/ blog</span>

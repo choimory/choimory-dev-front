@@ -7,6 +7,7 @@ import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Modal } from '@/shared/ui/Modal';
 import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 
 /** 공지사항 임시 데이터 */
@@ -79,28 +80,26 @@ export function PlatformNoticeView({ isLoggedIn }: PlatformNoticeViewProps) {
       />
 
       {selectedNotice && (
-        <div className="fixed inset-0 z-50 grid place-items-end bg-black/60 px-4 py-5 backdrop-blur-sm sm:place-items-center" role="presentation" onClick={() => setSelectedNotice(null)}>
-          <section className="w-full max-w-[640px] rounded-3xl border border-border bg-surface p-5 shadow-[0_24px_80px_rgba(0,0,0,0.34)]" role="dialog" aria-modal="true" aria-labelledby="notice-dialog-title" onClick={(event) => event.stopPropagation()}>
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <p className="flex items-center gap-1 text-sm font-bold text-primary">
-                  <BrandLogo size="sm" isAnimated={false} />
-                  <span>/ notice</span>
-                </p>
-                <h2 id="notice-dialog-title" className="mt-2 text-2xl font-black leading-tight text-foreground">
-                  {selectedNotice.title}
-                </h2>
-                <time className="mt-2 block text-xs text-muted">{selectedNotice.dateText}</time>
-              </div>
-              <button className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-surface-strong text-sm font-bold text-muted" type="button" onClick={() => setSelectedNotice(null)}>
-                닫기
-              </button>
+        <Modal labelledBy="notice-dialog-title" onClose={() => setSelectedNotice(null)} placement="bottom" overlay="dark" size="lg" padding="lg">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <p className="flex items-center gap-1 text-sm font-bold text-primary">
+                <BrandLogo size="sm" isAnimated={false} />
+                <span>/ notice</span>
+              </p>
+              <h2 id="notice-dialog-title" className="mt-2 text-2xl font-black leading-tight text-foreground">
+                {selectedNotice.title}
+              </h2>
+              <time className="mt-2 block text-xs text-muted">{selectedNotice.dateText}</time>
             </div>
-            <div className="mt-4 rounded-2xl bg-surface-strong p-4">
-              <p className="text-sm leading-6 text-foreground">{selectedNotice.content}</p>
-            </div>
-          </section>
-        </div>
+            <button className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-surface-strong text-sm font-bold text-muted" type="button" onClick={() => setSelectedNotice(null)}>
+              닫기
+            </button>
+          </div>
+          <div className="mt-4 rounded-2xl bg-surface-strong p-4">
+            <p className="text-sm leading-6 text-foreground">{selectedNotice.content}</p>
+          </div>
+        </Modal>
       )}
     </AppFrame>
   );
