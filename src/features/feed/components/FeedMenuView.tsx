@@ -8,9 +8,16 @@ import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Button } from '@/shared/ui/Button';
+import { Card } from '@/shared/ui/Card';
+import { Chip } from '@/shared/ui/Chip';
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { IconButton } from '@/shared/ui/IconButton';
+import { ListRow } from '@/shared/ui/ListRow';
 import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
+import { SegmentedTabs } from '@/shared/ui/SegmentedTabs';
 import { StatCard } from '@/shared/ui/StatCard';
 
 import type { FeedMenuKind, FeedTargetType, FeedViewModel, FeedWatchTarget } from '../model/feedTypes';
@@ -153,52 +160,40 @@ function PopularTargetSection({ targets }: { targets: FeedWatchTarget[] }) {
             실시간 관찰 대상 랭킹
           </h2>
         </div>
-        <span className="rounded-full bg-surface-strong px-2.5 py-1 text-xs font-bold text-muted">
+        <Chip>
           지금
-        </span>
+        </Chip>
       </div>
 
-      <div className="mt-4 grid grid-cols-4 gap-1 rounded-2xl bg-surface-strong p-1" role="tablist" aria-label="feed 인기 랭킹 종류">
-        {FEED_RANKING_TABS.map((tab) => {
-          const isActive = activeTabId === tab.id;
-
-          return (
-            <button
-              key={tab.id}
-              className={`h-9 rounded-xl text-xs font-black transition ${isActive ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => setActiveTabId(tab.id)}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
+      <SegmentedTabs className="mt-4" items={FEED_RANKING_TABS} activeId={activeTabId} ariaLabel="feed 인기 랭킹 종류" onChange={setActiveTabId} />
 
       <div className="mt-4 grid gap-2">
         {rankingTargets.map((target, index) => (
-          <Link
+          <ListRow
             key={target.id}
-            className="blog-ranking-enter grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl bg-surface-strong p-3"
             href={`/feed/targets/${target.id}`}
+            tone="strong"
+            className="blog-ranking-enter"
             style={{ animationDelay: `${index * 70}ms` }}
+            leading={(
+              <span className="grid size-9 place-items-center rounded-xl bg-surface text-sm font-black text-primary">
+                {target.rank}
+              </span>
+            )}
+            trailing={(
+              <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${TARGET_TREND_CLASS_NAME[target.trendDirection]}`}>
+                <span aria-hidden="true">{TARGET_TREND_ICON[target.trendDirection]}</span>
+                {target.trendText}
+              </span>
+            )}
           >
-            <span className="grid size-9 place-items-center rounded-xl bg-surface text-sm font-black text-primary">
-              {target.rank}
-            </span>
             <span className="min-w-0">
               <span className="flex items-center gap-2">
                 <span className="truncate text-sm font-bold text-foreground">{target.name}</span>
-                <span className="shrink-0 rounded-full bg-surface px-2 py-0.5 text-[11px] font-bold text-muted">{getTargetTypeLabel(target.type)}</span>
+                <Chip size="sm" tone="surface" className="shrink-0">{getTargetTypeLabel(target.type)}</Chip>
               </span>
             </span>
-            <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${TARGET_TREND_CLASS_NAME[target.trendDirection]}`}>
-              <span aria-hidden="true">{TARGET_TREND_ICON[target.trendDirection]}</span>
-              {target.trendText}
-            </span>
-          </Link>
+          </ListRow>
         ))}
       </div>
     </section>
@@ -211,16 +206,21 @@ function PopularTargetEventSection({ activities }: { activities: FeedViewModel['
       <SectionHeader domainPath="feed / event" title="최근 이벤트" headingId="feed-popular-event-title" />
       <div className="grid gap-3">
         {activities.map((activity) => (
-          <Link key={activity.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition hover:bg-surface-strong" href={`/feed/targets/${activity.targetId}`}>
-            <span className="grid size-10 place-items-center rounded-full bg-primary-soft text-primary">
-              <Icon className="size-5" name="bell" />
-            </span>
+          <ListRow
+            key={activity.id}
+            href={`/feed/targets/${activity.targetId}`}
+            leading={(
+              <IconBadge as="span">
+                <Icon className="size-5" name="bell" />
+              </IconBadge>
+            )}
+            trailing={<time className="text-xs text-muted">{activity.timeText}</time>}
+          >
             <span className="min-w-0">
               <span className="block truncate text-sm font-bold text-foreground">{activity.title}</span>
               <span className="mt-1 block truncate text-xs text-muted">{activity.source}</span>
             </span>
-            <time className="text-xs text-muted">{activity.timeText}</time>
-          </Link>
+          </ListRow>
         ))}
       </div>
     </section>
@@ -278,22 +278,27 @@ function MyFeedManageSection({ summaries, targets }: { summaries: FeedViewModel[
         </div>
       </section>
 
-      <section className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-border bg-surface p-3" aria-label="관찰 대상 추가">
-        <div className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground">
-          <Icon name="plus" />
-        </div>
+      <ListRow
+        as="section"
+        ariaLabel="관찰 대상 추가"
+        leading={(
+          <IconBadge tone="primary">
+            <Icon name="plus" />
+          </IconBadge>
+        )}
+      >
         <button className="h-10 rounded-[10px] bg-surface-strong px-3 text-left text-sm text-muted" type="button" onClick={() => setIsCreateFormOpen(true)}>
           관찰할 아이템, 스트리머, 아티스트를 등록하세요
         </button>
-      </section>
+      </ListRow>
 
       {isCreateFormOpen && typeof document !== 'undefined' && createPortal(
         <div className="fixed inset-0 z-50 bg-black/60 px-4 py-6 backdrop-blur-sm" role="presentation" onClick={() => setIsCreateFormOpen(false)}>
           <div className="mx-auto grid max-h-[calc(100vh-3rem)] w-full max-w-[560px] overflow-y-auto rounded-3xl border border-border bg-surface p-4 shadow-[0_24px_70px_rgba(0,0,0,0.35)]" role="dialog" aria-modal="true" aria-labelledby="feed-create-target-title" onClick={(event) => event.stopPropagation()}>
             <div className="mb-3 flex justify-end">
-              <button className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted" type="button" aria-label="관찰 대상 등록 닫기" onClick={() => setIsCreateFormOpen(false)}>
+              <IconButton ariaLabel="관찰 대상 등록 닫기" onClick={() => setIsCreateFormOpen(false)}>
                 <Icon name="x" />
-              </button>
+              </IconButton>
             </div>
             <FeedTargetCreateForm />
           </div>
@@ -320,20 +325,24 @@ function MyFeedManageSection({ summaries, targets }: { summaries: FeedViewModel[
 
 function TargetListLink({ href, rightText, target }: { href: string; rightText: string; target: FeedWatchTarget }) {
   return (
-    <Link className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition hover:bg-surface-strong" href={href}>
-      <span className={`grid size-10 place-items-center rounded-full ${getTargetToneClassName(target.type)}`}>
-        <Icon className="size-5" name={getTargetIconName(target.type)} />
-      </span>
+    <ListRow
+      href={href}
+      leading={(
+        <span className={`grid size-10 place-items-center rounded-full ${getTargetToneClassName(target.type)}`}>
+          <Icon className="size-5" name={getTargetIconName(target.type)} />
+        </span>
+      )}
+      trailing={<span className="text-xs font-bold text-primary">{rightText}</span>}
+    >
       <span className="min-w-0">
         <span className="flex items-center gap-2">
           <span className="truncate text-sm font-bold text-foreground">{target.name}</span>
-          <span className="shrink-0 rounded-full bg-surface-strong px-2 py-0.5 text-[11px] font-bold text-muted">{getTargetTypeLabel(target.type)}</span>
+          <Chip size="sm" className="shrink-0">{getTargetTypeLabel(target.type)}</Chip>
         </span>
         <span className="mt-1 block truncate text-xs text-muted">{target.summary}</span>
         <span className="mt-1 block truncate text-xs text-muted">{target.statusText} · {target.metricText}</span>
       </span>
-      <span className="text-xs font-bold text-primary">{rightText}</span>
-    </Link>
+    </ListRow>
   );
 }
 
@@ -351,7 +360,7 @@ function FeedTargetCreateForm() {
   };
 
   return (
-    <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="feed-create-target-title">
+ <Card as="section" aria-labelledby="feed-create-target-title">
       <div>
         <p className="text-sm font-bold text-primary">feed / register</p>
         <h2 id="feed-create-target-title" className="mt-1 text-base font-bold text-foreground">
@@ -360,24 +369,13 @@ function FeedTargetCreateForm() {
         <p className="mt-2 text-sm leading-6 text-muted">API 연결 전까지 화면에 필요한 입력 형태만 먼저 확인하고 있어요.</p>
       </div>
 
-      <div className="mt-4 grid grid-cols-3 gap-1 rounded-2xl bg-surface-strong p-1" role="tablist" aria-label="관찰 대상 등록 종류">
-        {(['item', 'streamer', 'artist'] satisfies FeedCreateTabId[]).map((tabId) => {
-          const isActive = activeTabId === tabId;
-
-          return (
-            <button
-              key={tabId}
-              className={`h-9 rounded-xl text-xs font-black transition ${isActive ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => handleChangeTab(tabId)}
-            >
-              {getTargetTypeLabel(tabId)}
-            </button>
-          );
-        })}
-      </div>
+      <SegmentedTabs
+        className="mt-4"
+        items={(['item', 'streamer', 'artist'] satisfies FeedCreateTabId[]).map((tabId) => ({ id: tabId, label: getTargetTypeLabel(tabId) }))}
+        activeId={activeTabId}
+        ariaLabel="관찰 대상 등록 종류"
+        onChange={handleChangeTab}
+      />
 
       <div className="mt-4 grid gap-3">
         <FormField label="대상 이름" placeholder={activeTabId === 'item' ? '기계식 키보드' : activeTabId === 'streamer' ? 'mory_live' : 'artist.nova'} />
@@ -412,11 +410,11 @@ function FeedTargetCreateForm() {
 
       <div className="mt-4 flex items-center justify-between gap-3">
         <p className="text-sm text-muted">{isSubmitted ? '등록 준비가 완료됐어요.' : '저장 전 mock 입력값은 목록에 추가하지 않아요.'}</p>
-        <button className="h-10 shrink-0 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button" onClick={handleSubmit}>
+        <Button className="shrink-0" onClick={handleSubmit}>
           {isSubmitted ? '준비 완료' : '등록'}
-        </button>
+        </Button>
       </div>
-    </section>
+    </Card>
   );
 }
 

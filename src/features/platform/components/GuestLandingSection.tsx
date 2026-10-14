@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
 
 import type { PlatformService } from '../model/platformHomeTypes';
 
@@ -52,9 +53,9 @@ export function GuestLandingSection({ services }: GuestLandingSectionProps) {
       <div className="grid gap-2 border-y border-border py-3">
         {GUEST_FEATURES.map((feature) => (
           <div key={feature} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 text-sm text-foreground">
-            <span className="grid size-6 place-items-center rounded-full bg-primary-soft text-primary">
+            <IconBadge as="span" size="xs">
               <Icon className="size-4" name="star" />
-            </span>
+            </IconBadge>
             <span>{feature}</span>
           </div>
         ))}

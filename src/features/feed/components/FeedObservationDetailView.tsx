@@ -4,6 +4,7 @@ import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Card } from '@/shared/ui/Card';
 import { Icon } from '@/shared/ui/Icon';
 
 import type { FeedObservationItem } from '../model/feedTypes';
@@ -46,22 +47,22 @@ export function FeedObservationDetailView({ isLoggedIn, observation }: FeedObser
         </section>
 
         <section className="grid grid-cols-2 gap-2" aria-label="관찰 상태 요약">
-          <article className="rounded-2xl border border-border bg-surface p-4">
+ <Card as="article">
             <p className="text-2xl font-black text-foreground">ON</p>
             <p className="mt-1 text-xs text-muted">관찰 상태</p>
-          </article>
-          <article className="rounded-2xl border border-border bg-surface p-4">
+          </Card>
+ <Card as="article">
             <p className="text-2xl font-black text-foreground">9</p>
             <p className="mt-1 text-xs text-muted">최근 알림</p>
-          </article>
+          </Card>
         </section>
 
-        <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="observation-rule-title">
+ <Card as="section" aria-labelledby="observation-rule-title">
           <h2 id="observation-rule-title" className="text-base font-bold text-foreground">관찰 조건</h2>
           <p className="mt-2 text-sm leading-6 text-muted">
             실제 연동 전까지는 mock 조건을 표시하고 있어요. 이후 스트리머 활동, 가격 조건, 콘텐츠 업로드 조건을 이 화면에서 관리할 예정이에요.
           </p>
-        </section>
+        </Card>
       </AppContent>
 
       <BottomNavigation

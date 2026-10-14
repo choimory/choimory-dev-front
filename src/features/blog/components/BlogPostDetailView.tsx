@@ -7,7 +7,11 @@ import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Button } from '@/shared/ui/Button';
+import { Card } from '@/shared/ui/Card';
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { IconButton } from '@/shared/ui/IconButton';
 import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
 
@@ -73,9 +77,9 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
 
         <article className="overflow-hidden rounded-3xl border border-border bg-surface" aria-labelledby="post-detail-title">
           <header className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 p-4">
-            <div className="grid size-12 place-items-center rounded-full bg-surface-strong text-sm font-bold text-primary">
+            <IconBadge size="xl" tone="strong" className="text-sm font-bold">
               {post.authorInitial}
-            </div>
+            </IconBadge>
             <div className="min-w-0">
               <h1 id="post-detail-title" className="text-base font-bold text-foreground">{post.authorName}</h1>
               <p className="mt-1 text-xs leading-5 text-muted">{post.meta}</p>
@@ -91,19 +95,19 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
 
           <div className="grid gap-4 p-4">
             <div className="flex items-center gap-1">
-              <button className="grid size-9 place-items-center rounded-[10px] text-accent-red" type="button" aria-label="좋아요">
+              <IconButton ariaLabel="좋아요" tone="ghost" className="text-accent-red">
                 <Icon name="heart" />
-              </button>
-              <button className="grid size-9 place-items-center rounded-[10px]" type="button" aria-label="댓글">
+              </IconButton>
+              <IconButton ariaLabel="댓글" tone="ghost">
                 <Icon name="chat" />
-              </button>
-              <button className="grid size-9 place-items-center rounded-[10px]" type="button" aria-label="공유">
+              </IconButton>
+              <IconButton ariaLabel="공유" tone="ghost">
                 <Icon name="share" />
-              </button>
+              </IconButton>
               <span className="flex-1" />
-              <button className="grid size-9 place-items-center rounded-[10px]" type="button" aria-label="저장">
+              <IconButton ariaLabel="저장" tone="ghost">
                 <Icon name="bookmark" />
-              </button>
+              </IconButton>
               {isOwnPost && (
                 <button className="h-9 rounded-[10px] bg-surface-strong px-3 text-xs font-bold text-primary" type="button">
                   수정
@@ -132,23 +136,23 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
           <SectionHeader domainPath="blog / comments" title="댓글" headingId="post-comments-title" />
           <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-2xl border border-border bg-surface p-3">
             <input className="h-10 min-w-0 rounded-[10px] border border-border bg-surface-strong px-3 text-sm text-foreground" placeholder="댓글을 남겨보세요" />
-            <button className="h-10 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">
+            <Button>
               작성
-            </button>
+            </Button>
           </div>
           {POST_DETAIL_COMMENTS.map((comment) => (
-            <article key={comment.id} className="rounded-2xl border border-border bg-surface p-3">
+            <Card as="article" padding="sm" key={comment.id}>
               <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
-                <div className="grid size-9 place-items-center rounded-full bg-primary-soft text-xs font-bold text-primary">
+                <IconBadge size="md" className="text-xs font-bold">
                   {comment.authorInitial}
-                </div>
+                </IconBadge>
                 <div className="min-w-0">
                   <h3 className="text-sm font-bold text-foreground">{comment.authorName}</h3>
                   <p className="mt-1 text-sm leading-5 text-muted">{comment.content}</p>
                 </div>
-                <button className="grid size-8 shrink-0 place-items-center rounded-[10px] text-muted" type="button" aria-label="댓글 좋아요">
+                <IconButton ariaLabel="댓글 좋아요" size="sm" tone="ghost" className="shrink-0 text-muted">
                   <Icon className="size-4" name="heart" />
-                </button>
+                </IconButton>
               </div>
               <div className="mt-2 flex items-center gap-3 text-xs text-muted">
                 <time>{comment.timeText}</time>
@@ -160,9 +164,9 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
               {replyingCommentId === comment.id && (
                 <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-2xl bg-surface-strong p-3">
                   <input className="h-10 min-w-0 rounded-[10px] border border-border bg-surface px-3 text-sm text-foreground" placeholder={`@${comment.authorName} 답글을 남겨보세요`} />
-                  <button className="h-10 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">
+                  <Button>
                     작성
-                  </button>
+                  </Button>
                 </div>
               )}
               {comment.replies.length > 0 && (
@@ -170,16 +174,16 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
                   {comment.replies.map((reply) => (
                     <article key={reply.id} className="rounded-2xl bg-surface-strong p-3">
                       <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
-                        <div className="grid size-8 place-items-center rounded-full bg-surface text-xs font-bold text-primary">
+                        <IconBadge size="sm" tone="surface" className="text-xs font-bold">
                           {reply.authorInitial}
-                        </div>
+                        </IconBadge>
                         <div className="min-w-0">
                           <h4 className="text-sm font-bold text-foreground">{reply.authorName}</h4>
                           <p className="mt-1 text-sm leading-5 text-muted">{reply.content}</p>
                         </div>
-                        <button className="grid size-8 shrink-0 place-items-center rounded-[10px] text-muted" type="button" aria-label="대댓글 좋아요">
+                        <IconButton ariaLabel="대댓글 좋아요" size="sm" tone="ghost" className="shrink-0 text-muted">
                           <Icon className="size-4" name="heart" />
-                        </button>
+                        </IconButton>
                       </div>
                       <div className="mt-2 flex items-center gap-3 text-xs text-muted">
                         <time>{reply.timeText}</time>
@@ -189,7 +193,7 @@ export function BlogPostDetailView({ isLoggedIn, post }: BlogPostDetailViewProps
                   ))}
                 </div>
               )}
-            </article>
+            </Card>
           ))}
         </section>
       </AppContent>

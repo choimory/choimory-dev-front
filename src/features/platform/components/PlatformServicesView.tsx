@@ -1,10 +1,11 @@
-import Link from 'next/link';
 
 import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Chip } from '@/shared/ui/Chip';
 import { Icon } from '@/shared/ui/Icon';
+import { ListRow } from '@/shared/ui/ListRow';
 import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 
 import type { PlatformService } from '../model/platformHomeTypes';
@@ -44,33 +45,35 @@ export function PlatformServicesView({ isLoggedIn, services }: PlatformServicesV
 
         <section className="grid gap-3" aria-label="서비스 목록">
           {services.map((service) => {
-            const cardContent = (
-              <>
-                <span className={`grid size-12 shrink-0 place-items-center rounded-2xl border border-border/60 ${SERVICE_TONE_CLASS_NAME[service.tone]}`}>
-                  <Icon name={service.iconName} />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-base font-bold text-foreground">{service.name}</span>
-                  <span className="mt-1 block text-sm leading-5 text-muted">{service.description}</span>
-                </span>
-                <span className="shrink-0 rounded-full bg-surface-strong px-2.5 py-1 text-xs font-bold text-muted">
-                  {service.status === 'active' ? '이동' : '준비 중'}
-                </span>
-              </>
+            const leading = (
+              <span className={`grid size-12 shrink-0 place-items-center rounded-2xl border border-border/60 ${SERVICE_TONE_CLASS_NAME[service.tone]}`}>
+                <Icon name={service.iconName} />
+              </span>
+            );
+            const body = (
+              <span className="min-w-0">
+                <span className="block text-base font-bold text-foreground">{service.name}</span>
+                <span className="mt-1 block text-sm leading-5 text-muted">{service.description}</span>
+              </span>
+            );
+            const trailing = (
+              <Chip className="shrink-0">
+                {service.status === 'active' ? '이동' : '준비 중'}
+              </Chip>
             );
 
             if (service.status === 'planned') {
               return (
-                <article key={service.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-4 opacity-75">
-                  {cardContent}
-                </article>
+                <ListRow key={service.id} as="article" padding="md" isDimmed leading={leading} trailing={trailing}>
+                  {body}
+                </ListRow>
               );
             }
 
             return (
-              <Link key={service.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-4 transition hover:bg-surface-strong" href={service.href}>
-                {cardContent}
-              </Link>
+              <ListRow key={service.id} href={service.href} padding="md" leading={leading} trailing={trailing}>
+                {body}
+              </ListRow>
             );
           })}
         </section>

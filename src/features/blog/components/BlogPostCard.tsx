@@ -1,6 +1,8 @@
 import Link from 'next/link';
 
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { IconButton } from '@/shared/ui/IconButton';
 
 import type { BlogPost } from '../model/blogTypes';
 
@@ -21,16 +23,16 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-surface">
       <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 p-3">
-        <div className="grid size-10 place-items-center rounded-full bg-surface-strong text-sm font-bold text-primary">
+        <IconBadge tone="strong" className="text-sm font-bold">
           {post.authorInitial}
-        </div>
+        </IconBadge>
         <Link className="min-w-0" href={`/blog/posts/${post.id}`}>
           <h2 className="text-sm font-bold">{post.authorName}</h2>
           <p className="text-xs leading-5 text-muted">{post.meta}</p>
         </Link>
-        <button className="grid size-9 place-items-center rounded-[10px] text-muted" type="button" aria-label="게시글 메뉴">
+        <IconButton ariaLabel="게시글 메뉴" tone="ghost" className="text-muted">
           <span className="text-xl leading-none">...</span>
-        </button>
+        </IconButton>
       </header>
 
       {post.hasMedia && (
@@ -46,19 +48,19 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
       )}
 
       <div className="flex items-center gap-1 px-3 pt-2">
-        <button className="grid size-9 place-items-center rounded-[10px] text-accent-red" type="button" aria-label="좋아요">
+        <IconButton ariaLabel="좋아요" tone="ghost" className="text-accent-red">
           <Icon name="heart" />
-        </button>
-        <button className="grid size-9 place-items-center rounded-[10px]" type="button" aria-label="댓글">
+        </IconButton>
+        <IconButton ariaLabel="댓글" tone="ghost">
           <Icon name="chat" />
-        </button>
-        <button className="grid size-9 place-items-center rounded-[10px]" type="button" aria-label="공유">
+        </IconButton>
+        <IconButton ariaLabel="공유" tone="ghost">
           <Icon name="share" />
-        </button>
+        </IconButton>
         <span className="flex-1" />
-        <button className="grid size-9 place-items-center rounded-[10px]" type="button" aria-label="저장">
+        <IconButton ariaLabel="저장" tone="ghost">
           <Icon name="bookmark" />
-        </button>
+        </IconButton>
       </div>
 
       <div className="grid gap-2 px-3 pb-4 pt-1">

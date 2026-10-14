@@ -1,3 +1,8 @@
+import { Button } from '@/shared/ui/Button';
+import { Card } from '@/shared/ui/Card';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { ListRow } from '@/shared/ui/ListRow';
+
 import { BlogPostCard } from './BlogPostCard';
 import type { BlogFeedTab, BlogPost } from '../model/blogTypes';
 
@@ -18,7 +23,7 @@ type BlogMemberFeedSectionProps = {
 export function BlogMemberFeedSection({ tabs, posts }: BlogMemberFeedSectionProps) {
   return (
     <div className="grid gap-3">
-      <section className="rounded-2xl border border-border bg-surface p-4">
+      <Card as="section">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h1 className="text-xl font-bold">blog</h1>
@@ -26,9 +31,9 @@ export function BlogMemberFeedSection({ tabs, posts }: BlogMemberFeedSectionProp
               인스타그램처럼 글, 이미지, 댓글, 팔로우를 다루는 서비스예요.
             </p>
           </div>
-          <button className="h-10 shrink-0 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">
+          <Button className="shrink-0">
             글쓰기
-          </button>
+          </Button>
         </div>
 
         <div className="mt-3 flex flex-wrap gap-2" role="tablist" aria-label="blog 피드 필터">
@@ -48,16 +53,21 @@ export function BlogMemberFeedSection({ tabs, posts }: BlogMemberFeedSectionProp
             </button>
           ))}
         </div>
-      </section>
+      </Card>
 
-      <section className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-border bg-surface p-3" aria-label="글 작성">
-        <div className="grid size-10 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
-          C
-        </div>
+      <ListRow
+        as="section"
+        ariaLabel="글 작성"
+        leading={(
+          <IconBadge tone="primary" className="text-sm font-bold">
+            C
+          </IconBadge>
+        )}
+      >
         <button className="h-10 rounded-[10px] bg-surface-strong px-3 text-left text-sm text-muted" type="button">
           무슨 생각을 공유할까요?
         </button>
-      </section>
+      </ListRow>
 
       <section className="grid gap-3" aria-label="blog 피드">
         {posts.map((post) => (

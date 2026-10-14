@@ -5,7 +5,11 @@ import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Card } from '@/shared/ui/Card';
+import { Chip } from '@/shared/ui/Chip';
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { ListRow } from '@/shared/ui/ListRow';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
 
 import type { FeedTargetType, FeedViewModel, FeedWatchTarget } from '../model/feedTypes';
@@ -87,16 +91,21 @@ export function FeedView({ viewModel }: FeedViewProps) {
               <SectionHeader domainPath="feed / activity" title="최근 알림" headingId="feed-activity-title" />
             <div className="grid gap-3">
               {viewModel.activities.map((activity) => (
-                <Link key={activity.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition hover:bg-surface-strong" href={`/feed/targets/${activity.targetId}`}>
-                  <span className="grid size-10 place-items-center rounded-full bg-primary-soft text-primary">
-                    <Icon className="size-5" name="bell" />
-                  </span>
+                <ListRow
+                  key={activity.id}
+                  href={`/feed/targets/${activity.targetId}`}
+                  leading={(
+                    <IconBadge as="span">
+                      <Icon className="size-5" name="bell" />
+                    </IconBadge>
+                  )}
+                  trailing={<time className="text-xs text-muted">{activity.timeText}</time>}
+                >
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-bold text-foreground">{activity.title}</span>
                     <span className="mt-1 block text-xs text-muted">{activity.source}</span>
                   </span>
-                  <time className="text-xs text-muted">{activity.timeText}</time>
-                </Link>
+                </ListRow>
               ))}
             </div>
             </section>
@@ -107,10 +116,10 @@ export function FeedView({ viewModel }: FeedViewProps) {
               <SectionHeader domainPath="feed / preview" title="준비 중인 알림" headingId="feed-signal-title" />
             <div className="grid gap-3">
               {viewModel.signals.map((signal) => (
-                <article key={signal.id} className="rounded-2xl border border-border bg-surface p-4">
+                <Card as="article" key={signal.id}>
                   <h3 className="text-base font-bold text-foreground">{signal.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-muted">{signal.description}</p>
-                </article>
+                </Card>
               ))}
             </div>
             </section>
@@ -119,10 +128,10 @@ export function FeedView({ viewModel }: FeedViewProps) {
               <SectionHeader domainPath="feed / benefits" title="맞춤 피드" headingId="feed-benefit-title" />
               <div className="grid gap-3">
                 {viewModel.guestBenefits.map((benefit) => (
-                  <article key={benefit.id} className="rounded-2xl border border-border bg-surface p-4">
+                  <Card as="article" key={benefit.id}>
                     <h3 className="text-base font-bold text-foreground">{benefit.title}</h3>
                     <p className="mt-2 text-sm leading-6 text-muted">{benefit.description}</p>
-                  </article>
+                  </Card>
                 ))}
               </div>
             </section>
@@ -144,19 +153,23 @@ export function FeedView({ viewModel }: FeedViewProps) {
 
 function TargetPreviewLink({ href, target }: { href: string; target: FeedWatchTarget }) {
   return (
-    <Link className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition hover:bg-surface-strong" href={href}>
-      <span className={`grid size-10 place-items-center rounded-full ${getTargetToneClassName(target.type)}`}>
-        <Icon className="size-5" name={getTargetIconName(target.type)} />
-      </span>
+    <ListRow
+      href={href}
+      leading={(
+        <span className={`grid size-10 place-items-center rounded-full ${getTargetToneClassName(target.type)}`}>
+          <Icon className="size-5" name={getTargetIconName(target.type)} />
+        </span>
+      )}
+      trailing={<span className="text-xs font-bold text-primary">{target.trendText}</span>}
+    >
       <span className="min-w-0">
         <span className="flex items-center gap-2">
           <span className="truncate text-sm font-bold text-foreground">{target.name}</span>
-          <span className="shrink-0 rounded-full bg-surface-strong px-2 py-0.5 text-[11px] font-bold text-muted">{getTargetTypeLabel(target.type)}</span>
+          <Chip size="sm" className="shrink-0">{getTargetTypeLabel(target.type)}</Chip>
         </span>
         <span className="mt-1 block truncate text-xs text-muted">{target.statusText} · {target.metricText}</span>
       </span>
-      <span className="text-xs font-bold text-primary">{target.trendText}</span>
-    </Link>
+    </ListRow>
   );
 }
 

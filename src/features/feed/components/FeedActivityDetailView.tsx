@@ -4,6 +4,7 @@ import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Card } from '@/shared/ui/Card';
 import { Icon } from '@/shared/ui/Icon';
 
 import type { FeedActivity } from '../model/feedTypes';
@@ -45,12 +46,12 @@ export function FeedActivityDetailView({ activity, isLoggedIn }: FeedActivityDet
           <time className="mt-2 block text-sm text-muted">{activity.timeText}</time>
         </section>
 
-        <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="activity-body-title">
+ <Card as="section" aria-labelledby="activity-body-title">
           <h2 id="activity-body-title" className="text-base font-bold text-foreground">알림 내용</h2>
           <p className="mt-2 text-sm leading-6 text-muted">
             실제 알림 API가 연결되기 전까지 상세 화면의 정보 구조를 먼저 확인하고 있어요. 이후 원본 대상, 발생 조건, 재알림 설정을 이 화면에 연결할 예정이에요.
           </p>
-        </section>
+        </Card>
       </AppContent>
 
       <BottomNavigation

@@ -7,7 +7,11 @@ import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { IconButton } from '@/shared/ui/IconButton';
+import { ListRow } from '@/shared/ui/ListRow';
 import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
 
@@ -100,9 +104,9 @@ function BlogModalShell({ title, children, onClose }: BlogModalShellProps) {
       <section className="max-h-[86vh] w-full max-w-sm overflow-y-auto rounded-3xl border border-border bg-surface p-4 shadow-2xl" onClick={(event) => event.stopPropagation()}>
         <div className="flex items-center justify-between gap-3">
           <h2 id="blog-modal-title" className="text-lg font-black text-foreground">{title}</h2>
-          <button className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted" type="button" aria-label="닫기" onClick={onClose}>
+          <IconButton ariaLabel="닫기" onClick={onClose}>
             <Icon name="x" />
-          </button>
+          </IconButton>
         </div>
         {children}
       </section>
@@ -243,32 +247,15 @@ function BlogPostCreateModal({ onClose }: BlogPostCreateModalProps) {
                     <p className="mt-1 text-xs text-muted">{index + 1}번째 사진</p>
                   </div>
                   <div className="grid grid-cols-3 gap-1">
-                    <button
-                      className="grid size-8 place-items-center rounded-[10px] bg-surface-strong text-muted disabled:opacity-35"
-                      type="button"
-                      aria-label={`${photo.name} 앞으로 이동`}
-                      disabled={index === 0}
-                      onClick={() => movePhoto(index, -1)}
-                    >
+                    <IconButton ariaLabel={`${photo.name} 앞으로 이동`} size="sm" disabled={index === 0} onClick={() => movePhoto(index, -1)}>
                       <Icon className="size-4 rotate-90" name="chevronLeft" />
-                    </button>
-                    <button
-                      className="grid size-8 place-items-center rounded-[10px] bg-surface-strong text-muted disabled:opacity-35"
-                      type="button"
-                      aria-label={`${photo.name} 뒤로 이동`}
-                      disabled={index === photos.length - 1}
-                      onClick={() => movePhoto(index, 1)}
-                    >
+                    </IconButton>
+                    <IconButton ariaLabel={`${photo.name} 뒤로 이동`} size="sm" disabled={index === photos.length - 1} onClick={() => movePhoto(index, 1)}>
                       <Icon className="size-4 -rotate-90" name="chevronLeft" />
-                    </button>
-                    <button
-                      className="grid size-8 place-items-center rounded-[10px] bg-surface-strong text-accent-red"
-                      type="button"
-                      aria-label={`${photo.name} 제거`}
-                      onClick={() => removePhoto(photo.id)}
-                    >
+                    </IconButton>
+                    <IconButton ariaLabel={`${photo.name} 제거`} size="sm" tone="danger" onClick={() => removePhoto(photo.id)}>
                       <Icon className="size-4" name="x" />
-                    </button>
+                    </IconButton>
                   </div>
                 </article>
               ))}
@@ -278,12 +265,12 @@ function BlogPostCreateModal({ onClose }: BlogPostCreateModalProps) {
       </div>
 
       <div className="mt-5 grid grid-cols-2 gap-2">
-        <button className="h-10 rounded-[10px] bg-surface-strong text-sm font-bold text-muted" type="button" onClick={onClose}>
+        <Button variant="secondary" onClick={onClose}>
           취소
-        </button>
-        <button className="h-10 rounded-[10px] bg-primary text-sm font-bold text-primary-foreground" type="button" onClick={onClose}>
+        </Button>
+        <Button onClick={onClose}>
           저장
-        </button>
+        </Button>
       </div>
     </BlogModalShell>
   );
@@ -330,12 +317,12 @@ function BlogSettingEditModal({ item, onClose }: BlogSettingEditModalProps) {
       </div>
 
       <div className="mt-5 grid grid-cols-2 gap-2">
-        <button className="h-10 rounded-[10px] bg-surface-strong text-sm font-bold text-muted" type="button" onClick={onClose}>
+        <Button variant="secondary" onClick={onClose}>
           취소
-        </button>
-        <button className="h-10 rounded-[10px] bg-primary text-sm font-bold text-primary-foreground" type="button" onClick={onClose}>
+        </Button>
+        <Button onClick={onClose}>
           저장
-        </button>
+        </Button>
       </div>
     </BlogModalShell>
   );
@@ -376,14 +363,19 @@ export function BlogMeSettingsView({ isLoggedIn }: BlogMeSettingsViewProps) {
           extraStats={BLOG_ME_ACTIVITY_STATS}
         />
 
-        <section className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-border bg-surface p-3" aria-label="글 작성">
-          <div className="grid size-10 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
-            M
-          </div>
+        <ListRow
+          as="section"
+          ariaLabel="글 작성"
+          leading={(
+            <IconBadge tone="primary" className="text-sm font-bold">
+              M
+            </IconBadge>
+          )}
+        >
           <button className="h-10 rounded-[10px] bg-surface-strong px-3 text-left text-sm text-muted" type="button" onClick={() => setIsPostCreateModalOpen(true)}>
             무슨 생각을 공유할까요?
           </button>
-        </section>
+        </ListRow>
 
         <section className="grid gap-2" aria-labelledby="blog-settings-title">
           <SectionHeader domainPath="blog / setting" title="설정" headingId="blog-settings-title" />

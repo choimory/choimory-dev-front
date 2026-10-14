@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
+import { Button } from '@/shared/ui/Button';
 
 import type { LoginViewModel } from '../model/authTypes';
 
@@ -60,9 +61,9 @@ export function LoginView({ viewModel }: LoginViewProps) {
               />
             </label>
 
-            <button className="mt-2 h-12 rounded-[12px] bg-primary text-sm font-bold text-primary-foreground" type="button">
+            <Button size="lg" className="mt-2">
               로그인
-            </button>
+            </Button>
           </form>
 
           <div className="mt-4 grid gap-3">

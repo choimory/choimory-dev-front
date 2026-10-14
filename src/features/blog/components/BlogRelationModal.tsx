@@ -3,6 +3,9 @@
 import { useState } from 'react';
 
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { IconButton } from '@/shared/ui/IconButton';
+import { ListRow } from '@/shared/ui/ListRow';
 
 /**
  * 사용자 관계 목록 항목
@@ -46,45 +49,39 @@ export function BlogRelationModal({ title, users, onClose }: BlogRelationModalPr
       <section className="w-full max-w-sm rounded-3xl border border-border bg-surface p-4 shadow-2xl" onClick={(event) => event.stopPropagation()}>
         <div className="flex items-center justify-between gap-3">
           <h3 id="blog-relation-modal-title" className="text-lg font-black text-foreground">{title}</h3>
-          <button className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted" type="button" aria-label="닫기" onClick={onClose}>
+          <IconButton ariaLabel="닫기" onClick={onClose}>
             <Icon name="x" />
-          </button>
+          </IconButton>
         </div>
         <div className="mt-4 grid gap-2">
           {pageUsers.map((user) => (
-            <article key={user.id} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-2xl bg-surface-strong p-3">
-              <span className="grid size-10 place-items-center rounded-full bg-primary-soft text-sm font-bold text-primary">
-                {user.initial}
-              </span>
+            <ListRow
+              key={user.id}
+              as="article"
+              tone="strong"
+              leading={(
+                <IconBadge as="span" className="text-sm font-bold">
+                  {user.initial}
+                </IconBadge>
+              )}
+            >
               <span className="min-w-0">
                 <span className="block truncate text-sm font-bold text-foreground">{user.nickname}</span>
                 <span className="mt-1 block truncate text-xs text-muted">{user.summary}</span>
               </span>
-            </article>
+            </ListRow>
           ))}
         </div>
         <div className="mt-4 flex items-center justify-between gap-3">
-          <button
-            className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted disabled:opacity-35"
-            type="button"
-            aria-label="이전 목록"
-            disabled={pageIndex === 0}
-            onClick={() => setPageIndex((currentValue) => Math.max(0, currentValue - 1))}
-          >
+          <IconButton ariaLabel="이전 목록" disabled={pageIndex === 0} onClick={() => setPageIndex((currentValue) => Math.max(0, currentValue - 1))}>
             <Icon name="chevronLeft" />
-          </button>
+          </IconButton>
           <span className="text-xs font-bold text-muted">
             {pageIndex + 1} / {pageCount}
           </span>
-          <button
-            className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted disabled:opacity-35"
-            type="button"
-            aria-label="다음 목록"
-            disabled={pageIndex >= pageCount - 1}
-            onClick={() => setPageIndex((currentValue) => Math.min(pageCount - 1, currentValue + 1))}
-          >
+          <IconButton ariaLabel="다음 목록" disabled={pageIndex >= pageCount - 1} onClick={() => setPageIndex((currentValue) => Math.min(pageCount - 1, currentValue + 1))}>
             <Icon className="size-5 rotate-180" name="chevronLeft" />
-          </button>
+          </IconButton>
         </div>
       </section>
     </div>

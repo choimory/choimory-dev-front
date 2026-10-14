@@ -7,6 +7,8 @@ import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Button } from '@/shared/ui/Button';
+import { Card } from '@/shared/ui/Card';
 import { Icon } from '@/shared/ui/Icon';
 
 import type { FeedTargetType, FeedWatchTarget } from '../model/feedTypes';
@@ -79,7 +81,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
             label="관찰 상태"
             onToggle={() => handleChange(() => setIsWatching((current) => !current))}
           />
-          <div className="rounded-2xl border border-border bg-surface p-4">
+ <Card>
             <p className="text-sm font-bold text-foreground">알림 주기</p>
             <div className="mt-3 grid grid-cols-3 gap-2">
               {['즉시', '하루 요약', '주간 요약'].map((option) => (
@@ -93,7 +95,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
                 </button>
               ))}
             </div>
-          </div>
+          </Card>
         </section>
 
         {target.type === 'item' && (
@@ -104,7 +106,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
               label="가격 알림"
               onToggle={() => handleChange(() => setIsPrimaryAlertOn((current) => !current))}
             />
-            <div className="rounded-2xl border border-border bg-surface p-4">
+ <Card>
               <label className="text-sm font-bold text-foreground" htmlFor="feed-target-price">목표 가격</label>
               <input
                 id="feed-target-price"
@@ -112,7 +114,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
                 value={targetPrice}
                 onChange={(event) => handleChange(() => setTargetPrice(event.target.value))}
               />
-            </div>
+            </Card>
           </section>
         )}
 
@@ -150,7 +152,7 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
           </section>
         )}
 
-        <section className="rounded-2xl border border-border bg-surface p-4" aria-label="설정 저장">
+ <Card as="section" aria-label="설정 저장">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-bold text-foreground">설정 저장</p>
@@ -160,20 +162,20 @@ export function FeedTargetSettingsView({ isLoggedIn, target }: FeedTargetSetting
               <Link className="grid h-10 place-items-center rounded-[10px] bg-surface-strong px-4 text-sm font-bold text-foreground" href="/feed/me">
                 취소
               </Link>
-              <button className="h-10 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button" onClick={handleSave}>
+              <Button onClick={handleSave}>
                 {isSaved ? '저장 완료' : '저장'}
-              </button>
+              </Button>
             </div>
           </div>
-        </section>
+        </Card>
 
-        <section className="rounded-2xl border border-border bg-surface p-4" aria-label="위험 작업">
+ <Card as="section" aria-label="위험 작업">
           <p className="text-sm font-bold text-foreground">관찰 대상 삭제</p>
           <p className="mt-2 text-sm leading-6 text-muted">mock 화면이라 실제 삭제는 진행하지 않아요. API 연결 후 관찰 목록에서 제거돼요.</p>
-          <button className="mt-3 h-10 rounded-[10px] bg-surface-strong px-4 text-sm font-bold text-foreground" type="button">
+          <Button variant="secondary" className="mt-3">
             삭제
-          </button>
-        </section>
+          </Button>
+        </Card>
       </AppContent>
 
       <BottomNavigation

@@ -7,8 +7,13 @@ import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Chip } from '@/shared/ui/Chip';
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { IconButton } from '@/shared/ui/IconButton';
+import { ListRow } from '@/shared/ui/ListRow';
 import { PageIntroCard } from '@/shared/ui/PageIntroCard';
+import { SegmentedTabs } from '@/shared/ui/SegmentedTabs';
 
 import { BlogPostCard } from './BlogPostCard';
 import type { BlogMenuKind, BlogViewModel } from '../model/blogTypes';
@@ -180,49 +185,38 @@ function BlogPopularInsightSection() {
             실시간 랭킹
           </h2>
         </div>
-        <span className="rounded-full bg-surface-strong px-2.5 py-1 text-xs font-bold text-muted">
+        <Chip>
           지금
-        </span>
+        </Chip>
       </div>
 
-      <div className="mt-4 grid grid-cols-4 gap-1 rounded-2xl bg-surface-strong p-1" role="tablist" aria-label="인기 랭킹 종류">
-        {BLOG_RANKING_TABS.map((tab) => {
-          const isActive = activeTabId === tab.id;
-
-          return (
-            <button
-              key={tab.id}
-              className={`h-9 rounded-xl text-xs font-black transition ${isActive ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => setActiveTabId(tab.id)}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
+      <SegmentedTabs className="mt-4" items={BLOG_RANKING_TABS} activeId={activeTabId} ariaLabel="인기 랭킹 종류" onChange={setActiveTabId} />
 
       <div className="mt-4 grid gap-2">
         {rankingItems.map((item, index) => (
-          <article
+          <ListRow
             key={item.id}
-            className="blog-ranking-enter grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl bg-surface-strong p-3"
+            as="article"
+            tone="strong"
+            className="blog-ranking-enter"
             style={{ animationDelay: `${index * 70}ms` }}
+            leading={(
+              <span className="grid size-9 place-items-center rounded-xl bg-surface text-sm font-black text-primary">
+                {item.rank}
+              </span>
+            )}
+            trailing={(
+              <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${RANKING_TREND_CLASS_NAME[item.trend]}`}>
+                <span aria-hidden="true">{RANKING_TREND_ICON[item.trend]}</span>
+                {item.valueText}
+              </span>
+            )}
           >
-            <span className="grid size-9 place-items-center rounded-xl bg-surface text-sm font-black text-primary">
-              {item.rank}
-            </span>
             <span className="min-w-0">
               <span className="block truncate text-sm font-bold text-foreground">{item.label}</span>
               <span className="mt-1 block text-xs leading-4 text-muted">{item.description}</span>
             </span>
-            <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${RANKING_TREND_CLASS_NAME[item.trend]}`}>
-              <span aria-hidden="true">{RANKING_TREND_ICON[item.trend]}</span>
-              {item.valueText}
-            </span>
-          </article>
+          </ListRow>
         ))}
       </div>
     </section>
@@ -277,34 +271,12 @@ function BlogFollowingManageSection() {
             팔로워와 팔로잉을 탭으로 나누고 필요한 사용자를 빠르게 찾아요.
           </p>
         </div>
-        <button
-          className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-surface-strong text-muted"
-          type="button"
-          aria-label="사용자 검색"
-          onClick={() => setIsSearchOpen((currentValue) => !currentValue)}
-        >
+        <IconButton ariaLabel="사용자 검색" className="shrink-0" onClick={() => setIsSearchOpen((currentValue) => !currentValue)}>
           <Icon name="search" />
-        </button>
+        </IconButton>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-1 rounded-2xl bg-surface-strong p-1" role="tablist" aria-label="관계 목록 종류">
-        {BLOG_RELATION_TABS.map((tab) => {
-          const isActive = activeTabId === tab.id;
-
-          return (
-            <button
-              key={tab.id}
-              className={`h-9 rounded-xl text-sm font-black transition ${isActive ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => handleTabClick(tab.id)}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
+      <SegmentedTabs className="mt-4" size="md" items={BLOG_RELATION_TABS} activeId={activeTabId} ariaLabel="관계 목록 종류" onChange={handleTabClick} />
 
       {isSearchOpen && (
         <input
@@ -320,10 +292,21 @@ function BlogFollowingManageSection() {
 
       <div className="mt-4 grid gap-2">
         {pageUsers.map((user) => (
-          <article key={user.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl bg-surface-strong p-3">
-            <span className="grid size-10 place-items-center rounded-full bg-primary-soft text-sm font-bold text-primary">
-              {user.initial}
-            </span>
+          <ListRow
+            key={user.id}
+            as="article"
+            tone="strong"
+            leading={(
+              <IconBadge as="span" className="text-sm font-bold">
+                {user.initial}
+              </IconBadge>
+            )}
+            trailing={(
+              <button className="h-9 shrink-0 rounded-[10px] bg-surface px-3 text-xs font-bold text-muted" type="button">
+                {activeTabId === 'following' ? '언팔로우' : '팔로우'}
+              </button>
+            )}
+          >
             <span className="min-w-0">
               <span className="flex min-w-0 items-center gap-2">
                 <span className="truncate text-sm font-bold text-foreground">{user.nickname}</span>
@@ -331,10 +314,7 @@ function BlogFollowingManageSection() {
               </span>
               <span className="mt-1 block truncate text-xs text-muted">{user.description}</span>
             </span>
-            <button className="h-9 shrink-0 rounded-[10px] bg-surface px-3 text-xs font-bold text-muted" type="button">
-              {activeTabId === 'following' ? '언팔로우' : '팔로우'}
-            </button>
-          </article>
+          </ListRow>
         ))}
         {pageUsers.length === 0 && (
           <p className="rounded-2xl bg-surface-strong p-4 text-center text-sm text-muted">
@@ -344,27 +324,15 @@ function BlogFollowingManageSection() {
       </div>
 
       <div className="mt-4 flex items-center justify-between gap-3">
-        <button
-          className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted disabled:opacity-35"
-          type="button"
-          aria-label="이전 목록"
-          disabled={safePageIndex === 0}
-          onClick={() => setPageIndex((currentValue) => Math.max(0, currentValue - 1))}
-        >
+        <IconButton ariaLabel="이전 목록" disabled={safePageIndex === 0} onClick={() => setPageIndex((currentValue) => Math.max(0, currentValue - 1))}>
           <Icon name="chevronLeft" />
-        </button>
+        </IconButton>
         <span className="text-xs font-bold text-muted">
           {safePageIndex + 1} / {pageCount}
         </span>
-        <button
-          className="grid size-9 place-items-center rounded-[10px] bg-surface-strong text-muted disabled:opacity-35"
-          type="button"
-          aria-label="다음 목록"
-          disabled={safePageIndex >= pageCount - 1}
-          onClick={() => setPageIndex((currentValue) => Math.min(pageCount - 1, currentValue + 1))}
-        >
+        <IconButton ariaLabel="다음 목록" disabled={safePageIndex >= pageCount - 1} onClick={() => setPageIndex((currentValue) => Math.min(pageCount - 1, currentValue + 1))}>
           <Icon className="size-5 rotate-180" name="chevronLeft" />
-        </button>
+        </IconButton>
       </div>
     </section>
   );

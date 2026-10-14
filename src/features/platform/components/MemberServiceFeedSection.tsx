@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { Chip } from '@/shared/ui/Chip';
 import { Icon } from '@/shared/ui/Icon';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
 
@@ -152,9 +153,9 @@ export function MemberServiceFeedSection({ services }: MemberServiceFeedSectionP
                       바로가기
                     </Link>
                   ) : (
-                    <span className="shrink-0 rounded-full bg-surface-strong px-2.5 py-1 text-xs font-bold text-muted">
+                    <Chip className="shrink-0">
                       준비 중
-                    </span>
+                    </Chip>
                   )}
                 </div>
 

@@ -7,6 +7,7 @@ import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Button } from '@/shared/ui/Button';
 
 import { MeSettingCard } from './MeSettingCard';
 import type { MeSettingItem, MeViewModel } from '../model/meTypes';
@@ -102,9 +103,9 @@ export function MeView({ viewModel }: MeViewProps) {
                     <textarea className="min-h-24 resize-none rounded-[10px] border border-border bg-surface px-3 py-3 text-sm font-normal leading-6 text-foreground" defaultValue={viewModel.description} />
                   </label>
                   <div className="flex justify-end pt-2">
-                    <button className="h-10 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">
+                    <Button>
                       수정하기
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
@@ -124,9 +125,9 @@ export function MeView({ viewModel }: MeViewProps) {
                     ))}
                   </div>
                   <div className="flex justify-end pt-1">
-                    <button className="h-10 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">
+                    <Button>
                       저장
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
@@ -167,9 +168,9 @@ export function MeView({ viewModel }: MeViewProps) {
                     </label>
                   </div>
                   <div className="flex justify-end pt-1">
-                    <button className="h-10 rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground" type="button">
+                    <Button>
                       저장
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
@@ -180,9 +181,9 @@ export function MeView({ viewModel }: MeViewProps) {
                   <p className="mt-2 text-sm leading-6 text-muted">
                     계정과 서비스 데이터를 정리하는 위험한 작업이에요. 실제 탈퇴 API가 연결되기 전까지는 화면 구조만 보여드려요.
                   </p>
-                  <button className="mt-4 h-10 rounded-[10px] border border-accent-red px-4 text-sm font-bold text-accent-red" type="button">
+                  <Button variant="outline-danger" className="mt-4">
                     탈퇴 절차 확인
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>

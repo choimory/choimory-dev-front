@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { BrandLogo } from '@/shared/ui/BrandLogo';
+import { Card } from '@/shared/ui/Card';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
 
 import { BlogPostCard } from './BlogPostCard';
@@ -22,7 +23,7 @@ type BlogGuestSectionProps = {
 export function BlogGuestSection({ posts }: BlogGuestSectionProps) {
   return (
     <div className="grid gap-3">
-      <section className="rounded-2xl border border-border bg-surface p-4" aria-labelledby="blog-guest-title">
+ <Card as="section" aria-labelledby="blog-guest-title">
         <p className="flex items-center gap-1 text-sm font-bold text-primary">
           <BrandLogo size="sm" isAnimated={false} />
           <span>/ blog</span>
@@ -55,7 +56,7 @@ export function BlogGuestSection({ posts }: BlogGuestSectionProps) {
             회원가입
           </Link>
         </div>
-      </section>
+      </Card>
 
       <section className="grid gap-3" aria-labelledby="blog-public-preview-title">
         <SectionHeader
