@@ -12,6 +12,9 @@
 - [남은 두 파일 분리](#남은-두-파일-분리)
   - [분리 결과](#분리-결과-1)
   - [참고](#참고)
+- [Doc Comment 추가](#doc-comment-추가)
+  - [추가한 곳](#추가한-곳)
+  - [남겨둔 것](#남겨둔-것)
 
 ---
 
@@ -149,3 +152,31 @@
 - 중복 후보: `TargetPreviewLink`(`FeedView`)와 `TargetListLink`(`FeedMenuView`)는 구조가 거의 같고 본문 줄 수와 우측 텍스트만 다르다. 하나로 합칠 수 있어 보이지만 이번 범위 밖이라 두었다.
 - 이 섹션으로 2단계 "남은 사항"의 첫 항목(두 파일 분리 여부)은 해소되었다.
 - 3단계(테스트 환경 구축)는 아직 시작하지 않았다. Next.js 문서의 Vitest 가이드와 설정 파일을 읽는 것부터 재개할 예정이며, 패키지 설치는 네트워크 접근이 필요해 진행 전 확인을 받는다.
+
+---
+
+# Doc Comment 추가
+
+> doc comment 추가
+
+## 답변
+
+코드 규칙(`comment.md`)상 모든 컴포넌트와 함수에 Doc Comment가 필요한데, 분리 과정에서 옮겨 온 컴포넌트들에 빠져 있어 일괄 추가했다. 주석만 추가했고 코드 동작은 바꾸지 않았다. `tsc`, `lint`가 통과했다.
+
+## 추가한 곳
+
+| 종류 | 대상 | 개수 |
+|---|---|---|
+| 컴포넌트 | `AlbumCarousel3d`, `AlbumDetailModal`, `ArtistDetailSection`, `BroadcastContributionGraph`, `FeedTargetCreateForm`, `FormField`, `ItemDetailSection`, `ListPanel`, `MiniLineChart`, `MyFeedManageSection`, `ObservationTargetSection`, `PopularTargetEventSection`, `PopularTargetSection`, `SettingToggle`, `StreamerDetailSection`, `TargetListLink`, `TargetPreviewLink`, `TogglePreview` | 18 |
+| 함수 | `getBroadcastSessions`, `getBroadcastIntensityClassName` (`BroadcastContributionGraph.tsx`) | 2 |
+| 상수 | `KEYBOARD_PRICE_RANGES`, `GPU_PRICE_RANGES` (`feedTypes.ts`, 한 줄 주석) | 2 |
+
+- 형식은 `comment.md` 양식을 따랐다. 용도 설명, `@param props 컴포넌트 Props`, `@returns`
+- 상세 섹션처럼 데이터가 없으면 아무것도 그리지 않는 컴포넌트는 그 동작도 설명에 적었다.
+- `src/` 전체를 전수 조사한 결과, Doc Comment가 없는 최상위 선언은 위 22건과 아래 "남겨둔 것"뿐이었다. 이미 있던 주석은 건드리지 않았다.
+
+## 남겨둔 것
+
+- `src/app/layout.tsx`: Next.js 기본 레이아웃(`geistSans`, `geistMono`, `metadata`, `viewport`, `RootLayout`)이라 손대지 않았다.
+- 인라인 props 타입: 분리한 컴포넌트 중 props를 함수 인자에 `{ label: string; ... }` 형태로 바로 쓴 곳이 많다. 규칙은 타입의 각 필드에 측면 주석을 요구하므로 별도 `type`으로 빼야 달 수 있다. 코드 변경이 필요해서 이번에는 하지 않았고, 정리 여부는 사용자 판단 대기.
+- 3단계(테스트 환경 구축)는 아직 시작하지 않았다.
