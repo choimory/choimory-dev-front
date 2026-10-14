@@ -7,6 +7,10 @@ import { FEED_OBSERVATIONS_FIXTURE } from '../../../../fixtures/feed';
 
 const OBSERVATION = FEED_OBSERVATIONS_FIXTURE[0];
 
+/**
+ * FeedObservationDetailView 테스트
+ * 관찰 항목 상세 화면의 분류, 제목, 상태, 상태 요약 카드, 관찰 조건 카드, 관찰 목록 링크와 활성 탭, 로그인 여부를 확인합니다.
+ */
 describe('FeedObservationDetailView', () => {
   it('관찰 항목의 분류, 제목, 상태를 보여준다', () => {
     render(<FeedObservationDetailView isLoggedIn observation={OBSERVATION} />);
@@ -44,6 +48,7 @@ describe('FeedObservationDetailView', () => {
 
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
 
+    // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<FeedObservationDetailView isLoggedIn observation={OBSERVATION} />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

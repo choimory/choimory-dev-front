@@ -13,6 +13,11 @@ function isToggleOn(label: RegExp) {
   return button.querySelector('[aria-hidden="true"]')?.classList.contains('justify-end') ?? false;
 }
 
+/**
+ * FeedTargetSettingsView 테스트
+ * 관찰 대상 설정 화면의 관찰 상태와 알림 주기, 종류별 알림 설정(아이템 가격, 스트리머, 아티스트), 저장 상태 전환과 해제, 취소 링크, 위험 작업, 로그인 여부를 확인합니다.
+ * 토글은 isToggleOn 헬퍼로 켜짐 상태를 읽습니다.
+ */
 describe('FeedTargetSettingsView', () => {
   it('설정 헤더에 종류 라벨, 대상 이름, 안내 문구를 보여준다', () => {
     render(<FeedTargetSettingsView isLoggedIn target={FEED_ITEM_TARGET_FIXTURE} />);
@@ -29,10 +34,12 @@ describe('FeedTargetSettingsView', () => {
 
     expect(isToggleOn(/관찰 상태/)).toBe(true);
 
+    // 관찰 상태 토글을 눌러 끈다
     await userEvent.click(screen.getByRole('button', { name: /관찰 상태/ }));
 
     expect(isToggleOn(/관찰 상태/)).toBe(false);
 
+    // 관찰 중이 아닌 아티스트 대상으로 다시 렌더링하면 꺼진 상태로 시작한다
     unmount();
     render(<FeedTargetSettingsView isLoggedIn target={FEED_ARTIST_TARGET_FIXTURE} />);
 
@@ -44,6 +51,7 @@ describe('FeedTargetSettingsView', () => {
 
     expect(screen.getByRole('button', { name: '즉시' })).toHaveClass('bg-primary');
 
+    // 주간 요약을 선택한다
     await userEvent.click(screen.getByRole('button', { name: '주간 요약' }));
 
     expect(screen.getByRole('button', { name: '주간 요약' })).toHaveClass('bg-primary');
@@ -64,6 +72,7 @@ describe('FeedTargetSettingsView', () => {
     render(<FeedTargetSettingsView isLoggedIn target={FEED_ITEM_TARGET_FIXTURE} />);
 
     const input = screen.getByLabelText('목표 가격');
+    // 기존 값을 지우고 새 목표 가격을 입력한다
     await userEvent.clear(input);
     await userEvent.type(input, '85,000원');
 
@@ -78,6 +87,7 @@ describe('FeedTargetSettingsView', () => {
     expect(within(section).getByRole('button', { name: /방송 알림/ })).toBeInTheDocument();
     expect(within(section).getByRole('button', { name: /채팅\/이벤트 알림/ })).toBeInTheDocument();
 
+    // 방송 알림만 끈다
     await userEvent.click(within(section).getByRole('button', { name: /방송 알림/ }));
 
     expect(isToggleOn(/방송 알림/)).toBe(false);
@@ -100,6 +110,7 @@ describe('FeedTargetSettingsView', () => {
 
     expect(within(section).getByText('변경한 알림 조건을 저장해요.')).toBeInTheDocument();
 
+    // 저장 버튼을 클릭한다
     await userEvent.click(within(section).getByRole('button', { name: '저장' }));
 
     expect(within(section).getByRole('button', { name: '저장 완료' })).toBeInTheDocument();
@@ -109,7 +120,9 @@ describe('FeedTargetSettingsView', () => {
   it('저장한 뒤 설정을 바꾸면 저장 완료 상태가 해제된다', async () => {
     render(<FeedTargetSettingsView isLoggedIn target={FEED_ITEM_TARGET_FIXTURE} />);
 
+    // 저장해서 저장 완료 상태로 만든 뒤
     await userEvent.click(screen.getByRole('button', { name: '저장' }));
+    // 알림 주기를 바꾸면 저장 완료 상태가 해제된다
     await userEvent.click(screen.getByRole('button', { name: '하루 요약' }));
 
     expect(screen.getByRole('button', { name: '저장' })).toBeInTheDocument();
@@ -143,6 +156,7 @@ describe('FeedTargetSettingsView', () => {
 
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
 
+    // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<FeedTargetSettingsView isLoggedIn target={FEED_ITEM_TARGET_FIXTURE} />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

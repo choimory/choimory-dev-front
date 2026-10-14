@@ -5,6 +5,10 @@ import { StreamerDetailSection } from '@/features/feed/components/StreamerDetail
 
 import { FEED_ITEM_TARGET_FIXTURE, FEED_STREAMER_TARGET_FIXTURE } from '../../../../fixtures/feed';
 
+/**
+ * StreamerDetailSection 테스트
+ * 스트리머 상세의 방송 상태(LIVE, 대기), 이벤트 지표와 추이 문구, 원본 채널 링크, 방송 기록 그래프, 채팅 기록, 최근 방송과 이벤트 목록을 확인합니다.
+ */
 describe('StreamerDetailSection', () => {
   it('스트리머 상세 데이터가 없으면 아무것도 렌더링하지 않는다', () => {
     const { container } = render(<StreamerDetailSection target={FEED_ITEM_TARGET_FIXTURE} />);

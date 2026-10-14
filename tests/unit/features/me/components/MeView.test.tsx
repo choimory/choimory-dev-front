@@ -13,6 +13,11 @@ async function openSetting(title: string) {
   return screen.getByRole('dialog', { name: title });
 }
 
+/**
+ * MeView 테스트
+ * 마이페이지의 프로필 카드와 설정 카드 목록, 설정 카드를 눌러 여는 모달(개인정보, 사이트 설정, 2차 인증, 회원 탈퇴)의 내용과 입력, 닫기 동작을 확인합니다.
+ * 모달 열기는 openSetting 헬퍼로 묶었습니다.
+ */
 describe('MeView', () => {
   it('프로필 카드에 닉네임, 이메일, 소개와 홈 링크를 보여준다', () => {
     render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
@@ -65,9 +70,11 @@ describe('MeView', () => {
   it('개인정보 변경 모달에서 닉네임을 수정할 수 있다', async () => {
     render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
 
+    // 개인정보 변경 모달을 연다
     const dialog = await openSetting('개인정보 변경');
     const nickname = within(dialog).getByLabelText(/닉네임/);
 
+    // 기존 닉네임을 지우고 새 닉네임을 입력한다
     await userEvent.clear(nickname);
     await userEvent.type(nickname, 'newmory');
 
@@ -87,7 +94,9 @@ describe('MeView', () => {
   it('사이트 설정 모달에서 테마를 바꿀 수 있다', async () => {
     render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
 
+    // 사이트 설정 모달을 연다
     const dialog = await openSetting('사이트 설정');
+    // dark 테마를 선택한다
     await userEvent.click(within(dialog).getByRole('radio', { name: 'dark' }));
 
     expect(within(dialog).getByRole('radio', { name: 'dark' })).toBeChecked();
@@ -128,7 +137,9 @@ describe('MeView', () => {
   it('닫기 버튼을 누르면 모달이 닫힌다', async () => {
     render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
 
+    // 개인정보 변경 모달을 연 뒤
     const dialog = await openSetting('개인정보 변경');
+    // 닫기 버튼을 누르면 모달이 닫힌다
     await userEvent.click(within(dialog).getByRole('button', { name: '닫기' }));
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -137,7 +148,9 @@ describe('MeView', () => {
   it('모달 배경을 누르면 모달이 닫힌다', async () => {
     render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
 
+    // 회원 탈퇴 모달을 연 뒤
     const dialog = await openSetting('회원 탈퇴');
+    // 모달 배경(패널의 부모)을 누르면 모달이 닫힌다
     await userEvent.click(dialog.parentElement as HTMLElement);
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -146,8 +159,10 @@ describe('MeView', () => {
   it('다른 설정을 열면 이전 모달 내용은 사라지고 새 내용으로 바뀐다', async () => {
     render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
 
+    // 개인정보 변경 모달을 열었다가 닫고
     const profileDialog = await openSetting('개인정보 변경');
     await userEvent.click(within(profileDialog).getByRole('button', { name: '닫기' }));
+    // 사이트 설정 모달을 열면 새 내용으로 바뀐다
     const themeDialog = await openSetting('사이트 설정');
 
     expect(within(themeDialog).getByRole('heading', { level: 3, name: '테마 설정' })).toBeInTheDocument();

@@ -6,6 +6,10 @@ import { ItemDetailSection } from '@/features/feed/components/ItemDetailSection'
 
 import { FEED_ITEM_TARGET_FIXTURE, FEED_STREAMER_TARGET_FIXTURE } from '../../../../fixtures/feed';
 
+/**
+ * ItemDetailSection 테스트
+ * 아이템 상세의 가격 요약, 원본 링크, 기간 탭과 가격 그래프, 지점 호버와 클릭 고정과 해제, 기간 전환 시 초기화를 확인합니다.
+ */
 describe('ItemDetailSection', () => {
   it('아이템 상세 데이터가 없으면 아무것도 렌더링하지 않는다', () => {
     const { container } = render(<ItemDetailSection target={FEED_STREAMER_TARGET_FIXTURE} />);
@@ -44,6 +48,7 @@ describe('ItemDetailSection', () => {
   it('기간 탭을 바꾸면 해당 기간의 지점으로 그래프가 바뀐다', async () => {
     const { container } = render(<ItemDetailSection target={FEED_ITEM_TARGET_FIXTURE} />);
 
+    // 1개월 탭을 클릭한다
     await userEvent.click(screen.getByRole('tab', { name: '1개월' }));
 
     expect(screen.getByRole('tab', { name: '1개월' })).toHaveAttribute('aria-selected', 'true');
@@ -58,9 +63,11 @@ describe('ItemDetailSection', () => {
     // 날짜 "수"는 x축 라벨에 한 번 나온다
     expect(screen.getAllByText('수')).toHaveLength(1);
 
+    // 지점에 마우스를 올리면 안내가 나타난다
     fireEvent.mouseEnter(circle);
     expect(screen.getAllByText('수')).toHaveLength(2);
 
+    // 마우스를 벗어나면 안내가 사라진다
     fireEvent.mouseLeave(circle);
     expect(screen.getAllByText('수')).toHaveLength(1);
   });
@@ -70,7 +77,9 @@ describe('ItemDetailSection', () => {
 
     const circle = container.querySelectorAll('circle')[1];
 
+    // 지점을 클릭해 고정하고
     await userEvent.click(circle);
+    // 마우스를 벗어나도 안내가 유지된다
     fireEvent.mouseLeave(circle);
 
     expect(screen.getAllByText('수')).toHaveLength(2);
@@ -90,7 +99,9 @@ describe('ItemDetailSection', () => {
   it('그래프 배경을 누르면 고정이 해제된다', async () => {
     const { container } = render(<ItemDetailSection target={FEED_ITEM_TARGET_FIXTURE} />);
 
+    // 지점을 클릭해 고정한 뒤
     await userEvent.click(container.querySelectorAll('circle')[0]);
+    // 그래프 배경을 클릭하면 고정이 해제된다
     await userEvent.click(screen.getByRole('img', { name: '가격 변동 라인그래프' }));
 
     expect(container.querySelectorAll('circle')[0]).toHaveAttribute('r', '4.5');
@@ -99,7 +110,9 @@ describe('ItemDetailSection', () => {
   it('기간을 바꾸면 고정된 지점이 해제된다', async () => {
     const { container } = render(<ItemDetailSection target={FEED_ITEM_TARGET_FIXTURE} />);
 
+    // 지점을 클릭해 고정한 뒤
     await userEvent.click(container.querySelectorAll('circle')[0]);
+    // 기간 탭을 바꾸면 고정이 해제된다
     await userEvent.click(screen.getByRole('tab', { name: '1개월' }));
 
     container.querySelectorAll('circle').forEach((circle) => expect(circle).toHaveAttribute('r', '4.5'));

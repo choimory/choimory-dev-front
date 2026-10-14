@@ -5,6 +5,10 @@ import { describe, expect, it } from 'vitest';
 import { SignupView } from '@/features/auth/components/SignupView';
 import { signupViewModel } from '@/features/auth/model/authTypes';
 
+/**
+ * SignupView 테스트
+ * 회원가입 화면의 제목과 설명, 홈 링크, 입력창 4종(닉네임, 이메일, 비밀번호, 비밀번호 확인), 회원가입 버튼, 로그인 링크를 확인합니다.
+ */
 describe('SignupView', () => {
   it('제목과 설명을 보여준다', () => {
     render(<SignupView viewModel={signupViewModel} />);
@@ -31,11 +35,13 @@ describe('SignupView', () => {
   it('각 입력창에 입력할 수 있다', async () => {
     render(<SignupView viewModel={signupViewModel} />);
 
+    // 입력창 4개에 각각 값을 입력한다
     await userEvent.type(screen.getByLabelText('닉네임'), 'mory');
     await userEvent.type(screen.getByLabelText('이메일'), 'mory@example.com');
     await userEvent.type(screen.getByLabelText('비밀번호', { exact: true }), 'secret');
     await userEvent.type(screen.getByLabelText('비밀번호 확인'), 'secret');
 
+    // 입력한 값이 각 입력창에 반영됐는지 확인한다
     expect(screen.getByLabelText('닉네임')).toHaveValue('mory');
     expect(screen.getByLabelText('이메일')).toHaveValue('mory@example.com');
     expect(screen.getByLabelText('비밀번호', { exact: true })).toHaveValue('secret');

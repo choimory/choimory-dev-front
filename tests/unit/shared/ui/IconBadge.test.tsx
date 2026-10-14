@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { IconBadge } from '@/shared/ui/IconBadge';
 
+/**
+ * IconBadge 테스트
+ * 원형 배지의 기본값과 크기 5종, 톤 4종, 태그(as)와 추가 className 반영을 확인합니다.
+ */
 describe('IconBadge', () => {
   it('기본값은 div, lg 크기, soft 톤이다', () => {
     render(<IconBadge>C</IconBadge>);

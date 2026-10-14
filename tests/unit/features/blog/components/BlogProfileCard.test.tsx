@@ -13,6 +13,10 @@ const PROFILE: BlogUserProfile = {
   followingCount: 36,
 };
 
+/**
+ * BlogProfileCard 테스트
+ * blog 프로필 카드의 닉네임, 이니셜, 소개, 카운팅 카드, 팔로워와 팔로잉 클릭, 공개 블로그 링크, 추가 카운팅을 확인합니다.
+ */
 describe('BlogProfileCard', () => {
   it('닉네임을 제목으로, 이니셜과 소개를 보여주고 영역 이름을 연결한다', () => {
     render(<BlogProfileCard headingId="profile-title" profile={PROFILE} onSelectRelation={() => {}} />);
@@ -45,9 +49,11 @@ describe('BlogProfileCard', () => {
     const onSelectRelation = vi.fn();
     render(<BlogProfileCard headingId="profile-title" profile={PROFILE} onSelectRelation={onSelectRelation} />);
 
+    // 팔로워 카드를 누르면 followers로 호출된다
     await userEvent.click(screen.getByRole('button', { name: /팔로워/ }));
     expect(onSelectRelation).toHaveBeenLastCalledWith('followers');
 
+    // 팔로잉 카드를 누르면 following으로 호출된다
     await userEvent.click(screen.getByRole('button', { name: /팔로잉/ }));
     expect(onSelectRelation).toHaveBeenLastCalledWith('following');
   });

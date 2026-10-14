@@ -5,6 +5,10 @@ import { describe, expect, it } from 'vitest';
 import { LoginView } from '@/features/auth/components/LoginView';
 import { loginViewModel } from '@/features/auth/model/authTypes';
 
+/**
+ * LoginView 테스트
+ * 로그인 화면의 제목과 설명, 홈 링크, 이메일/비밀번호 입력, 로그인 버튼, 회원가입 링크, 소셜 로그인 버튼(제공자별 색상, 빈 목록)을 확인합니다.
+ */
 describe('LoginView', () => {
   it('제목과 설명을 보여준다', () => {
     render(<LoginView viewModel={loginViewModel} />);
@@ -28,9 +32,11 @@ describe('LoginView', () => {
     expect(email).toHaveAttribute('type', 'email');
     expect(password).toHaveAttribute('type', 'password');
 
+    // 이메일과 비밀번호를 입력한다
     await userEvent.type(email, 'mory@example.com');
     await userEvent.type(password, 'secret');
 
+    // 입력한 값이 각 입력창에 반영됐는지 확인한다
     expect(email).toHaveValue('mory@example.com');
     expect(password).toHaveValue('secret');
   });
@@ -56,8 +62,10 @@ describe('LoginView', () => {
   });
 
   it('소셜 제공자 목록이 비어 있으면 소셜 버튼을 보여주지 않는다', () => {
+    // 소셜 제공자 목록을 비운 화면을 렌더링한다
     render(<LoginView viewModel={{ ...loginViewModel, socialProviders: [] }} />);
 
+    // 남은 버튼은 로그인 버튼 하나뿐이다
     expect(screen.getAllByRole('button')).toHaveLength(1);
     expect(screen.queryByRole('button', { name: '네이버로 로그인' })).not.toBeInTheDocument();
   });

@@ -9,6 +9,10 @@ function getVisibleNicknames() {
   return screen.queryAllByRole('article').map((article) => within(article).getAllByText(/./)[1].textContent);
 }
 
+/**
+ * BlogFollowingManageSection 테스트
+ * 팔로잉 화면의 관계 목록 카드가 탭(팔로잉, 팔로워), 3명 단위 페이지 이동, 닉네임과 설명 검색, 검색 결과 없음 안내, 탭 변경 시 초기화를 처리하는지 확인합니다.
+ */
 describe('BlogFollowingManageSection', () => {
   it('관계 목록 제목과 설명, 탭 2종을 보여주고 팔로잉 탭이 기본 선택이다', () => {
     render(<BlogFollowingManageSection />);
@@ -29,6 +33,7 @@ describe('BlogFollowingManageSection', () => {
   it('팔로워 탭으로 바꾸면 팔로워 목록과 "팔로우" 버튼을 보여준다', async () => {
     render(<BlogFollowingManageSection />);
 
+    // 팔로워 탭을 클릭한다
     await userEvent.click(screen.getByRole('tab', { name: '팔로워' }));
 
     expect(getVisibleNicknames()).toEqual(['jin.note', 'ui.archive', 'nav.lab']);
@@ -50,12 +55,14 @@ describe('BlogFollowingManageSection', () => {
 
     expect(screen.getByRole('button', { name: '이전 목록' })).toBeDisabled();
 
+    // 다음 목록 버튼으로 2페이지로 이동한다
     await userEvent.click(screen.getByRole('button', { name: '다음 목록' }));
 
     expect(screen.getByText('2 / 2')).toBeInTheDocument();
     expect(getVisibleNicknames()).toEqual(['feed.watch', 'nav.lab', 'build.note']);
     expect(screen.getByRole('button', { name: '다음 목록' })).toBeDisabled();
 
+    // 이전 목록 버튼으로 1페이지로 돌아온다
     await userEvent.click(screen.getByRole('button', { name: '이전 목록' }));
 
     expect(screen.getByText('1 / 2')).toBeInTheDocument();
@@ -66,6 +73,7 @@ describe('BlogFollowingManageSection', () => {
 
     expect(screen.queryByPlaceholderText('닉네임이나 설명으로 검색')).not.toBeInTheDocument();
 
+    // 검색 버튼을 눌러 검색창을 연다
     await userEvent.click(screen.getByRole('button', { name: '사용자 검색' }));
     expect(screen.getByPlaceholderText('닉네임이나 설명으로 검색')).toBeInTheDocument();
 
@@ -76,7 +84,9 @@ describe('BlogFollowingManageSection', () => {
   it('검색어로 닉네임을 거르고 첫 페이지로 돌아간다', async () => {
     render(<BlogFollowingManageSection />);
 
+    // 2페이지로 이동한 상태에서
     await userEvent.click(screen.getByRole('button', { name: '다음 목록' }));
+    // 검색창을 열고 닉네임 일부를 입력한다
     await userEvent.click(screen.getByRole('button', { name: '사용자 검색' }));
     await userEvent.type(screen.getByPlaceholderText('닉네임이나 설명으로 검색'), 'nav');
 
@@ -87,11 +97,13 @@ describe('BlogFollowingManageSection', () => {
   it('설명으로도 검색하고 대소문자와 앞뒤 공백을 무시한다', async () => {
     render(<BlogFollowingManageSection />);
 
+    // 검색창을 열고 앞뒤 공백이 있는 설명 일부를 입력한다
     await userEvent.click(screen.getByRole('button', { name: '사용자 검색' }));
     await userEvent.type(screen.getByPlaceholderText('닉네임이나 설명으로 검색'), '  빌드  ');
 
     expect(getVisibleNicknames()).toEqual(['build.note']);
 
+    // 입력을 지우고 대문자 닉네임으로 다시 검색한다
     await userEvent.clear(screen.getByPlaceholderText('닉네임이나 설명으로 검색'));
     await userEvent.type(screen.getByPlaceholderText('닉네임이나 설명으로 검색'), 'JIN.NOTE');
 
@@ -101,6 +113,7 @@ describe('BlogFollowingManageSection', () => {
   it('검색 결과가 없으면 안내 문구를 보여준다', async () => {
     render(<BlogFollowingManageSection />);
 
+    // 검색창을 열고 없는 사용자를 입력한다
     await userEvent.click(screen.getByRole('button', { name: '사용자 검색' }));
     await userEvent.type(screen.getByPlaceholderText('닉네임이나 설명으로 검색'), '없는사용자');
 
@@ -112,6 +125,7 @@ describe('BlogFollowingManageSection', () => {
   it('탭을 바꾸면 검색어와 페이지가 초기화된다', async () => {
     render(<BlogFollowingManageSection />);
 
+    // 검색어를 입력한 상태에서 팔로워 탭으로 바꾼다
     await userEvent.click(screen.getByRole('button', { name: '사용자 검색' }));
     await userEvent.type(screen.getByPlaceholderText('닉네임이나 설명으로 검색'), 'nav');
     await userEvent.click(screen.getByRole('tab', { name: '팔로워' }));

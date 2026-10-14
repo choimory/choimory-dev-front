@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { BlogContainer } from '@/features/blog/container/BlogContainer';
 
+/**
+ * BlogContainer 테스트
+ * 컨테이너가 authStatus(guest, member)에 따라 비회원 섹션과 회원 피드를 구분해 보여주는지 확인합니다.
+ */
 describe('BlogContainer', () => {
   it('guest 상태이면 비회원 섹션을 보여준다', () => {
     render(<BlogContainer authStatus="guest" />);

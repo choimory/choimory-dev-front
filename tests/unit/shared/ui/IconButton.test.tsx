@@ -4,6 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { IconButton } from '@/shared/ui/IconButton';
 
+/**
+ * IconButton 테스트
+ * 아이콘 버튼의 접근 가능한 이름, 클릭과 disabled 동작, 크기와 톤별 클래스를 확인합니다.
+ */
 describe('IconButton', () => {
   it('ariaLabel로 접근 가능한 이름을 가지며 type은 button이다', () => {
     render(<IconButton ariaLabel="닫기">x</IconButton>);
@@ -18,8 +22,10 @@ describe('IconButton', () => {
     const onClick = vi.fn();
     render(<IconButton ariaLabel="닫기" onClick={onClick}>x</IconButton>);
 
+    // 버튼을 클릭한다
     await userEvent.click(screen.getByRole('button', { name: '닫기' }));
 
+    // 클릭 핸들러가 한 번 호출됐는지 확인한다
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
@@ -28,8 +34,10 @@ describe('IconButton', () => {
     render(<IconButton ariaLabel="이전 목록" disabled onClick={onClick}>x</IconButton>);
 
     const button = screen.getByRole('button', { name: '이전 목록' });
+    // 비활성 버튼을 클릭해도
     await userEvent.click(button);
 
+    // 버튼은 비활성 상태이고 핸들러는 호출되지 않는다
     expect(button).toBeDisabled();
     expect(onClick).not.toHaveBeenCalled();
   });
@@ -49,6 +57,7 @@ describe('IconButton', () => {
 
     expect(screen.getByRole('button', { name: '삭제' })).toHaveClass('bg-surface-strong', 'text-accent-red');
 
+    // ghost 톤으로 다시 렌더링하면 배경이 사라지고 전달한 글자 색만 남는다
     rerender(<IconButton ariaLabel="삭제" tone="ghost" className="text-accent-red">x</IconButton>);
 
     const ghost = screen.getByRole('button', { name: '삭제' });

@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { Chip } from '@/shared/ui/Chip';
 
+/**
+ * Chip 테스트
+ * 칩의 기본값(md, muted)과 size, tone, className 반영을 확인합니다.
+ */
 describe('Chip', () => {
   it('기본값은 md 크기의 muted 톤이다', () => {
     render(<Chip>지금</Chip>);

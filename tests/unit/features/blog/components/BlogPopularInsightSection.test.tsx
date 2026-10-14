@@ -4,6 +4,10 @@ import { describe, expect, it } from 'vitest';
 
 import { BlogPopularInsightSection } from '@/features/blog/components/BlogPopularInsightSection';
 
+/**
+ * BlogPopularInsightSection 테스트
+ * 인기 화면의 실시간 랭킹 카드가 탭 4종과 기본 탭의 랭킹 5개, 탭 전환, 순위 변동별 색상, 등장 애니메이션 지연을 보여주는지 확인합니다.
+ */
 describe('BlogPopularInsightSection', () => {
   it('실시간 랭킹 제목과 "지금" 칩을 보여준다', () => {
     render(<BlogPopularInsightSection />);
@@ -40,6 +44,7 @@ describe('BlogPopularInsightSection', () => {
   ])('%s 탭을 누르면 해당 랭킹 1위(%s)를 보여준다', async (tabName, firstLabel) => {
     render(<BlogPopularInsightSection />);
 
+    // 해당 탭을 클릭한다
     await userEvent.click(screen.getByRole('tab', { name: tabName }));
 
     expect(screen.getByRole('tab', { name: tabName })).toHaveAttribute('aria-selected', 'true');

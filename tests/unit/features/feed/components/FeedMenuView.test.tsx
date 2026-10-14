@@ -8,6 +8,10 @@ import { FEED_ARTIST_TARGET_FIXTURE, FEED_ITEM_TARGET_FIXTURE, FEED_STREAMER_TAR
 
 const VIEW_MODEL: FeedViewModel = { ...FEED_VIEW_MODEL_FIXTURE, authStatus: 'guest' };
 
+/**
+ * FeedMenuView 테스트
+ * feed 메뉴 화면이 popular(순위 정렬), observations(관찰 중인 대상), me(내 대상) 메뉴별로 알맞은 섹션을 보여주고, 메뉴별 활성 탭과 인증별 상단바를 처리하는지 확인합니다.
+ */
 describe('FeedMenuView', () => {
   describe('popular 메뉴', () => {
     it('"실시간 순위" 소개와 랭킹, 최근 이벤트 섹션을 보여준다', () => {
@@ -84,9 +88,11 @@ describe('FeedMenuView', () => {
     expect(nav().getByRole('link', { name: '인기' })).toHaveAttribute('aria-current', 'page');
     expect(nav().getByRole('link', { name: '관찰' })).not.toHaveAttribute('aria-current');
 
+    // observations 메뉴로 다시 렌더링한다
     rerender(<FeedMenuView menuKind="observations" viewModel={VIEW_MODEL} />);
     expect(nav().getByRole('link', { name: '관찰' })).toHaveAttribute('aria-current', 'page');
 
+    // me 메뉴로 다시 렌더링한다
     rerender(<FeedMenuView menuKind="me" viewModel={VIEW_MODEL} />);
     expect(nav().getByRole('link', { name: '내 피드' })).toHaveAttribute('aria-current', 'page');
   });
@@ -97,6 +103,7 @@ describe('FeedMenuView', () => {
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'feed 홈으로 돌아가기' })).toHaveAttribute('href', '/feed');
 
+    // member 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<FeedMenuView menuKind="popular" viewModel={{ ...VIEW_MODEL, authStatus: 'member' }} />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

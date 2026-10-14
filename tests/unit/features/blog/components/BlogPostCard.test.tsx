@@ -7,6 +7,10 @@ import { BLOG_POSTS_FIXTURE } from '../../../../fixtures/blog';
 
 const [POST_WITH_MEDIA, POST_WITHOUT_MEDIA] = BLOG_POSTS_FIXTURE;
 
+/**
+ * BlogPostCard 테스트
+ * 게시글 카드의 작성자, 제목, 본문, 좋아요와 댓글 수, 상세 링크, 이미지 유무, 아이콘 버튼 5종을 확인합니다.
+ */
 describe('BlogPostCard', () => {
   it('작성자 이름, 이니셜, 부가 정보를 보여준다', () => {
     render(<BlogPostCard post={POST_WITH_MEDIA} />);

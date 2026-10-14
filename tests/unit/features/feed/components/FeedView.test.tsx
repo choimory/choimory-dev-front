@@ -9,6 +9,10 @@ import { FEED_TARGETS_FIXTURE, FEED_VIEW_MODEL_FIXTURE } from '../../../../fixtu
 const GUEST_VIEW_MODEL: FeedViewModel = { ...FEED_VIEW_MODEL_FIXTURE, authStatus: 'guest' };
 const MEMBER_VIEW_MODEL: FeedViewModel = { ...FEED_VIEW_MODEL_FIXTURE, authStatus: 'member' };
 
+/**
+ * FeedView 테스트
+ * feed 홈의 소개와 상단바, 비회원 영역(로그인 링크, 준비 중 알림, 혜택)과 회원 영역(요약, 관심 대상 최대 3개, 최근 알림)의 전환, 하단 네비게이션 상태를 확인합니다.
+ */
 describe('FeedView', () => {
   it('feed 소개 제목과 설명을 보여준다', () => {
     render(<FeedView viewModel={GUEST_VIEW_MODEL} />);

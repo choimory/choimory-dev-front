@@ -6,6 +6,10 @@ import { PopularTargetSection } from '@/features/feed/components/PopularTargetSe
 
 import { FEED_TARGETS_FIXTURE } from '../../../../fixtures/feed';
 
+/**
+ * PopularTargetSection 테스트
+ * 인기 관찰 대상 랭킹의 탭 4종, 종류별 필터, 순위와 추이 표시(아이콘, 색상), 등장 애니메이션 지연, 빈 목록을 확인합니다.
+ */
 describe('PopularTargetSection', () => {
   it('제목, 경로, "지금" 칩을 보여준다', () => {
     render(<PopularTargetSection targets={FEED_TARGETS_FIXTURE} />);
@@ -43,6 +47,7 @@ describe('PopularTargetSection', () => {
   ])('%s 탭에서는 해당 종류의 대상만 보여준다', async (tabName, names) => {
     render(<PopularTargetSection targets={FEED_TARGETS_FIXTURE} />);
 
+    // 해당 종류 탭을 클릭한다
     await userEvent.click(screen.getByRole('tab', { name: tabName }));
 
     const links = screen.getAllByRole('link');
@@ -54,7 +59,9 @@ describe('PopularTargetSection', () => {
   it('전체 탭으로 돌아오면 모든 대상을 다시 보여준다', async () => {
     render(<PopularTargetSection targets={FEED_TARGETS_FIXTURE} />);
 
+    // 아이템 탭으로 바꿨다가
     await userEvent.click(screen.getByRole('tab', { name: '아이템' }));
+    // 전체 탭으로 돌아온다
     await userEvent.click(screen.getByRole('tab', { name: '전체' }));
 
     expect(screen.getAllByRole('link')).toHaveLength(3);

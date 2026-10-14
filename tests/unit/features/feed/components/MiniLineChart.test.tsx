@@ -23,6 +23,10 @@ function renderChart(overrides: Partial<Parameters<typeof MiniLineChart>[0]> = {
   return { ...view, ...handlers };
 }
 
+/**
+ * MiniLineChart 테스트
+ * 가격 꺾은선 그래프의 지점과 날짜, 최고가와 최저가, 호버와 포커스 안내, 클릭 고정과 배경 클릭 해제, 고정 지점 강조를 확인합니다.
+ */
 describe('MiniLineChart', () => {
   it('라벨과 라인그래프 이미지를 보여준다', () => {
     renderChart();
@@ -64,9 +68,11 @@ describe('MiniLineChart', () => {
 
     const circle = container.querySelectorAll('circle')[1];
 
+    // 지점에 마우스를 올린다
     fireEvent.mouseEnter(circle);
     expect(onHoverPoint).toHaveBeenLastCalledWith('week-2');
 
+    // 지점에서 마우스를 벗어난다
     fireEvent.mouseLeave(circle);
     expect(onHoverPoint).toHaveBeenLastCalledWith(null);
   });
@@ -78,9 +84,11 @@ describe('MiniLineChart', () => {
 
     expect(circle).toHaveAttribute('tabindex', '0');
 
+    // 지점에 포커스를 준다
     fireEvent.focus(circle);
     expect(onHoverPoint).toHaveBeenLastCalledWith('week-1');
 
+    // 지점의 포커스를 뺀다
     fireEvent.blur(circle);
     expect(onHoverPoint).toHaveBeenLastCalledWith(null);
   });
@@ -88,6 +96,7 @@ describe('MiniLineChart', () => {
   it('지점을 누르면 고정을 토글하고 그래프 배경의 해제 동작은 실행하지 않는다', async () => {
     const { container, onTogglePinPoint, onClearPinnedPoint } = renderChart();
 
+    // 지점을 클릭한다
     await userEvent.click(container.querySelectorAll('circle')[2]);
 
     expect(onTogglePinPoint).toHaveBeenCalledWith('week-3');
@@ -97,6 +106,7 @@ describe('MiniLineChart', () => {
   it('그래프 배경을 누르면 고정을 해제한다', async () => {
     const { onClearPinnedPoint } = renderChart();
 
+    // 그래프 배경을 클릭한다
     await userEvent.click(screen.getByRole('img', { name: '가격 추이 라인그래프' }));
 
     expect(onClearPinnedPoint).toHaveBeenCalledTimes(1);

@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 
+/**
+ * AppTopBar 테스트
+ * 상단 앱 바의 로고 링크, 로그인/로그아웃 링크, 서비스명(링크 또는 텍스트), leading 영역, 폭 옵션을 확인합니다.
+ */
 describe('AppTopBar', () => {
   it('브랜드 로고 링크와 로그인 링크를 렌더링한다', () => {
     render(<AppTopBar />);
@@ -43,6 +47,7 @@ describe('AppTopBar', () => {
 
     expect(container.querySelector('header > div')).toHaveClass('max-w-[768px]');
 
+    // size를 narrow로 바꿔 다시 렌더링한다
     rerender(<AppTopBar size="narrow" />);
 
     expect(container.querySelector('header > div')).toHaveClass('max-w-[560px]');

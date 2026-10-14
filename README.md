@@ -25,10 +25,12 @@ choimory.dev 서비스의 프론트엔드 프로젝트입니다.
 | 스타일 | Tailwind CSS v4 (PostCSS 방식) |
 | 폰트 | Geist Sans / Geist Mono |
 | 린트 | ESLint 9 + eslint-config-next (Flat Config) |
+| 테스트 | Vitest 5 + React Testing Library + jest-dom + user-event (jsdom 환경) |
 | 패키지 매니저 | npm |
 
 - Next.js 16부터 Turbopack이 기본 번들러이므로 `--turbopack` 플래그는 사용하지 않습니다.
 - `next lint`는 Next.js 16에서 제거되었으므로 ESLint CLI를 직접 사용합니다.
+- Vitest 5가 `@types/node` `^22` 이상을 요구하므로 `@types/node`는 `^22`를 사용합니다.
 
 ---
 
@@ -40,6 +42,8 @@ npm run dev     # 개발 서버 실행 (http://localhost:3000)
 npm run build   # 프로덕션 빌드
 npm run start   # 빌드 결과 실행
 npm run lint    # eslint . 실행
+npm run test    # Vitest 감시 모드
+npm run test:run # Vitest 1회 실행
 ```
 
 타입 검사는 `npx tsc --noEmit`으로 수행합니다.
@@ -103,6 +107,18 @@ src/
 └── shared/
     ├── model/
     └── ui/
+
+tests/
+├── fixtures/          # 테스트용 데이터 (feature별 픽스처)
+└── unit/              # Vitest 단위, 컴포넌트 테스트 (src/와 같은 경로로 미러링)
+    ├── features/
+    │   ├── auth/ blog/ feed/ me/ platform/   # components/, container/, model/
+    └── shared/
+        ├── model/
+        └── ui/
+
+vitest.config.mts      # Vitest 설정
+vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더링 정리)
 ```
 
 경로 별칭은 `@/*` → `./src/*` 입니다.
@@ -220,6 +236,24 @@ src/
 
 공통 UI는 `shared/ui`에 둡니다.
 
+공용 UI 컴포넌트는 다음과 같습니다. 같은 모양이 두 곳 이상 반복되면 개별 화면에서 클래스를 다시 쓰지 않고 이 컴포넌트를 사용합니다.
+
+| 컴포넌트 | 용도 | 주요 props |
+|---|---|---|
+| `Card` | 테두리와 배경이 있는 기본 카드 | `as`(div, section, article), `tone`(default, strong), `padding`(sm, md) |
+| `Chip` | 짧은 상태나 분류를 보여주는 알약 | `size`(sm, md), `tone`(muted, surface) |
+| `IconBadge` | 아이콘이나 이니셜을 담는 원형 배지 | `as`, `size`(xs~xl), `tone`(primary, soft, strong, surface) |
+| `SegmentedTabs` | 같은 영역 안의 보기 전환 탭 | `items`, `activeId`, `onChange`, `ariaLabel`, `size` |
+| `ListRow` | 좌측, 본문, 우측으로 이루어진 목록 행 | `leading`, `trailing`, `href`/`onClick`(링크/버튼), `tone`, `padding`, `isDimmed` |
+| `Button` | 텍스트 버튼 | `variant`(primary, secondary, outline-danger), `size`(md, lg) |
+| `IconButton` | 아이콘만 있는 정사각 버튼 | `ariaLabel`(필수), `size`(sm~lg), `tone`(muted, danger, ghost) |
+| `Modal` | `document.body` 포털 모달 | `labelledBy`, `onClose`, `title`, `placement`, `overlay`, `size`, `padding` |
+
+- `ListRow`는 `href`가 있으면 링크로, `onClick`이 있으면 버튼으로, 둘 다 없으면 정적 행으로 렌더링한다.
+- `strong` 톤의 `ListRow`는 테두리와 hover 효과가 없다.
+- `Modal`은 배경을 누르면 `onClose`를 호출하고 패널 안쪽 클릭은 막는다. `title`을 주면 제목과 닫기 버튼 헤더를 렌더링한다.
+- `feed`의 대상 종류별 라벨, 아이콘, 색상 클래스는 `features/feed/model/feedTargetView.ts`의 함수를 사용한다.
+
 공통 화면 레이아웃은 다음 기준을 따릅니다.
 
 - 서비스 화면의 중앙 콘텐츠는 `shared/ui/AppContent.tsx`를 사용한다.
@@ -279,6 +313,18 @@ src/
 - 안내/설명 문구(description 등)는 권유형(`~해요/~해보세요`)으로 쓴다.
 - 시스템 알림, 이벤트 로그 문구(알림 제목, `recentAlerts` 등)는 완료형(`~했어요/~됐어요`)으로 쓴다.
 - 댓글처럼 사용자가 작성한 대화체 텍스트는 이 규칙 적용 대상에서 제외한다.
+
+**테스트**
+
+- 테스트 코드는 `tests/unit/` 아래에 `src/`와 같은 경로로 두고, 파일명은 `{대상파일명}.test.ts(x)`로 한다. (예: `src/shared/ui/Card.tsx` → `tests/unit/shared/ui/Card.test.tsx`)
+- 테스트에서는 `@/shared/ui/Card`처럼 경로 별칭으로 import한다.
+- 여러 테스트가 같이 쓰는 테스트용 데이터는 `tests/fixtures/`에 둔다. 컨테이너 테스트만 실제 임시 데이터를 쓰고, 컴포넌트 테스트는 픽스처를 쓴다.
+- `globals`를 켜지 않으므로 `describe`, `it`, `expect`, `vi`는 `vitest`에서 import한다.
+- 컴포넌트 테스트는 `getByRole`, `getByLabelText` 같은 접근성 기준 쿼리를 우선 사용하고, 사용자 이벤트는 `@testing-library/user-event`로 시뮬레이션한다.
+- 열거형 값(크기, 톤, variant 등)은 `it.each`로 한 번에 검증한다.
+- jsdom에 없는 API(`scrollBy`, `URL.createObjectURL`)는 해당 테스트 파일에서만 `vi.fn()`으로 대체한다.
+- 라우터 없이 `next/link`를 클릭하면 jsdom이 페이지 이동을 시도하므로, 링크 클릭이 필요한 테스트는 파일 안에서 `vi.mock('next/link', ...)`로 대체한다.
+- 현재 Playwright(E2E)와 MSW(API 모킹 통합 테스트)는 도입하지 않았다. API 연동 후 추가한다.
 
 ---
 

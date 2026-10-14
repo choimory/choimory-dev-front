@@ -8,6 +8,10 @@ import { BLOG_POSTS_FIXTURE, BLOG_TABS_FIXTURE } from '../../../../fixtures/blog
 
 const VIEW_MODEL: BlogViewModel = { authStatus: 'guest', tabs: BLOG_TABS_FIXTURE, posts: BLOG_POSTS_FIXTURE };
 
+/**
+ * BlogMenuView 테스트
+ * blog 메뉴 화면이 popular, following 메뉴에 맞는 소개와 섹션을 보여주고, 메뉴별 하단 네비게이션 활성 상태와 인증별 상단바를 처리하는지 확인합니다.
+ */
 describe('BlogMenuView', () => {
   it('popular 메뉴는 "실시간 순위" 소개와 인기 랭킹 섹션을 보여준다', () => {
     render(<BlogMenuView menuKind="popular" viewModel={VIEW_MODEL} />);
@@ -40,6 +44,7 @@ describe('BlogMenuView', () => {
     expect(screen.getByRole('link', { name: '인기' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: '팔로잉' })).not.toHaveAttribute('aria-current');
 
+    // following 메뉴로 다시 렌더링하면 활성 탭이 팔로잉으로 바뀐다
     rerender(<BlogMenuView menuKind="following" viewModel={VIEW_MODEL} />);
 
     expect(screen.getByRole('link', { name: '팔로잉', description: '' })).toHaveAttribute('aria-current', 'page');
@@ -51,6 +56,7 @@ describe('BlogMenuView', () => {
 
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
 
+    // member 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<BlogMenuView menuKind="popular" viewModel={{ ...VIEW_MODEL, authStatus: 'member' }} />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

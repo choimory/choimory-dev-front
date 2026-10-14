@@ -8,6 +8,10 @@ import { BLOG_POSTS_FIXTURE } from '../../../../fixtures/blog';
 
 const [OWN_POST, OTHER_POST] = BLOG_POSTS_FIXTURE;
 
+/**
+ * BlogPostDetailView 테스트
+ * 게시글 상세 화면의 작성자, 본문, 이미지, 태그 링크, 내 글에만 있는 수정 버튼, 댓글과 대댓글, "답글 달기" 입력창 열고 닫기를 확인합니다.
+ */
 describe('BlogPostDetailView', () => {
   it('페이지 소개 제목과 게시글 작성자, 부가 정보를 보여준다', () => {
     render(<BlogPostDetailView isLoggedIn post={OWN_POST} />);
@@ -29,6 +33,7 @@ describe('BlogPostDetailView', () => {
 
     expect(screen.getByLabelText('게시글 이미지')).toBeInTheDocument();
 
+    // 이미지가 없는 게시글로 다시 렌더링한다
     rerender(<BlogPostDetailView isLoggedIn post={OTHER_POST} />);
 
     expect(screen.queryByLabelText('게시글 이미지')).not.toBeInTheDocument();
@@ -48,6 +53,7 @@ describe('BlogPostDetailView', () => {
 
     expect(screen.getByRole('button', { name: '수정' })).toBeInTheDocument();
 
+    // 다른 사람의 글로 다시 렌더링하면 수정 버튼이 사라진다
     rerender(<BlogPostDetailView isLoggedIn post={OTHER_POST} />);
 
     expect(screen.queryByRole('button', { name: '수정' })).not.toBeInTheDocument();
@@ -87,6 +93,7 @@ describe('BlogPostDetailView', () => {
 
     const [firstReply, secondReply] = screen.getAllByRole('button', { name: '답글 달기' });
 
+    // 첫 댓글의 답글 달기를 누르면 그 댓글에만 입력창이 열린다
     await userEvent.click(firstReply);
     expect(screen.getByPlaceholderText('@mory.dev 답글을 남겨보세요')).toBeInTheDocument();
     expect(screen.queryByPlaceholderText('@jin.note 답글을 남겨보세요')).not.toBeInTheDocument();
@@ -94,6 +101,7 @@ describe('BlogPostDetailView', () => {
     await userEvent.click(firstReply);
     expect(screen.queryByPlaceholderText('@mory.dev 답글을 남겨보세요')).not.toBeInTheDocument();
 
+    // 두 번째 댓글의 답글 달기를 누르면 두 번째 댓글에 입력창이 열린다
     await userEvent.click(secondReply);
     expect(screen.getByPlaceholderText('@jin.note 답글을 남겨보세요')).toBeInTheDocument();
   });
@@ -103,7 +111,9 @@ describe('BlogPostDetailView', () => {
 
     const [firstReply, secondReply] = screen.getAllByRole('button', { name: '답글 달기' });
 
+    // 첫 댓글의 입력창을 연 상태에서
     await userEvent.click(firstReply);
+    // 다른 댓글의 답글 달기를 누르면 첫 입력창은 닫힌다
     await userEvent.click(secondReply);
 
     expect(screen.queryByPlaceholderText('@mory.dev 답글을 남겨보세요')).not.toBeInTheDocument();
@@ -116,6 +126,7 @@ describe('BlogPostDetailView', () => {
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'blog 홈으로 돌아가기' })).toHaveAttribute('href', '/blog');
 
+    // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<BlogPostDetailView isLoggedIn post={OWN_POST} />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

@@ -9,6 +9,10 @@ import { BLOG_POSTS_FIXTURE, BLOG_TABS_FIXTURE } from '../../../../fixtures/blog
 const GUEST_VIEW_MODEL: BlogViewModel = { authStatus: 'guest', tabs: BLOG_TABS_FIXTURE, posts: BLOG_POSTS_FIXTURE };
 const MEMBER_VIEW_MODEL: BlogViewModel = { ...GUEST_VIEW_MODEL, authStatus: 'member' };
 
+/**
+ * BlogView 테스트
+ * blog 홈 화면이 비회원은 소개 섹션, 회원은 피드 섹션을 보여주는지와 상단바, 하단 네비게이션 상태를 확인합니다.
+ */
 describe('BlogView', () => {
   it('비회원이면 비회원 섹션과 로그인 링크를 보여준다', () => {
     render(<BlogView viewModel={GUEST_VIEW_MODEL} />);

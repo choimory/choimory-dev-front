@@ -4,6 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { StatCard } from '@/shared/ui/StatCard';
 
+/**
+ * StatCard 테스트
+ * 통계 카드가 onClick 유무에 따라 정적 카드(article)와 버튼으로 나뉘고, size별 글자 크기가 달라지는지 확인합니다.
+ */
 describe('StatCard', () => {
   it('onClick이 없으면 정적 카드(article)로 렌더링한다', () => {
     render(<StatCard label="팔로워" value="128" />);
@@ -17,8 +21,10 @@ describe('StatCard', () => {
     const onClick = vi.fn();
     render(<StatCard label="팔로워" value="128" onClick={onClick} />);
 
+    // 버튼을 클릭한다
     await userEvent.click(screen.getByRole('button', { name: /팔로워/ }));
 
+    // 클릭 핸들러가 한 번 호출됐는지 확인한다
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
@@ -27,6 +33,7 @@ describe('StatCard', () => {
 
     expect(screen.getByText('값')).toHaveClass('text-xl');
 
+    // sm 크기로 다시 렌더링하면 값 글자가 작아진다
     rerender(<StatCard label="라벨" value="값" size="sm" />);
 
     expect(screen.getByText('값')).toHaveClass('text-sm');

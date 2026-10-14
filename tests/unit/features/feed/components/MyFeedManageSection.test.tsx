@@ -6,6 +6,10 @@ import { MyFeedManageSection } from '@/features/feed/components/MyFeedManageSect
 
 import { FEED_TARGETS_FIXTURE, FEED_VIEW_MODEL_FIXTURE } from '../../../../fixtures/feed';
 
+/**
+ * MyFeedManageSection 테스트
+ * 내 피드 관리의 프로필, 요약 카운팅, 설정 링크 목록, 관찰 대상 등록 모달(열기, 닫기 버튼, 배경 클릭)을 확인합니다.
+ */
 describe('MyFeedManageSection', () => {
   it('페이지 소개와 프로필 카드를 보여준다', () => {
     render(<MyFeedManageSection summaries={FEED_VIEW_MODEL_FIXTURE.summaries} targets={FEED_TARGETS_FIXTURE} />);
@@ -43,6 +47,7 @@ describe('MyFeedManageSection', () => {
   it('관찰 대상 추가 행을 누르면 등록 폼이 담긴 모달이 열린다', async () => {
     render(<MyFeedManageSection summaries={[]} targets={[]} />);
 
+    // 관찰 대상 추가 행을 클릭해 모달을 연다
     await userEvent.click(screen.getByRole('button', { name: '관찰할 아이템, 스트리머, 아티스트를 등록하세요' }));
 
     const dialog = screen.getByRole('dialog', { name: '관찰 대상 등록' });
@@ -54,7 +59,9 @@ describe('MyFeedManageSection', () => {
   it('모달의 닫기 버튼으로 모달이 닫힌다', async () => {
     render(<MyFeedManageSection summaries={[]} targets={[]} />);
 
+    // 관찰 대상 추가 행을 클릭해 모달을 연 뒤
     await userEvent.click(screen.getByRole('button', { name: '관찰할 아이템, 스트리머, 아티스트를 등록하세요' }));
+    // 닫기 버튼을 누르면 모달이 닫힌다
     await userEvent.click(screen.getByRole('button', { name: '관찰 대상 등록 닫기' }));
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -63,7 +70,9 @@ describe('MyFeedManageSection', () => {
   it('모달 배경을 누르면 모달이 닫힌다', async () => {
     render(<MyFeedManageSection summaries={[]} targets={[]} />);
 
+    // 관찰 대상 추가 행을 클릭해 모달을 연 뒤
     await userEvent.click(screen.getByRole('button', { name: '관찰할 아이템, 스트리머, 아티스트를 등록하세요' }));
+    // 배경(패널의 부모)을 누르면 모달이 닫힌다
     await userEvent.click(screen.getByRole('dialog').parentElement as HTMLElement);
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();

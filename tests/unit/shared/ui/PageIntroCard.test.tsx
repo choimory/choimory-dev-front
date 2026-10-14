@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 
+/**
+ * PageIntroCard 테스트
+ * 화면 최상단 소개 영역이 로고와 경로만 보여주는 경우와 제목과 설명까지 보여주는 경우를 확인합니다.
+ */
 describe('PageIntroCard', () => {
   it('로고와 도메인 경로만 있으면 제목과 설명은 표시하지 않는다', () => {
     render(<PageIntroCard domainPath="blog / me" />);

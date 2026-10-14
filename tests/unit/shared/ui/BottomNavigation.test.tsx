@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import { BottomNavigation, type BottomNavigationItem } from '@/shared/ui/BottomNavigation';
 
+/** 테스트용 하단 네비게이션 항목 4개 (공지사항이 활성 상태) */
 const ITEMS: BottomNavigationItem[] = [
   { label: '홈', href: '/', iconName: 'home' },
   { label: '공지사항', href: '/notice', iconName: 'megaphone', isActive: true },
@@ -10,6 +11,10 @@ const ITEMS: BottomNavigationItem[] = [
   { label: '내 정보', href: '/me', iconName: 'user' },
 ];
 
+/**
+ * BottomNavigation 테스트
+ * 하단 네비게이션의 링크 목록, 활성 항목(aria-current), 기본 폭과 narrow 폭을 확인합니다.
+ */
 describe('BottomNavigation', () => {
   it('항목마다 라벨과 경로를 가진 링크를 렌더링한다', () => {
     render(<BottomNavigation items={ITEMS} />);
@@ -32,6 +37,7 @@ describe('BottomNavigation', () => {
 
     expect(screen.getByRole('navigation')).toHaveClass('max-w-[768px]');
 
+    // size를 narrow로 바꿔 다시 렌더링한다
     rerender(<BottomNavigation items={ITEMS} size="narrow" />);
 
     expect(screen.getByRole('navigation')).toHaveClass('max-w-[560px]');

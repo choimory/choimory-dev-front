@@ -4,6 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ListRow } from '@/shared/ui/ListRow';
 
+/**
+ * ListRow 테스트
+ * 목록 행이 href/onClick 유무에 따라 링크, 버튼, 정적 행으로 렌더링되는지와 슬롯(leading, trailing)별 열 구성, 톤, 여백, 흐림 표시를 확인합니다.
+ */
 describe('ListRow', () => {
   it('href가 있으면 링크로 렌더링하고 hover 클래스를 붙인다', () => {
     render(<ListRow href="/services">서비스</ListRow>);
@@ -19,6 +23,7 @@ describe('ListRow', () => {
     render(<ListRow onClick={onClick}>설정</ListRow>);
 
     const button = screen.getByRole('button', { name: '설정' });
+    // 행을 클릭한다
     await userEvent.click(button);
 
     expect(button).toHaveClass('text-left', 'hover:bg-surface-strong');
@@ -39,12 +44,15 @@ describe('ListRow', () => {
 
     expect(screen.getByRole('article')).not.toHaveClass('grid-cols-[auto_minmax(0,1fr)_auto]');
 
+    // leading만 있으면 2열(좌측, 본문)이다
     rerender(<ListRow as="article" ariaLabel="행" leading={<i>L</i>}>본문</ListRow>);
     expect(screen.getByRole('article')).toHaveClass('grid-cols-[auto_minmax(0,1fr)]');
 
+    // trailing만 있으면 2열(본문, 우측)이다
     rerender(<ListRow as="article" ariaLabel="행" trailing={<i>T</i>}>본문</ListRow>);
     expect(screen.getByRole('article')).toHaveClass('grid-cols-[minmax(0,1fr)_auto]');
 
+    // 둘 다 있으면 3열(좌측, 본문, 우측)이다
     rerender(<ListRow as="article" ariaLabel="행" leading={<i>L</i>} trailing={<i>T</i>}>본문</ListRow>);
     expect(screen.getByRole('article')).toHaveClass('grid-cols-[auto_minmax(0,1fr)_auto]');
   });

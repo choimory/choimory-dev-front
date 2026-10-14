@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 
+/**
+ * BrandLogo 테스트
+ * 접근성 라벨과 로고 텍스트, 크기와 타자기 애니메이션 옵션(클래스, CSS 변수)을 확인합니다.
+ */
 describe('BrandLogo', () => {
   it('접근성 라벨과 로고 텍스트를 보여준다', () => {
     render(<BrandLogo />);

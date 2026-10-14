@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { BlogMeSettingsContainer } from '@/features/blog/container/BlogMeSettingsContainer';
 
+/**
+ * BlogMeSettingsContainer 테스트
+ * 컨테이너가 내 blog 설정 화면을 보여주고 authStatus가 member일 때만 로그인 상태로 전달하는지 확인합니다.
+ */
 describe('BlogMeSettingsContainer', () => {
   it('내 blog 설정 화면을 보여준다', () => {
     render(<BlogMeSettingsContainer authStatus="member" />);
@@ -16,6 +20,7 @@ describe('BlogMeSettingsContainer', () => {
 
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
 
+    // member 상태로 다시 렌더링한다
     rerender(<BlogMeSettingsContainer authStatus="member" />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

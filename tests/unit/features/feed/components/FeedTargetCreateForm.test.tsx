@@ -4,6 +4,10 @@ import { describe, expect, it } from 'vitest';
 
 import { FeedTargetCreateForm } from '@/features/feed/components/FeedTargetCreateForm';
 
+/**
+ * FeedTargetCreateForm 테스트
+ * 관찰 대상 등록 폼의 종류 탭(아이템, 스트리머, 아티스트), 종류별 입력 항목과 알림 토글, 등록 버튼 상태 전환을 확인합니다.
+ */
 describe('FeedTargetCreateForm', () => {
   it('제목과 안내 문구, 종류 탭 3종을 보여주고 아이템 탭이 기본 선택이다', () => {
     render(<FeedTargetCreateForm />);
@@ -17,6 +21,7 @@ describe('FeedTargetCreateForm', () => {
     render(<FeedTargetCreateForm />);
 
     for (const tabName of ['아이템', '스트리머', '아티스트']) {
+      // 각 종류 탭을 차례로 클릭하며
       await userEvent.click(screen.getByRole('tab', { name: tabName }));
 
       ['대상 이름', '설명', '원본 링크', '알림 주기'].forEach((label) => expect(screen.getByLabelText(label)).toBeInTheDocument());
@@ -36,6 +41,7 @@ describe('FeedTargetCreateForm', () => {
   it('스트리머 탭에는 채널 입력과 알림 토글 2개를 추가로 보여준다', async () => {
     render(<FeedTargetCreateForm />);
 
+    // 스트리머 탭을 클릭한다
     await userEvent.click(screen.getByRole('tab', { name: '스트리머' }));
 
     expect(screen.getByLabelText('대상 이름')).toHaveAttribute('placeholder', 'mory_live');
@@ -49,6 +55,7 @@ describe('FeedTargetCreateForm', () => {
   it('아티스트 탭에는 최근 발매곡 입력과 알림 토글 2개를 추가로 보여준다', async () => {
     render(<FeedTargetCreateForm />);
 
+    // 아티스트 탭을 클릭한다
     await userEvent.click(screen.getByRole('tab', { name: '아티스트' }));
 
     expect(screen.getByLabelText('대상 이름')).toHaveAttribute('placeholder', 'artist.nova');
@@ -68,6 +75,7 @@ describe('FeedTargetCreateForm', () => {
   it('등록 버튼을 누르면 "준비 완료" 상태로 바뀐다', async () => {
     render(<FeedTargetCreateForm />);
 
+    // 등록 버튼을 클릭한다
     await userEvent.click(screen.getByRole('button', { name: '등록' }));
 
     expect(screen.getByRole('button', { name: '준비 완료' })).toBeInTheDocument();
@@ -77,7 +85,9 @@ describe('FeedTargetCreateForm', () => {
   it('탭을 바꾸면 완료 상태가 초기화된다', async () => {
     render(<FeedTargetCreateForm />);
 
+    // 등록 버튼을 눌러 완료 상태로 만든 뒤
     await userEvent.click(screen.getByRole('button', { name: '등록' }));
+    // 탭을 바꾸면 완료 상태가 초기화된다
     await userEvent.click(screen.getByRole('tab', { name: '스트리머' }));
 
     expect(screen.getByRole('button', { name: '등록' })).toBeInTheDocument();

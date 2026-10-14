@@ -16,6 +16,10 @@ function renderCarousel(activeAlbumIndex = 0) {
   return { onMoveAlbum, onOpenAlbum };
 }
 
+/**
+ * AlbumCarousel3d 테스트
+ * 앨범 캐러셀의 제목과 이전, 다음 버튼, 앨범 버튼, 이동과 열기 핸들러 호출, 가시성과 겹침 순서를 확인합니다.
+ */
 describe('AlbumCarousel3d', () => {
   it('"최근 앨범" 제목과 이전, 다음 버튼을 보여준다', () => {
     renderCarousel();
@@ -36,9 +40,11 @@ describe('AlbumCarousel3d', () => {
   it('이전, 다음 버튼은 방향과 함께 onMoveAlbum을 호출한다', async () => {
     const { onMoveAlbum } = renderCarousel();
 
+    // 이전 버튼을 누르면 -1 방향으로 호출된다
     await userEvent.click(screen.getByRole('button', { name: '이전 앨범' }));
     expect(onMoveAlbum).toHaveBeenLastCalledWith(-1);
 
+    // 다음 버튼을 누르면 1 방향으로 호출된다
     await userEvent.click(screen.getByRole('button', { name: '다음 앨범' }));
     expect(onMoveAlbum).toHaveBeenLastCalledWith(1);
   });
@@ -46,6 +52,7 @@ describe('AlbumCarousel3d', () => {
   it('앨범을 누르면 앨범 id와 함께 onOpenAlbum을 호출한다', async () => {
     const { onOpenAlbum } = renderCarousel();
 
+    // 두 번째 앨범을 클릭한다
     await userEvent.click(screen.getByRole('button', { name: /두번째 앨범/ }));
 
     expect(onOpenAlbum).toHaveBeenCalledWith('album-2');

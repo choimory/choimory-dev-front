@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { SectionHeader } from '@/shared/ui/SectionHeader';
 
+/**
+ * SectionHeader 테스트
+ * 섹션 헤더의 도메인 경로, 제목, headingId 연결과 우측 액션 링크 유무를 확인합니다.
+ */
 describe('SectionHeader', () => {
   it('도메인 경로와 제목을 보여주고 headingId를 연결한다', () => {
     render(<SectionHeader domainPath="blog / setting" title="설정" headingId="setting-title" />);

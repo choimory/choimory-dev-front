@@ -9,6 +9,10 @@ const ICON_NAMES: IconName[] = [
   'monitor', 'note', 'plus', 'search', 'share', 'star', 'tag', 'trophy', 'user', 'users', 'x',
 ];
 
+/**
+ * Icon 테스트
+ * IconName 타입의 모든 아이콘이 svg로 렌더링되는지, 기본 크기와 className 교체가 동작하는지 확인합니다.
+ */
 describe('Icon', () => {
   it.each(ICON_NAMES)('%s 아이콘은 svg를 렌더링한다', (name) => {
     const { container } = render(<Icon name={name} />);
@@ -25,6 +29,7 @@ describe('Icon', () => {
 
     expect(container.querySelector('svg')).toHaveClass('size-5');
 
+    // className을 넘겨 다시 렌더링하면 기본 크기 대신 전달한 클래스가 적용된다
     rerender(<Icon name="home" className="size-4 rotate-90" />);
 
     expect(container.querySelector('svg')).toHaveClass('size-4', 'rotate-90');

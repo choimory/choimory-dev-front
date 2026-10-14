@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { AppContent } from '@/shared/ui/AppContent';
 
+/**
+ * AppContent 테스트
+ * 서비스 화면 공통 중앙 영역(main)이 기본 wide 폭과 narrow variant, 추가 className을 반영하는지 확인합니다.
+ */
 describe('AppContent', () => {
   it('기본값은 wide 폭의 main 영역이다', () => {
     render(<AppContent>본문</AppContent>);

@@ -18,6 +18,10 @@ function renderModal(selectedTrack = undefined as (typeof ALBUM.tracks)[number] 
   return { onClose, onSelectTrack };
 }
 
+/**
+ * AlbumDetailModal 테스트
+ * 앨범 상세 모달의 앨범 정보와 트랙 목록, 트랙 선택 시 트랙 상세(크레딧, 가사), 돌아가기, 닫기, 배경 클릭을 확인합니다.
+ */
 describe('AlbumDetailModal', () => {
   it('앨범 제목을 이름으로 가진 dialog와 발매일을 보여준다', () => {
     renderModal();
@@ -40,6 +44,7 @@ describe('AlbumDetailModal', () => {
   it('트랙을 누르면 트랙 id와 함께 onSelectTrack을 호출한다', async () => {
     const { onSelectTrack } = renderModal();
 
+    // 두 번째 트랙을 클릭한다
     await userEvent.click(screen.getByRole('button', { name: /첫번째 트랙2/ }));
 
     expect(onSelectTrack).toHaveBeenCalledWith('album-1-track-2');
@@ -48,6 +53,7 @@ describe('AlbumDetailModal', () => {
   it('닫기 버튼으로 onClose를 호출한다', async () => {
     const { onClose } = renderModal();
 
+    // 닫기 버튼을 클릭한다
     await userEvent.click(screen.getByRole('button', { name: '앨범 상세 닫기' }));
 
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -70,6 +76,7 @@ describe('AlbumDetailModal', () => {
 
     expect(screen.queryByText('album')).not.toBeInTheDocument();
 
+    // 돌아가기 버튼을 클릭한다
     await userEvent.click(screen.getByRole('button', { name: '앨범 정보로 돌아가기' }));
 
     expect(onSelectTrack).toHaveBeenCalledWith(null);
@@ -78,6 +85,7 @@ describe('AlbumDetailModal', () => {
   it('배경을 누르면 onClose를 호출한다', async () => {
     const { onClose } = renderModal();
 
+    // 배경(패널의 부모)을 클릭한다
     await userEvent.click(screen.getByRole('dialog').parentElement as HTMLElement);
 
     expect(onClose).toHaveBeenCalledTimes(1);

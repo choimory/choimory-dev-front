@@ -4,6 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Button } from '@/shared/ui/Button';
 
+/**
+ * Button 테스트
+ * 텍스트 버튼의 기본값(primary, md, type=button), 클릭, button 속성 전달, variant 3종과 lg 크기를 확인합니다.
+ */
 describe('Button', () => {
   it('기본값은 primary, md 크기, type=button이다', () => {
     render(<Button>저장</Button>);
@@ -18,8 +22,10 @@ describe('Button', () => {
     const onClick = vi.fn();
     render(<Button onClick={onClick}>저장</Button>);
 
+    // 버튼을 클릭한다
     await userEvent.click(screen.getByRole('button', { name: '저장' }));
 
+    // 클릭 핸들러가 한 번 호출됐는지 확인한다
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 

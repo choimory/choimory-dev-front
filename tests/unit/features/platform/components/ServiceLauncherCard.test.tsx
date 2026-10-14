@@ -6,6 +6,11 @@ import { ServiceLauncherCard } from '@/features/platform/components/ServiceLaunc
 
 import { PLATFORM_SERVICES_FIXTURE } from '../../../../fixtures/platformServices';
 
+/**
+ * ServiceLauncherCard 테스트
+ * 서비스 런처의 서비스 목록, 제공 중(링크)과 준비 중(비활성 버튼, 예정 표시) 구분, 이전과 다음 버튼의 스크롤 동작을 확인합니다.
+ * jsdom에는 Element.scrollBy가 없어서 테스트마다 vi.fn()으로 대체합니다.
+ */
 describe('ServiceLauncherCard', () => {
   const scrollBy = vi.fn();
 
@@ -55,9 +60,11 @@ describe('ServiceLauncherCard', () => {
   it('이전, 다음 버튼은 런처를 좌우로 부드럽게 스크롤한다', async () => {
     render(<ServiceLauncherCard services={PLATFORM_SERVICES_FIXTURE} />);
 
+    // 다음 버튼을 누르면 오른쪽으로 240px 스크롤한다
     await userEvent.click(screen.getByRole('button', { name: '다음 서비스 보기' }));
     expect(scrollBy).toHaveBeenLastCalledWith({ left: 240, behavior: 'smooth' });
 
+    // 이전 버튼을 누르면 왼쪽으로 240px 스크롤한다
     await userEvent.click(screen.getByRole('button', { name: '이전 서비스 보기' }));
     expect(scrollBy).toHaveBeenLastCalledWith({ left: -240, behavior: 'smooth' });
   });

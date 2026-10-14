@@ -22,6 +22,10 @@ const DANGER_ITEM: MeSettingItem = {
   tone: 'danger',
 };
 
+/**
+ * MeSettingCard 테스트
+ * 설정 항목 카드의 제목과 설명, 일반 항목과 위험 항목의 라벨과 색상, 클릭 시 항목과 함께 onSelect가 호출되는지 확인합니다.
+ */
 describe('MeSettingCard', () => {
   it('설정 항목의 제목과 설명을 보여준다', () => {
     render(<MeSettingCard item={NORMAL_ITEM} onSelect={() => {}} />);
@@ -46,8 +50,10 @@ describe('MeSettingCard', () => {
     const onSelect = vi.fn();
     render(<MeSettingCard item={NORMAL_ITEM} onSelect={onSelect} />);
 
+    // 카드를 클릭한다
     await userEvent.click(screen.getByRole('button'));
 
+    // 선택한 항목과 함께 onSelect가 한 번 호출됐는지 확인한다
     expect(onSelect).toHaveBeenCalledTimes(1);
     expect(onSelect).toHaveBeenCalledWith(NORMAL_ITEM);
   });

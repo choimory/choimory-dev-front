@@ -5,6 +5,10 @@ import { PlatformServicesView } from '@/features/platform/components/PlatformSer
 
 import { PLATFORM_SERVICES_FIXTURE } from '../../../../fixtures/platformServices';
 
+/**
+ * PlatformServicesView 테스트
+ * 서비스 메뉴 화면의 서비스 목록(제공 중은 링크, 준비 중은 흐린 행), 빈 목록, 상단바와 하단 네비게이션 상태를 확인합니다.
+ */
 describe('PlatformServicesView', () => {
   it('페이지 소개와 서비스 목록 영역을 보여준다', () => {
     render(<PlatformServicesView isLoggedIn={false} services={PLATFORM_SERVICES_FIXTURE} />);
@@ -45,6 +49,7 @@ describe('PlatformServicesView', () => {
 
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
 
+    // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<PlatformServicesView isLoggedIn services={[]} />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

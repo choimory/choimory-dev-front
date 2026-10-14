@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import { getTargetIconName, getTargetToneClassName, getTargetTypeLabel } from '@/features/feed/model/feedTargetView';
 
+/**
+ * feedTargetView 테스트
+ * 관찰 대상 종류(item, streamer, artist)별 라벨, 아이콘 이름, 아이콘 배지 색상 클래스를 반환하는 함수를 확인합니다.
+ */
 describe('feedTargetView', () => {
   describe('getTargetTypeLabel', () => {
     it.each([

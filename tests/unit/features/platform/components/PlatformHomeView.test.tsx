@@ -9,6 +9,10 @@ import { PLATFORM_SERVICES_FIXTURE } from '../../../../fixtures/platformServices
 const GUEST_VIEW_MODEL = { ...platformHomeViewModel, authStatus: 'guest' as const, services: PLATFORM_SERVICES_FIXTURE };
 const MEMBER_VIEW_MODEL = { ...GUEST_VIEW_MODEL, authStatus: 'member' as const };
 
+/**
+ * PlatformHomeView 테스트
+ * 플랫폼 홈의 로고, 검색바, 서비스 런처와 비회원/회원별 섹션 전환, 상단바와 하단 네비게이션 상태를 확인합니다.
+ */
 describe('PlatformHomeView', () => {
   it('로고 제목, 검색바, 서비스 런처를 보여준다', () => {
     render(<PlatformHomeView viewModel={GUEST_VIEW_MODEL} />);

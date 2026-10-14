@@ -5,6 +5,10 @@ import { BlogMemberFeedSection } from '@/features/blog/components/BlogMemberFeed
 
 import { BLOG_POSTS_FIXTURE, BLOG_TABS_FIXTURE } from '../../../../fixtures/blog';
 
+/**
+ * BlogMemberFeedSection 테스트
+ * 회원용 blog 섹션의 글쓰기 버튼, 피드 필터 탭과 선택 상태, 글 작성 행, 게시글 카드 목록을 확인합니다.
+ */
 describe('BlogMemberFeedSection', () => {
   it('blog 제목과 글쓰기 버튼을 보여준다', () => {
     render(<BlogMemberFeedSection tabs={BLOG_TABS_FIXTURE} posts={BLOG_POSTS_FIXTURE} />);

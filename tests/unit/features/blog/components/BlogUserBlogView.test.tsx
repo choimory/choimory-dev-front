@@ -6,6 +6,10 @@ import { BlogUserBlogView } from '@/features/blog/components/BlogUserBlogView';
 
 import { BLOG_POSTS_FIXTURE } from '../../../../fixtures/blog';
 
+/**
+ * BlogUserBlogView 테스트
+ * 유저 blog 화면의 경로와 프로필(닉네임, 대문자 이니셜), 포스트 목록, 팔로워와 팔로잉 모달 열기와 닫기, 로그인 여부를 확인합니다.
+ */
 describe('BlogUserBlogView', () => {
   it('페이지 소개에 유저 닉네임 경로를, 프로필에 닉네임과 대문자 이니셜을 보여준다', () => {
     render(<BlogUserBlogView isLoggedIn={false} nickname="jin.note" posts={BLOG_POSTS_FIXTURE} />);
@@ -46,12 +50,15 @@ describe('BlogUserBlogView', () => {
   it('팔로워 카드를 누르면 팔로워 모달이, 팔로잉 카드를 누르면 팔로잉 모달이 열린다', async () => {
     render(<BlogUserBlogView isLoggedIn={false} nickname="jin.note" posts={BLOG_POSTS_FIXTURE} />);
 
+    // 팔로워 카드를 눌러 팔로워 모달을 연다
     await userEvent.click(screen.getByRole('button', { name: /팔로워/ }));
     expect(screen.getByRole('dialog', { name: '팔로워' })).toBeInTheDocument();
 
+    // 모달을 닫고
     await userEvent.click(screen.getByRole('button', { name: '닫기' }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
+    // 팔로잉 카드를 눌러 팔로잉 모달을 연다
     await userEvent.click(screen.getByRole('button', { name: /팔로잉/ }));
     expect(screen.getByRole('dialog', { name: '팔로잉' })).toBeInTheDocument();
   });
@@ -62,6 +69,7 @@ describe('BlogUserBlogView', () => {
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'blog 홈으로 돌아가기' })).toHaveAttribute('href', '/blog');
 
+    // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<BlogUserBlogView isLoggedIn nickname="jin.note" posts={[]} />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

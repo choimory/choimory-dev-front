@@ -12,6 +12,10 @@ const ITEM: BlogSettingItem = {
   options: ['전체 공개', '팔로워 공개', '비공개'],
 };
 
+/**
+ * BlogSettingEditModal 테스트
+ * 설정 변경 모달의 제목과 설명, 옵션 목록과 현재값 강조, 옵션 선택 시 강조 이동, 취소와 저장과 닫기 동작을 확인합니다.
+ */
 describe('BlogSettingEditModal', () => {
   it('설정 제목을 가진 dialog와 설명을 보여준다', () => {
     render(<BlogSettingEditModal item={ITEM} onClose={() => {}} />);
@@ -31,6 +35,7 @@ describe('BlogSettingEditModal', () => {
   it('다른 옵션을 누르면 강조가 이동한다', async () => {
     render(<BlogSettingEditModal item={ITEM} onClose={() => {}} />);
 
+    // 다른 옵션(비공개)을 선택한다
     await userEvent.click(screen.getByRole('button', { name: '비공개' }));
 
     expect(screen.getByRole('button', { name: '비공개' })).toHaveClass('border-primary', 'bg-primary-soft');
@@ -41,6 +46,7 @@ describe('BlogSettingEditModal', () => {
     const onClose = vi.fn();
     render(<BlogSettingEditModal item={ITEM} onClose={onClose} />);
 
+    // 취소, 저장, 닫기 버튼을 차례로 누른다
     await userEvent.click(screen.getByRole('button', { name: '취소' }));
     await userEvent.click(screen.getByRole('button', { name: '저장' }));
     await userEvent.click(screen.getByRole('button', { name: '닫기' }));

@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { Card } from '@/shared/ui/Card';
 
+/**
+ * Card 테스트
+ * 기본 카드의 기본값(div, bg-surface, p-4)과 as, tone, padding, className 반영을 확인합니다.
+ */
 describe('Card', () => {
   it('기본값으로 div, bg-surface, p-4를 사용한다', () => {
     render(<Card data-testid="card">내용</Card>);

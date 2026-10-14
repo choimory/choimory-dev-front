@@ -5,6 +5,10 @@ import { TargetListLink } from '@/features/feed/components/TargetListLink';
 
 import { FEED_ARTIST_TARGET_FIXTURE, FEED_ITEM_TARGET_FIXTURE, FEED_STREAMER_TARGET_FIXTURE } from '../../../../fixtures/feed';
 
+/**
+ * TargetListLink 테스트
+ * 관찰 대상 목록 행의 링크 경로, 이름과 종류 칩, 요약, 상태와 지표, 우측 문구, 종류별 아이콘 색상을 확인합니다.
+ */
 describe('TargetListLink', () => {
   it('지정한 경로로 이동하는 링크다', () => {
     render(<TargetListLink href="/feed/targets/target-item" rightText="상세" target={FEED_ITEM_TARGET_FIXTURE} />);

@@ -9,6 +9,11 @@ function createImage(name: string) {
   return new File(['image'], name, { type: 'image/png' });
 }
 
+/**
+ * BlogPostCreateModal 테스트
+ * 글작성 모달의 입력 항목, 공개여부와 댓글허용여부 선택, 사진 첨부(미리보기, 추가, 순서 변경, 제거), 취소와 저장과 닫기 동작을 확인합니다.
+ * jsdom에는 URL.createObjectURL이 없어서 테스트마다 대체합니다.
+ */
 describe('BlogPostCreateModal', () => {
   beforeEach(() => {
     // jsdom에는 URL.createObjectURL이 없어서 대체한다
@@ -27,6 +32,7 @@ describe('BlogPostCreateModal', () => {
   it('제목, 내용, 태그를 입력할 수 있다', async () => {
     render(<BlogPostCreateModal onClose={() => {}} />);
 
+    // 제목, 내용, 태그를 입력한다
     await userEvent.type(screen.getByLabelText('글제목'), '새 글');
     await userEvent.type(screen.getByLabelText('글내용'), '본문이에요');
     await userEvent.type(screen.getByLabelText('태그'), 'react');
@@ -48,6 +54,7 @@ describe('BlogPostCreateModal', () => {
   it('공개여부를 바꿔도 댓글허용여부에는 영향이 없다', async () => {
     render(<BlogPostCreateModal onClose={() => {}} />);
 
+    // 공개여부를 비공개로 바꾼다
     await userEvent.click(screen.getByRole('button', { name: '비공개' }));
 
     expect(screen.getByRole('button', { name: '비공개' })).toHaveClass('bg-primary');
@@ -58,6 +65,7 @@ describe('BlogPostCreateModal', () => {
   it('댓글허용여부를 바꿀 수 있다', async () => {
     render(<BlogPostCreateModal onClose={() => {}} />);
 
+    // 댓글허용여부를 비허용으로 바꾼다
     await userEvent.click(screen.getByRole('button', { name: '비허용' }));
 
     expect(screen.getByRole('button', { name: '비허용' })).toHaveClass('bg-primary');
@@ -69,6 +77,7 @@ describe('BlogPostCreateModal', () => {
 
     expect(screen.queryByLabelText('선택한 사진')).not.toBeInTheDocument();
 
+    // 사진 2장을 한 번에 선택한다
     await userEvent.upload(screen.getByLabelText('사진 선택'), [createImage('a.png'), createImage('b.png')]);
 
     const list = screen.getByLabelText('선택한 사진');
@@ -83,6 +92,7 @@ describe('BlogPostCreateModal', () => {
   it('사진을 추가로 선택하면 기존 목록 뒤에 이어 붙는다', async () => {
     render(<BlogPostCreateModal onClose={() => {}} />);
 
+    // 사진을 한 장씩 두 번 선택한다
     await userEvent.upload(screen.getByLabelText('사진 선택'), createImage('a.png'));
     await userEvent.upload(screen.getByLabelText('사진 선택'), createImage('b.png'));
 
@@ -94,6 +104,7 @@ describe('BlogPostCreateModal', () => {
   it('첫 사진은 앞으로, 마지막 사진은 뒤로 이동할 수 없다', async () => {
     render(<BlogPostCreateModal onClose={() => {}} />);
 
+    // 사진 2장을 선택한다
     await userEvent.upload(screen.getByLabelText('사진 선택'), [createImage('a.png'), createImage('b.png')]);
 
     expect(screen.getByRole('button', { name: 'a.png 앞으로 이동' })).toBeDisabled();
@@ -104,7 +115,9 @@ describe('BlogPostCreateModal', () => {
   it('사진 순서를 바꿀 수 있다', async () => {
     render(<BlogPostCreateModal onClose={() => {}} />);
 
+    // 사진 2장을 선택한 뒤
     await userEvent.upload(screen.getByLabelText('사진 선택'), [createImage('a.png'), createImage('b.png')]);
+    // 두 번째 사진을 앞으로 이동한다
     await userEvent.click(screen.getByRole('button', { name: 'b.png 앞으로 이동' }));
 
     const names = within(screen.getByLabelText('선택한 사진')).getAllByText(/\.png$/).map((element) => element.textContent);
@@ -115,12 +128,15 @@ describe('BlogPostCreateModal', () => {
   it('사진을 제거할 수 있고 모두 제거하면 목록이 사라진다', async () => {
     render(<BlogPostCreateModal onClose={() => {}} />);
 
+    // 사진 2장을 선택한 뒤
     await userEvent.upload(screen.getByLabelText('사진 선택'), [createImage('a.png'), createImage('b.png')]);
+    // 첫 사진을 제거한다
     await userEvent.click(screen.getByRole('button', { name: 'a.png 제거' }));
 
     expect(screen.queryByText('a.png')).not.toBeInTheDocument();
     expect(screen.getByText('b.png')).toBeInTheDocument();
 
+    // 남은 사진도 제거하면 목록이 사라진다
     await userEvent.click(screen.getByRole('button', { name: 'b.png 제거' }));
 
     expect(screen.queryByLabelText('선택한 사진')).not.toBeInTheDocument();
@@ -130,6 +146,7 @@ describe('BlogPostCreateModal', () => {
     const onClose = vi.fn();
     render(<BlogPostCreateModal onClose={onClose} />);
 
+    // 취소, 저장, 닫기 버튼을 차례로 누른다
     await userEvent.click(screen.getByRole('button', { name: '취소' }));
     await userEvent.click(screen.getByRole('button', { name: '저장' }));
     await userEvent.click(screen.getByRole('button', { name: '닫기' }));

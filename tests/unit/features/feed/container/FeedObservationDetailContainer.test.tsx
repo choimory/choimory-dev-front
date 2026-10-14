@@ -4,6 +4,10 @@ import { describe, expect, it } from 'vitest';
 import { FeedObservationDetailContainer } from '@/features/feed/container/FeedObservationDetailContainer';
 import { feedViewModel } from '@/features/feed/model/feedTypes';
 
+/**
+ * FeedObservationDetailContainer 테스트
+ * 컨테이너가 observationId에 해당하는 관찰 항목을 보여주고, 없는 id이면 첫 번째 항목으로 대체하며 authStatus를 반영하는지 확인합니다.
+ */
 describe('FeedObservationDetailContainer', () => {
   it('observationId에 해당하는 관찰 항목을 보여준다', () => {
     render(<FeedObservationDetailContainer authStatus="guest" observationId="observation-2" />);
@@ -22,6 +26,7 @@ describe('FeedObservationDetailContainer', () => {
 
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
 
+    // member 상태로 다시 렌더링한다
     rerender(<FeedObservationDetailContainer authStatus="member" observationId="observation-1" />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

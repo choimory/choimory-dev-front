@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { TogglePreview } from '@/features/feed/components/TogglePreview';
 
+/**
+ * TogglePreview 테스트
+ * 켜진 상태의 스위치 미리보기가 라벨을 보여주고 상호작용 요소 없이 장식으로만 표시되는지 확인합니다.
+ */
 describe('TogglePreview', () => {
   it('라벨을 보여준다', () => {
     render(<TogglePreview label="가격 알림" />);

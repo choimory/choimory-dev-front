@@ -5,6 +5,10 @@ import { GuestLandingSection } from '@/features/platform/components/GuestLanding
 
 import { PLATFORM_SERVICES_FIXTURE } from '../../../../fixtures/platformServices';
 
+/**
+ * GuestLandingSection 테스트
+ * 비회원 랜딩 섹션의 환영 제목, 로그인과 회원가입 링크, 서비스 특징 안내, 제공 중과 준비 중 서비스 구분을 확인합니다.
+ */
 describe('GuestLandingSection', () => {
   it('환영 제목과 로고 경로를 보여준다', () => {
     render(<GuestLandingSection services={PLATFORM_SERVICES_FIXTURE} />);

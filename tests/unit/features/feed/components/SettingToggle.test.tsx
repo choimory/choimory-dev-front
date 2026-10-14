@@ -4,6 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { SettingToggle } from '@/features/feed/components/SettingToggle';
 
+/**
+ * SettingToggle 테스트
+ * 설정 토글 행의 라벨과 설명, 클릭 시 onToggle 호출, 켜짐과 꺼짐 스위치 모양을 확인합니다.
+ */
 describe('SettingToggle', () => {
   it('라벨과 설명을 가진 버튼으로 보여준다', () => {
     render(<SettingToggle label="방송 시작 알림" description="방송이 시작되면 알려드려요." isOn onToggle={() => {}} />);
@@ -17,6 +21,7 @@ describe('SettingToggle', () => {
     const onToggle = vi.fn();
     render(<SettingToggle label="방송 시작 알림" description="설명" isOn={false} onToggle={onToggle} />);
 
+    // 토글을 클릭한다
     await userEvent.click(screen.getByRole('button'));
 
     expect(onToggle).toHaveBeenCalledTimes(1);

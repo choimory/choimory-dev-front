@@ -5,6 +5,10 @@ import { PopularTargetEventSection } from '@/features/feed/components/PopularTar
 
 import { FEED_ACTIVITIES_FIXTURE } from '../../../../fixtures/feed';
 
+/**
+ * PopularTargetEventSection 테스트
+ * 최근 이벤트 목록의 제목, 알림별 링크(제목, 출처, 시간)와 이동 경로, 빈 목록을 확인합니다.
+ */
 describe('PopularTargetEventSection', () => {
   it('"최근 이벤트" 제목을 영역 이름으로 보여준다', () => {
     render(<PopularTargetEventSection activities={FEED_ACTIVITIES_FIXTURE} />);

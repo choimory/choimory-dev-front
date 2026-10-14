@@ -5,6 +5,10 @@ import { FeedTargetDetailView } from '@/features/feed/components/FeedTargetDetai
 
 import { FEED_ARTIST_TARGET_FIXTURE, FEED_ITEM_TARGET_FIXTURE, FEED_STREAMER_TARGET_FIXTURE } from '../../../../fixtures/feed';
 
+/**
+ * FeedTargetDetailView 테스트
+ * 관찰 대상 상세 화면의 종류별 헤더, 요약 카드, 종류별 상세 섹션 선택(아이템, 스트리머, 아티스트), 최근 알림, 관련 소식, 링크와 활성 탭, 로그인 여부를 확인합니다.
+ */
 describe('FeedTargetDetailView', () => {
   it.each([
     [FEED_ITEM_TARGET_FIXTURE, '아이템', '기계식 키보드', '목표가 아래로 내려가면 알려드려요.'],
@@ -96,6 +100,7 @@ describe('FeedTargetDetailView', () => {
 
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
 
+    // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<FeedTargetDetailView isLoggedIn target={FEED_ITEM_TARGET_FIXTURE} />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

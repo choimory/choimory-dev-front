@@ -7,6 +7,10 @@ import { FEED_ACTIVITIES_FIXTURE } from '../../../../fixtures/feed';
 
 const ACTIVITY = FEED_ACTIVITIES_FIXTURE[0];
 
+/**
+ * FeedActivityDetailView 테스트
+ * 알림 상세 화면의 출처, 제목, 시간, 알림 내용 카드, 내 피드 링크와 활성 탭, 로그인 여부를 확인합니다.
+ */
 describe('FeedActivityDetailView', () => {
   it('알림의 출처, 제목, 시간을 보여준다', () => {
     render(<FeedActivityDetailView activity={ACTIVITY} isLoggedIn />);
@@ -36,6 +40,7 @@ describe('FeedActivityDetailView', () => {
 
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
 
+    // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<FeedActivityDetailView activity={ACTIVITY} isLoggedIn />);
 
     expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();

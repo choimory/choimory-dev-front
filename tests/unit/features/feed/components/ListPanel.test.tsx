@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { ListPanel } from '@/features/feed/components/ListPanel';
 
+/**
+ * ListPanel 테스트
+ * 제목과 문자열 목록을 담는 패널의 영역 이름, 항목 순서, 빈 목록을 확인합니다.
+ */
 describe('ListPanel', () => {
   it('제목을 영역 이름으로 연결해 보여준다', () => {
     render(<ListPanel title="최근 이벤트" items={['신규 구독']} />);

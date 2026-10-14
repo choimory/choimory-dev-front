@@ -16,6 +16,10 @@ function getServiceCard(name: string) {
   return card;
 }
 
+/**
+ * MemberServiceFeedSection 테스트
+ * 회원용 서비스 피드의 프로필 카드와 서비스별 현황 카드(지표, 알림, 준비 중 서비스의 흐림과 예정 알림)를 확인합니다.
+ */
 describe('MemberServiceFeedSection', () => {
   it('내 프로필 영역에 닉네임, 이메일, 내 정보 관리 링크를 보여준다', () => {
     render(<MemberServiceFeedSection services={PLATFORM_SERVICES_FIXTURE} />);

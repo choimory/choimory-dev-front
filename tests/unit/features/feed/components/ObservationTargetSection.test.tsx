@@ -5,6 +5,10 @@ import { ObservationTargetSection } from '@/features/feed/components/Observation
 
 import { FEED_TARGETS_FIXTURE } from '../../../../fixtures/feed';
 
+/**
+ * ObservationTargetSection 테스트
+ * 관찰 대상 요약의 전체와 종류별 개수, 대상 링크와 추이 문구, 빈 목록을 확인합니다.
+ */
 describe('ObservationTargetSection', () => {
   it('관찰 대상 요약에 전체와 종류별 개수를 보여준다', () => {
     render(<ObservationTargetSection targets={FEED_TARGETS_FIXTURE} />);
