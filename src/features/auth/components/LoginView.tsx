@@ -1,3 +1,4 @@
+import type { FormEvent } from 'react';
 import Link from 'next/link';
 
 import { AppFrame } from '@/shared/ui/AppFrame';
@@ -10,7 +11,14 @@ import type { LoginViewModel } from '../model/authTypes';
  * 로그인 화면 컴포넌트의 Props
  */
 type LoginViewProps = {
-  viewModel: LoginViewModel; // 로그인 화면 데이터
+  viewModel: LoginViewModel;                        // 로그인 화면 데이터
+  email: string;                                    // 이메일 입력 값
+  password: string;                                 // 비밀번호 입력 값
+  isSubmitting: boolean;                            // 로그인 요청 진행 여부
+  errorMessage: string | null;                      // 로그인 오류 메시지
+  onChangeEmail: (email: string) => void;           // 이메일 변경 이벤트
+  onChangePassword: (password: string) => void;     // 비밀번호 변경 이벤트
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void; // 로그인 제출 이벤트
 };
 
 /** 소셜 로그인 버튼 색상 클래스 */
@@ -26,7 +34,16 @@ const SOCIAL_LOGIN_BUTTON_CLASS_NAME: Record<LoginViewModel['socialProviders'][n
  * @param props 컴포넌트 Props
  * @returns 로그인 화면
  */
-export function LoginView({ viewModel }: LoginViewProps) {
+export function LoginView({
+  viewModel,
+  email,
+  password,
+  isSubmitting,
+  errorMessage,
+  onChangeEmail,
+  onChangePassword,
+  onSubmit,
+}: LoginViewProps) {
   return (
     <AppFrame>
       <main className="mx-auto grid min-h-dvh w-full max-w-[440px] content-center px-5 py-12">
@@ -40,7 +57,7 @@ export function LoginView({ viewModel }: LoginViewProps) {
             <p className="mt-2 text-sm leading-6 text-muted">{viewModel.description}</p>
           </div>
 
-          <form className="mt-7 grid gap-4">
+          <form className="mt-7 grid gap-4" onSubmit={onSubmit}>
             <label className="grid gap-2 text-sm font-medium text-foreground">
               이메일
               <input
@@ -48,6 +65,8 @@ export function LoginView({ viewModel }: LoginViewProps) {
                 name="email"
                 placeholder="you@example.com"
                 type="email"
+                value={email}
+                onChange={(event) => onChangeEmail(event.target.value)}
               />
             </label>
 
@@ -58,11 +77,19 @@ export function LoginView({ viewModel }: LoginViewProps) {
                 name="password"
                 placeholder="비밀번호"
                 type="password"
+                value={password}
+                onChange={(event) => onChangePassword(event.target.value)}
               />
             </label>
 
-            <Button size="lg" className="mt-2">
-              로그인
+            {errorMessage && (
+              <p className="text-sm text-accent-red" role="alert">
+                {errorMessage}
+              </p>
+            )}
+
+            <Button size="lg" className="mt-2" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? '로그인 중...' : '로그인'}
             </Button>
           </form>
 
