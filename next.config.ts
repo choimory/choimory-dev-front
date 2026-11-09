@@ -25,7 +25,8 @@ function loadAppEnv() {
 loadAppEnv();
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Docker 이미지에서 node_modules 없이 server.js로 실행할 수 있도록 필요한 파일만 .next/standalone에 모은다.
+  output: "standalone",
 };
 
 export default nextConfig;

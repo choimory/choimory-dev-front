@@ -1,0 +1,129 @@
+# front 테스트, 이미지 빌드, GitOps 이미지 태그 갱신
+# stg 브랜치는 stg 환경, main 브랜치는 prod 환경으로 자동 배포한다.
+name: deploy
+
+on:
+  push:
+    branches:
+      - stg
+      - main
+
+# 같은 브랜치에 연속으로 push되면 이전 실행을 취소해 오래된 이미지가 나중에 배포되는 것을 막는다.
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  IMAGE: ghcr.io/choimory/choimory-dev-front
+  # stg 브랜치는 stg, main 브랜치는 prod. 이미지 태그 접두어와 GitOps overlay 이름으로 쓴다.
+  PROFILE: ${{ github.ref_name == 'main' && 'prod' || 'stg' }}
+
+jobs:
+  # 린트나 테스트가 실패하면 이미지를 만들지 않아 배포도 진행되지 않는다.
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Dockerfile과 같은 Node 22로 테스트한다.
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test:run
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    # GitHub Environments(stg, prod)에서 환경별 빌드 변수를 읽는다.
+    environment: ${{ github.ref_name == 'main' && 'prod' || 'stg' }}
+    permissions:
+      contents: read
+      # GITHUB_TOKEN으로 GHCR에 이미지를 push하기 위한 권한
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Environment 변수가 비어 있으면 API 주소 없는 이미지가 배포되므로 빌드 전에 중단한다.
+      - name: Check Build Variables
+        env:
+          API_BASE_URL: ${{ vars.NEXT_PUBLIC_MEMBER_API_BASE_URL }}
+        run: |
+          if [ -z "${API_BASE_URL}" ]; then
+            echo "::error::Environment 변수 NEXT_PUBLIC_MEMBER_API_BASE_URL이 없습니다."
+            exit 1
+          fi
+
+      - name: Login to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # GitHub Actions 레이어 캐시를 쓰기 위해 필요하다.
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v4
+
+      # NEXT_PUBLIC_ 값은 빌드 시 번들에 고정되므로 환경별로 이미지를 따로 만든다.
+      # stg는 https://staging-api.choimory.dev/member, prod는 https://api.choimory.dev/member를 쓴다.
+      - name: Build and Push Image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE }}:${{ env.PROFILE }}-${{ github.sha }}
+          build-args: NEXT_PUBLIC_MEMBER_API_BASE_URL=${{ vars.NEXT_PUBLIC_MEMBER_API_BASE_URL }}
+          # GHCR 패키지를 이 레포와 연결한다.
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          cache-from: type=gha,scope=${{ env.PROFILE }}
+          cache-to: type=gha,mode=max,scope=${{ env.PROFILE }}
+
+      # GITHUB_TOKEN은 다른 레포에 쓸 수 없어 choimory-gitops에 등록한 Deploy Key로 인증한다.
+      # 주의: 이 키는 gitops 레포 쓰기 권한이 있으며, ArgoCD를 통해 클러스터 배포로 이어진다.
+      - name: Checkout GitOps
+        uses: actions/checkout@v7
+        with:
+          repository: choimory/choimory-gitops
+          ref: main
+          path: gitops
+          ssh-key: ${{ secrets.GITOPS_DEPLOY_KEY }}
+
+      # overlay의 이미지 태그를 변경한다. ArgoCD가 변경사항을 감지해 클러스터에 반영한다.
+      # 주의: projects/choimory-dev/front/overlays/{stg,prod}가 gitops main 브랜치에 있어야 한다.
+      - name: Update GitOps Image Tag
+        working-directory: gitops
+        run: |
+          cd "projects/choimory-dev/front/overlays/${PROFILE}"
+          kustomize edit set image "${IMAGE}:${PROFILE}-${GITHUB_SHA}"
+          cd "${GITHUB_WORKSPACE}/gitops"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add projects/choimory-dev/front/overlays
+          git commit -m "deploy: front ${PROFILE}-${GITHUB_SHA}"
+
+          # member-api 워크플로와 동시에 push하면 거부될 수 있어 rebase 후 재시도한다.
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git pull --rebase origin main
+            sleep "${attempt}"
+          done
+          exit 1
