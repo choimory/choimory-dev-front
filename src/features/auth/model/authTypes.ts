@@ -38,6 +38,65 @@ export type SignupViewModel = {
   loginLink: AuthLink; // 로그인 화면 링크
 };
 
+/**
+ * 로그인 요청
+ */
+export type LoginRequest = {
+  email: string;    // 가입한 이메일
+  password: string; // 비밀번호
+};
+
+/**
+ * 회원가입 요청
+ */
+export type MemberJoinRequest = {
+  email: string;             // 이메일
+  password: string;          // 비밀번호 (영문, 숫자, 특수문자 포함 8~64자)
+  nickname: string;          // 닉네임 (한글, 영문, 숫자 3~15자)
+  introduce?: string | null; // 자기소개 (선택, 500자 이하)
+};
+
+/**
+ * 회원 상태
+ */
+export type MemberStatus = 'REGISTER' | 'ACTIVATE' | 'INACTIVATE' | 'SUSPENDED';
+
+/**
+ * 회원가입 응답
+ */
+export type MemberJoinResponse = {
+  id: string;            // 회원 ID (UUID v7)
+  email: string;         // 이메일
+  nickname: string;      // 닉네임
+  status: MemberStatus;  // 회원 상태
+};
+
+/**
+ * member-api 토큰 발급 응답. BFF 서버에서만 다룹니다.
+ */
+export type MemberTokenResponse = {
+  accessToken: string;      // Access Token
+  refreshToken: string;     // Refresh Token
+  tokenType: string;        // 토큰 종류 (Authorization 헤더 접두어)
+  accessExpiresIn: number;  // Access Token 만료까지 남은 시간(초)
+  refreshExpiresIn: number; // Refresh Token 만료까지 남은 시간(초)
+};
+
+/**
+ * 회원가입 폼 입력 값
+ */
+export type SignupFormValues = {
+  nickname: string;        // 닉네임
+  email: string;           // 이메일
+  password: string;        // 비밀번호
+  passwordConfirm: string; // 비밀번호 확인
+};
+
+/**
+ * 폼 필드별 오류 메시지
+ */
+export type FieldErrors = Partial<Record<keyof SignupFormValues, string>>;
+
 /** 로그인 화면 임시 데이터 */
 export const loginViewModel: LoginViewModel = {
   title: '로그인',

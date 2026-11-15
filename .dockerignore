@@ -1,0 +1,33 @@
+# 이미지 빌드에 필요 없는 파일을 빌드 컨텍스트에서 제외해 전송량을 줄이고 캐시 무효화를 막는다.
+
+# 로컬 의존성과 빌드 결과물 (이미지 안에서 새로 설치, 빌드한다)
+node_modules
+.next
+out
+build
+coverage
+*.tsbuildinfo
+next-env.d.ts
+
+# 환경별 설정 파일
+# 로컬 값이 이미지에 들어가지 않도록 제외한다. 컨테이너 값은 빌드 인자와 환경변수로 주입한다.
+env
+.env*
+
+# 테스트 (이미지 빌드에서는 실행하지 않는다)
+tests
+vitest.config.mts
+vitest.setup.ts
+
+# IDE, 에이전트 설정
+.idea
+.agents
+.claude
+
+# Git
+.git
+.gitignore
+
+*.md
+Dockerfile
+.dockerignore

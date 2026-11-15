@@ -37,16 +37,41 @@ choimory.dev 서비스의 프론트엔드 프로젝트입니다.
 ## 실행 방법
 
 ```bash
-npm install     # 의존성 설치
-npm run dev     # 개발 서버 실행 (http://localhost:3000)
-npm run build   # 프로덕션 빌드
-npm run start   # 빌드 결과 실행
+npm install      # 의존성 설치
+npm run dev      # 개발 서버 실행 (APP_ENV=local, env/.env.local 사용, http://localhost:3000)
+npm run dev:dev  # 개발 서버 실행 (APP_ENV=dev, env/.env.dev 사용)
+npm run build    # 프로덕션 빌드 (APP_ENV 없음, 환경변수를 직접 주입해야 함)
+npm run build:dev  # dev 환경 빌드 (env/.env.dev 사용)
+npm run build:prod # prod 환경 빌드 (env/.env.prod 사용)
+npm run start    # 빌드 결과 실행
 npm run lint    # eslint . 실행
 npm run test    # Vitest 감시 모드
 npm run test:run # Vitest 1회 실행
 ```
 
 타입 검사는 `npx tsc --noEmit`으로 수행합니다.
+
+### 환경 변수
+
+Next.js의 `NODE_ENV`는 `development`, `production`, `test`만 허용하므로, local/dev/prod 구분은 `APP_ENV`로 합니다.
+
+```text
+env/
+├── .env.local   # APP_ENV=local, 내 PC 개발용 (git 제외)
+├── .env.dev     # APP_ENV=dev, 개발 서버용 (git 제외)
+└── .env.prod    # APP_ENV=prod, 운영 서버용 (git 제외)
+.env.example     # 키 목록 템플릿 (커밋)
+```
+
+| 변수 | 사용처 | 설명 |
+|---|---|---|
+| `MEMBER_API_BASE_URL` | 서버(Route Handler) 전용 | Next 서버가 member-api를 호출할 때 사용하는 주소 |
+| `NEXT_PUBLIC_MEMBER_API_BASE_URL` | 브라우저 | 브라우저가 member-api를 직접 호출할 때 사용하는 공개 주소 |
+
+- `next.config.ts`가 `APP_ENV`에 맞는 `env/.env.{APP_ENV}`를 `process.loadEnvFile`로 로드합니다. `APP_ENV`는 `local`, `dev`, `prod`만 허용하며, 없으면 파일을 읽지 않고 주입된 환경변수만 사용합니다.
+- 이미 주입된 환경변수는 덮어쓰지 않으므로 배포 환경에서 직접 주입한 값이 파일보다 우선합니다.
+- **루트에 `.env.local`을 만들지 않습니다.** Next.js가 `next.config.ts`보다 먼저 루트 `.env*`를 로드하고 `env/`의 값은 덮어쓰지 않으므로, 같은 키가 있으면 루트 값이 이깁니다.
+- `env/.env.*`는 git에 올리지 않고 `.env.example`만 커밋합니다. JWT secret은 member-api만 가지며 프론트에는 두지 않습니다.
 
 > Next.js 16은 동일 프로젝트에서 개발 서버가 중복 실행되는 것을 차단합니다. 이미 실행 중인 서버가 있으면 해당 서버를 사용하거나 종료 후 다시 실행합니다.
 
@@ -57,6 +82,9 @@ npm run test:run # Vitest 1회 실행
 ```text
 src/
 ├── app/
+│   ├── api/auth/login/route.ts       # 로그인 BFF
+│   ├── api/auth/logout/route.ts      # 로그아웃 BFF
+│   ├── api/auth/reissue/route.ts     # 토큰 재발급 BFF
 │   ├── blog/page.tsx
 │   ├── blog/following/page.tsx
 │   ├── blog/me/page.tsx
@@ -84,9 +112,12 @@ src/
 │
 ├── features/
 │   ├── auth/
+│   │   ├── api/                      # authApi (login, logout, restoreSession, join)
 │   │   ├── components/
 │   │   ├── container/
-│   │   └── model/
+│   │   ├── hooks/                    # useLogin, useSignup
+│   │   ├── model/
+│   │   └── server/                   # authBff (BFF 핸들러, 서버 전용)
 │   ├── blog/
 │   │   ├── components/
 │   │   ├── container/
@@ -105,15 +136,21 @@ src/
 │       └── model/
 │
 └── shared/
+    ├── api/                          # apiClient, httpClient, tokenStore, tokenRefresher, apiTypes, bffResponse
+    ├── auth/                         # refreshCookie (서버 전용)
+    ├── config/                       # env (서버 전용 환경변수)
     ├── model/
     └── ui/
+
+env/                   # APP_ENV별 환경변수 (git 제외)
 
 tests/
 ├── fixtures/          # 테스트용 데이터 (feature별 픽스처)
 └── unit/              # Vitest 단위, 컴포넌트 테스트 (src/와 같은 경로로 미러링)
     ├── features/
-    │   ├── auth/ blog/ feed/ me/ platform/   # components/, container/, model/
+    │   ├── auth/ blog/ feed/ me/ platform/   # components/, container/, model/ (auth는 api/, hooks/, server/ 포함)
     └── shared/
+        ├── api/ auth/ config/
         ├── model/
         └── ui/
 
@@ -192,8 +229,9 @@ vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더
   - 알림 상세 화면
   - 서비스 내부 하단 네비게이션
 - 인증
-  - 로그인 화면
-  - 회원가입 화면
+  - 로그인 화면 (member-api 연동, 실패 시 오류 메시지, 소셜 로그인 버튼은 화면 구성 확인용)
+  - 회원가입 화면 (member-api 연동, 필드별 검증 오류 표시)
+  - 상단바와 마이페이지의 로그인 상태 표시는 아직 `?auth=member` 쿼리(`shared/model/mockAuth.ts`)를 사용한다. 회원 조회 API가 생기면 실제 세션으로 교체한다
 - 마이페이지
   - 프로필 요약
   - 설정 카드 클릭으로 여는 개인정보 변경 모달
@@ -272,6 +310,53 @@ vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더
 
 ---
 
+## API 연동과 인증
+
+member-api(`choimory-dev-member-api`)와 연동하는 구조입니다. OpenAPI 문서는 member-api의 `docs/api/v1`에 있습니다.
+
+### 연동 중인 API
+
+| 기능 | member-api | 호출 경로 |
+|---|---|---|
+| 로그인 | `POST /v1/login` | 브라우저 → `POST /api/auth/login`(BFF) → member-api |
+| 토큰 재발급 | `POST /v1/member/reissue` | 브라우저 → `POST /api/auth/reissue`(BFF) → member-api |
+| 로그아웃 | `POST /v1/logout` | 브라우저 → `POST /api/auth/logout`(BFF) → member-api |
+| 회원가입 | `POST /v1/member/join` | 브라우저 → member-api 직접 호출 (CORS 필요) |
+
+- member-api 공통 응답은 `{code, name, message, data}`이며, `httpRequest`가 `data`를 꺼내고 실패는 `ApiError`로 던집니다. 가입 검증 실패(400)의 `data`는 `getValidateResults`로 필드 목록을 꺼냅니다.
+- 그 외 일반 API는 브라우저가 `apiClient`로 member-api를 직접 호출합니다. 일반 화면의 데이터는 클라이언트에서 불러오는 것이 기본이며, 서버 컴포넌트는 로그인 없이 볼 수 있는 공개 데이터에만 사용합니다.
+
+### 토큰 관리
+
+| 토큰 | 수명 | 보관 위치 |
+|---|---|---|
+| Refresh Token | 14일 | httpOnly 쿠키(`refresh_token`). BFF만 읽고 쓴다. SameSite=Lax, `path=/api/auth`, `secure`는 `NODE_ENV=production`일 때 |
+| Access Token | 30분 | 브라우저 메모리(`shared/api/tokenStore.ts`). 새로고침하면 사라진다 |
+
+- 로그인 응답에서 Refresh Token은 쿠키로만 전달하고, Access Token만 본문으로 내려줍니다.
+- Refresh Token은 1회용(rotation)이므로 재발급할 때마다 쿠키를 새 값으로 교체합니다.
+- BFF는 Refresh Token을 다루는 로그인, 로그아웃, 재발급에만 사용합니다.
+- 새로고침 후 로그인 상태는 `authApi.restoreSession()`(재발급)으로 복원합니다.
+
+### apiClient의 토큰 갱신
+
+`createApiClient`로 만든 `apiClient`(`shared/api/apiClient.ts`)는 다음 순서로 Access Token을 처리합니다.
+
+1. 호출 전에 만료 30초 이내이면 먼저 갱신한다. 갱신에 실패해도 요청은 보내 서버가 판단하게 한다.
+2. 응답이 401 `TOKEN_EXPIRED`이면 갱신 후 원 요청을 1회만 재시도한다.
+3. 갱신까지 실패하면 `onAuthExpired`(기본: `/login` 이동)를 실행하고 원래 오류를 던진다.
+4. 갱신 요청은 동시에 하나만 보낸다. Refresh Token이 1회용이라 같은 토큰으로 두 번 보내면 하나가 실패하기 때문이다.
+5. 인증이 필요 없는 요청은 `{ auth: false }`로 보낸다.
+
+### 새 API를 추가할 때
+
+- 도메인별 `features/{domain}/api/{domain}Api.ts`에 호출 함수를 작성하고 `shared/api/apiClient`를 사용한다.
+- 요청/응답 타입은 `features/{domain}/model`에 분리하고, 화면용 형태가 다르면 ViewModel과 mapper를 둔다.
+- Refresh Token처럼 브라우저에 노출하면 안 되는 값을 다루는 호출만 `app/api` Route Handler(BFF)로 만든다. 핸들러 로직은 `features/{domain}/server`에 두고 `route.ts`는 호출만 한다.
+- member-api 오류는 `ApiError`의 `status`, `errorName`(예: `TOKEN_EXPIRED`, `DUPLICATE_EMAIL`)으로 분기한다.
+
+---
+
 ## 코드 규칙
 
 전체 규칙은 `.agents/rules/` 하위 문서를 따릅니다. 프론트엔드는 아래 두 문서가 기준입니다.
@@ -324,6 +409,8 @@ vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더
 - 열거형 값(크기, 톤, variant 등)은 `it.each`로 한 번에 검증한다.
 - jsdom에 없는 API(`scrollBy`, `URL.createObjectURL`)는 해당 테스트 파일에서만 `vi.fn()`으로 대체한다.
 - 라우터 없이 `next/link`를 클릭하면 jsdom이 페이지 이동을 시도하므로, 링크 클릭이 필요한 테스트는 파일 안에서 `vi.mock('next/link', ...)`로 대체한다.
+- 서버 전용 코드(Route Handler 핸들러 등)의 테스트는 파일 첫 줄에 `// @vitest-environment node`를 둔다. `next/headers` 같은 서버 모듈은 `vi.mock`으로 대체한다.
+- API 호출 테스트는 `vi.stubGlobal('fetch', ...)` 또는 함수의 `fetchImpl` 옵션으로 fetch를 대체한다. 공통 응답 Response 생성은 `tests/fixtures/api.ts`의 `jsonResponse`를 사용한다.
 - 현재 Playwright(E2E)와 MSW(API 모킹 통합 테스트)는 도입하지 않았다. API 연동 후 추가한다.
 
 ---
