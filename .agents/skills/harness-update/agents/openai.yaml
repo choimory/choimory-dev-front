@@ -1,0 +1,11 @@
+interface:
+  display_name: Harness Update
+  short_description: choimory-harness 기준으로 AGENTS.md와 .agents 규칙/스킬을 최신화
+  default_prompts:
+    - "$harness-update 하네스 업데이트 해줘"
+    - "$harness-update hallmark 스킬도 같이 업데이트 해줘"
+
+policy:
+  allow_implicit_invocation: true
+
+dependencies: []
