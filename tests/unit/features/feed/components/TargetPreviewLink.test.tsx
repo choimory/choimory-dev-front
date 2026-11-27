@@ -40,6 +40,6 @@ describe('TargetPreviewLink', () => {
   ])('%#번째 종류에 맞는 색상(%s)의 아이콘 배지를 쓴다', (target, toneClassName) => {
     const { container } = render(<TargetPreviewLink href="/x" target={target} />);
 
-    expect(container.querySelector('.rounded-full.size-10')).toHaveClass(toneClassName);
+    expect(container.querySelector('.rounded-input.size-10')).toHaveClass(toneClassName);
   });
 });

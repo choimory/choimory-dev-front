@@ -41,6 +41,6 @@ describe('TargetListLink', () => {
     const { container } = render(<TargetListLink href="/x" rightText="상세" target={target} />);
 
     expect(screen.getByRole('link')).toHaveTextContent(label);
-    expect(container.querySelector('.rounded-full.size-10')).toHaveClass(toneClassName);
+    expect(container.querySelector('.rounded-input.size-10')).toHaveClass(toneClassName);
   });
 });

@@ -18,13 +18,15 @@ describe('BlogPostDetailView', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: '중앙 피드 폭 고정하기' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: 'mory.dev' })).toBeInTheDocument();
-    expect(screen.getByText('프론트 구성 기획 · 8분 전')).toBeInTheDocument();
+    expect(screen.getByText('프론트 구성 기획')).toBeInTheDocument();
+    expect(screen.getByText('8분 전')).toBeInTheDocument();
   });
 
   it('좋아요와 댓글 수, 본문을 보여준다', () => {
     render(<BlogPostDetailView isLoggedIn post={OWN_POST} />);
 
-    expect(screen.getByText('좋아요 128개 · 댓글 24개')).toBeInTheDocument();
+    expect(screen.getByText('좋아요 128개')).toBeInTheDocument();
+    expect(screen.getByText('댓글 24개')).toBeInTheDocument();
     expect(screen.getByText(/모바일 앱 같은 느낌을 유지할 수 있어요/)).toBeInTheDocument();
   });
 

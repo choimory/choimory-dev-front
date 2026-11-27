@@ -7,3 +7,4 @@
 - 2026-09-20: DONE:서비스 도메인 페이지별 페이지 소개 헤더 작업(domain-page-intro-header)
 - 2026-10-14: DONE:컴포넌트 리팩토링과 테스트코드 작업(component-refactor-and-test)
 - 2026-10-20: DONE:API 연동 및 env 설정 작업(api-integration-and-env-setup)
+- 2026-11-27: DONE:디자인 고도화(design-enhancement)

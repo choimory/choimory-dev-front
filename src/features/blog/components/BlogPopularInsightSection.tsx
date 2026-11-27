@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Chip } from '@/shared/ui/Chip';
+import { Card } from '@/shared/ui/Card';
 import { ListRow } from '@/shared/ui/ListRow';
 import { SegmentedTabs } from '@/shared/ui/SegmentedTabs';
 
@@ -69,12 +69,12 @@ const BLOG_RANKING_ITEMS: Record<BlogRankingTabId, BlogRankingItem[]> = {
   ],
 };
 
-/** 인기 랭킹 상태별 badge 클래스 */
+/** 인기 랭킹 상태별 색 클래스 */
 const RANKING_TREND_CLASS_NAME: Record<BlogRankingItem['trend'], string> = {
-  up: 'bg-primary-soft text-primary',
-  down: 'bg-accent-red/15 text-accent-red',
-  same: 'bg-surface text-muted',
-  new: 'bg-accent-green-soft text-accent-green',
+  up: 'text-primary',
+  down: 'text-accent-red',
+  same: 'text-muted',
+  new: 'text-accent-green',
 };
 
 /** 인기 랭킹 상태별 아이콘 */
@@ -95,48 +95,42 @@ export function BlogPopularInsightSection() {
   const rankingItems = BLOG_RANKING_ITEMS[activeTabId];
 
   return (
-    <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="blog-popular-ranking-title">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm font-bold text-primary">blog / ranking</p>
-          <h2 id="blog-popular-ranking-title" className="mt-1 text-xl font-black leading-tight text-foreground">
-            실시간 랭킹
-          </h2>
-        </div>
-        <Chip>
-          지금
-        </Chip>
+    <Card as="section" aria-labelledby="blog-popular-ranking-title">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 id="blog-popular-ranking-title" className="text-section font-semibold leading-tight text-foreground">
+          실시간 랭킹
+        </h2>
+        <span className="text-xs font-medium text-muted">지금</span>
       </div>
 
       <SegmentedTabs className="mt-4" items={BLOG_RANKING_TABS} activeId={activeTabId} ariaLabel="인기 랭킹 종류" onChange={setActiveTabId} />
 
-      <div className="mt-4 grid gap-2">
+      <div className="mt-2 grid">
         {rankingItems.map((item, index) => (
           <ListRow
             key={item.id}
             as="article"
-            tone="strong"
-            className="blog-ranking-enter"
+            className="blog-ranking-enter px-0 last:border-b-0 last:pb-0"
             style={{ animationDelay: `${index * 70}ms` }}
             leading={(
-              <span className="grid size-9 place-items-center rounded-xl bg-surface text-sm font-black text-primary">
+              <span className="w-6 text-sm font-semibold tabular-nums text-ink-2">
                 {item.rank}
               </span>
             )}
             trailing={(
-              <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${RANKING_TREND_CLASS_NAME[item.trend]}`}>
+              <span className={`inline-flex shrink-0 items-center gap-1 text-xs font-medium tabular-nums ${RANKING_TREND_CLASS_NAME[item.trend]}`}>
                 <span aria-hidden="true">{RANKING_TREND_ICON[item.trend]}</span>
                 {item.valueText}
               </span>
             )}
           >
             <span className="min-w-0">
-              <span className="block truncate text-sm font-bold text-foreground">{item.label}</span>
+              <span className="block text-sm font-semibold text-foreground">{item.label}</span>
               <span className="mt-1 block text-xs leading-4 text-muted">{item.description}</span>
             </span>
           </ListRow>
         ))}
       </div>
-    </section>
+    </Card>
   );
 }

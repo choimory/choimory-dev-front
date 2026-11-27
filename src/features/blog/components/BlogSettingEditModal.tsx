@@ -39,27 +39,28 @@ export function BlogSettingEditModal({ item, onClose }: BlogSettingEditModalProp
   return (
     <Modal title={item.title} labelledBy="blog-modal-title" onClose={onClose} className="max-h-[86vh] overflow-y-auto">
       <p className="mt-2 text-sm leading-6 text-muted">{item.description}</p>
-      <div className="mt-4 grid gap-2">
+      <div className="tray mt-4 grid gap-1 p-1">
         {item.options.map((option) => (
           <button
             key={option}
-            className={`grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border p-3 text-left ${
+            className={`grid h-9 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-input border px-3 text-left ${
               selectedValue === option
                 ? 'border-primary bg-primary-soft text-primary'
-                : 'border-border bg-surface-strong text-foreground'
+                : 'border-transparent text-foreground hover:bg-surface active:bg-surface'
             }`}
             type="button"
+            aria-pressed={selectedValue === option}
             onClick={() => setSelectedValue(option)}
           >
-            <span className="text-sm font-bold">{option}</span>
-            <span className={`grid size-4 place-items-center rounded-full border ${selectedValue === option ? 'border-primary' : 'border-border'}`}>
-              {selectedValue === option && <span className="size-2 rounded-full bg-primary" />}
+            <span className="text-sm font-medium">{option}</span>
+            <span aria-hidden="true" className={`grid size-4 place-items-center rounded-xs border ${selectedValue === option ? 'border-primary' : 'border-muted'}`}>
+              {selectedValue === option && <span className="size-2 rounded-xs bg-primary" />}
             </span>
           </button>
         ))}
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-2">
+      <div className="mt-5 flex justify-end gap-3 border-t border-border pt-4">
         <Button variant="secondary" onClick={onClose}>
           취소
         </Button>

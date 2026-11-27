@@ -28,13 +28,13 @@ type BrandLogoSegment = {
 
 /** 브랜드 로고를 구성하는 색상 조각 목록 */
 const BRAND_LOGO_SEGMENTS: BrandLogoSegment[] = [
-  { value: '{', className: 'text-primary' },
+  { value: '{', className: 'text-logo-brace' },
   { value: 'choimory' },
-  { value: '.', className: 'text-accent-green' },
+  { value: '.', className: 'text-logo-dot' },
   { value: 'dev' },
-  { value: '(', className: 'text-accent-orange' },
-  { value: ')', className: 'text-accent-orange' },
-  { value: '}', className: 'text-primary' },
+  { value: '(', className: 'text-logo-paren' },
+  { value: ')', className: 'text-logo-paren' },
+  { value: '}', className: 'text-logo-brace' },
 ];
 
 /** 브랜드 로고 애니메이션 CSS 변수 */
@@ -51,7 +51,7 @@ const BRAND_LOGO_STYLE = {
 export function BrandLogo({ size = 'md', isAnimated = true }: BrandLogoProps) {
   return (
     <span
-      className={`${isAnimated ? 'brand-logo-typewriter' : ''} inline-block font-mono font-black tracking-normal text-foreground ${BRAND_LOGO_SIZE_CLASS_NAME[size]}`.trim()}
+      className={`${isAnimated ? 'brand-logo-typewriter' : ''} inline-block font-logo font-black tracking-normal text-logo-ink ${BRAND_LOGO_SIZE_CLASS_NAME[size]}`.trim()}
       style={isAnimated ? BRAND_LOGO_STYLE : undefined}
       aria-label="choimory.dev"
     >

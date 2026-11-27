@@ -23,14 +23,14 @@ type BlogMenuViewProps = {
 };
 
 /** blog 메뉴별 화면 문구 */
-const BLOG_MENU_COPY: Record<BlogMenuKind, { eyebrow: string; title: string; description: string }> = {
+const BLOG_MENU_COPY: Record<BlogMenuKind, { domainPath: string; title: string; description: string }> = {
   popular: {
-    eyebrow: 'blog / popular',
+    domainPath: 'blog / popular',
     title: '실시간 순위',
     description: '검색어, 멘션, 팔로워, 태그 흐름을 기준으로 많이 움직이는 글을 모아봐요.',
   },
   following: {
-    eyebrow: 'blog / following',
+    domainPath: 'blog / following',
     title: '팔로잉',
     description: '팔로워와 팔로잉 목록을 확인하고 필요한 사용자를 빠르게 찾아요.',
   },
@@ -53,15 +53,15 @@ export function BlogMenuView({ menuKind, viewModel }: BlogMenuViewProps) {
         serviceName="blog"
         serviceHref="/blog"
         leading={
-          <Link className="grid size-10 place-items-center rounded-[10px] text-foreground" href="/blog" aria-label="blog 홈으로 돌아가기">
+          <Link className="grid size-10 place-items-center rounded-input text-foreground hover:bg-surface-strong active:bg-surface-strong" href="/blog" aria-label="blog 홈으로 돌아가기">
             <Icon name="chevronLeft" />
           </Link>
         }
       />
 
-      <AppContent className="grid gap-3">
+      <AppContent className="grid gap-5">
         <PageIntroCard
-          domainPath={copy.eyebrow}
+          domainPath={copy.domainPath}
           title={copy.title}
           description={copy.description}
         />
@@ -69,7 +69,7 @@ export function BlogMenuView({ menuKind, viewModel }: BlogMenuViewProps) {
         {menuKind === 'popular' && <BlogPopularInsightSection />}
         {menuKind === 'following' && <BlogFollowingManageSection />}
 
-        <section className="grid gap-3" aria-label={copy.title}>
+        <section className="grid" aria-label={copy.title}>
           {viewModel.posts.map((post) => (
             <BlogPostCard key={post.id} post={post} />
           ))}

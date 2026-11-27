@@ -1,8 +1,11 @@
 import Link from 'next/link';
 
-import { Chip } from '@/shared/ui/Chip';
+import { Card } from '@/shared/ui/Card';
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { ListRow } from '@/shared/ui/ListRow';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
+import { StatCard } from '@/shared/ui/StatCard';
 
 import type { PlatformService } from '../model/platformHomeTypes';
 
@@ -11,14 +14,6 @@ import type { PlatformService } from '../model/platformHomeTypes';
  */
 type MemberServiceFeedSectionProps = {
   services: PlatformService[]; // 서비스별 피드 카드 목록
-};
-
-/** 서비스 강조 색상별 클래스 */
-const SERVICE_TONE_CLASS_NAME: Record<PlatformService['tone'], string> = {
-  blue: 'text-primary bg-primary-soft',
-  green: 'text-accent-green bg-accent-green-soft',
-  orange: 'text-accent-orange bg-accent-orange-soft',
-  purple: 'text-accent-purple bg-accent-purple-soft',
 };
 
 /**
@@ -104,83 +99,131 @@ const MEMBER_PROFILE = {
  * @returns 로그인 사용자용 서비스 피드 섹션
  */
 export function MemberServiceFeedSection({ services }: MemberServiceFeedSectionProps) {
+  const activeServices = services.filter((service) => service.status === 'active');
+  const plannedServices = services.filter((service) => service.status === 'planned');
+
   return (
     <section className="grid gap-4" aria-label="내 서비스 피드">
-      <section className="grid gap-3" aria-labelledby="member-profile-section-title">
+      <section className="grid gap-2" aria-labelledby="member-profile-section-title">
         <SectionHeader domainPath="platform / me" title="내 프로필" headingId="member-profile-section-title" />
 
-        <article className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="member-profile-title">
+        <Card as="article" aria-labelledby="member-profile-title">
           <div className="flex items-center justify-between gap-3">
-            <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
-              <div className="grid size-16 place-items-center rounded-3xl bg-primary text-xl font-black text-primary-foreground">
-                C
-              </div>
+            <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-start gap-3">
+              <IconBadge size="xl" tone="strong" className="text-lg font-semibold">
+                <span className="text-ink-2">C</span>
+              </IconBadge>
               <div className="min-w-0">
-                <h3 id="member-profile-title" className="mt-1 text-2xl font-bold tracking-normal text-foreground">{MEMBER_PROFILE.nickname}</h3>
-                <p className="mt-1 text-sm text-muted">{MEMBER_PROFILE.email}</p>
-                <p className="mt-2 text-sm leading-5 text-muted">{MEMBER_PROFILE.description}</p>
+                <h3 id="member-profile-title" className="text-section text-foreground">{MEMBER_PROFILE.nickname}</h3>
+                <p className="mt-0.5 text-sm text-muted">{MEMBER_PROFILE.email}</p>
+                <p className="mt-2 text-sm leading-5 text-ink-2">{MEMBER_PROFILE.description}</p>
               </div>
             </div>
-            <Link className="hidden h-10 shrink-0 place-items-center rounded-[10px] bg-primary px-4 text-sm font-bold text-primary-foreground sm:grid" href="/me">
+            <Link className="key relative hidden h-10 shrink-0 place-items-center px-4 text-sm font-semibold after:absolute after:inset-x-0 after:-inset-y-0.5 sm:grid" href="/me">
               내 정보 관리
             </Link>
           </div>
-        </article>
+        </Card>
       </section>
 
-      <section className="grid gap-3" aria-labelledby="service-feed-card-title">
+      <section className="grid gap-2" aria-labelledby="service-feed-card-title">
         <SectionHeader domainPath="platform / services" title="서비스 현황" headingId="service-feed-card-title" />
 
         <div className="grid gap-4">
-          {services.map((service) => {
+          {activeServices.map((service) => {
             const serviceFeed = MEMBER_SERVICE_FEED_CARDS.find((feedCard) => feedCard.serviceId === service.id);
             const metrics = serviceFeed?.metrics ?? [];
             const notifications = serviceFeed?.notifications ?? PLANNED_SERVICE_NOTIFICATIONS;
             return (
-              <article key={service.id} className={`grid gap-4 rounded-3xl border border-border bg-surface p-5 ${service.status === 'planned' ? 'opacity-75' : ''}`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <span className={`grid size-12 shrink-0 place-items-center rounded-2xl border border-border/60 ${SERVICE_TONE_CLASS_NAME[service.tone]}`}>
-                      <Icon name={service.iconName} />
-                    </span>
+              <Card key={service.id} as="article" className="grid gap-4">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                  <div className="flex min-w-0 flex-[1_1_12rem] items-center gap-3">
+                    <IconBadge as="span" tone="strong">
+                      <Icon className="text-ink-2" name={service.iconName} />
+                    </IconBadge>
                     <div className="min-w-0">
-                      <p className="text-sm font-bold text-primary">{service.name}</p>
-                      <h3 className="mt-1 text-xl font-bold leading-tight text-foreground">{service.description}</h3>
+                      <h3 className="text-section leading-tight text-foreground">{service.description}</h3>
+                      <p className="mt-1 text-sm font-medium text-ink-2">{service.name}</p>
                     </div>
                   </div>
-                  {service.status === 'active' ? (
-                    <Link className="shrink-0 rounded-full bg-surface-strong px-2.5 py-1 text-xs font-bold text-muted transition hover:bg-primary hover:text-primary-foreground" href={service.href}>
-                      바로가기
-                    </Link>
-                  ) : (
-                    <Chip className="shrink-0">
-                      준비 중
-                    </Chip>
-                  )}
+                  <Link className="key relative ml-auto inline-grid h-9 shrink-0 place-items-center px-3 text-sm font-medium after:absolute after:inset-x-0 after:-inset-y-1" href={service.href}>
+                    바로가기
+                  </Link>
                 </div>
 
                 {metrics.length > 0 && (
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-[repeat(auto-fit,minmax(7rem,1fr))]">
                     {metrics.map((metric) => (
-                      <Link key={metric.label} className="rounded-2xl bg-surface-strong p-3 transition hover:bg-primary-soft" href={metric.href}>
-                        <p className="text-2xl font-black text-foreground">{metric.value}</p>
-                        <p className="mt-1 text-xs leading-4 text-muted">{metric.label}</p>
+                      <Link key={metric.label} className="min-w-0 pb-2 hover:bg-surface-strong hover:underline active:bg-background" href={metric.href}>
+                        <StatCard label={metric.label} value={metric.value} />
                       </Link>
                     ))}
                   </div>
                 )}
 
-                <div className="grid gap-2">
+                <div className="grid border-t border-border">
                   {notifications.map((notification) => (
-                    <Link key={notification.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl bg-surface-strong p-3 transition hover:bg-primary-soft" href={notification.href}>
-                      <h4 className="truncate text-sm font-bold text-foreground">{notification.title}</h4>
-                      <time className="text-xs text-muted">{notification.timeText}</time>
-                    </Link>
+                    <ListRow
+                      key={notification.id}
+                      href={notification.href}
+                      className="min-h-11 px-0 transition-none last:border-b-0 active:bg-background"
+                      trailing={<time className="whitespace-nowrap text-xs tabular-nums text-ink-2">{notification.timeText}</time>}
+                    >
+                      <h4 className="text-sm font-medium text-foreground">{notification.title}</h4>
+                    </ListRow>
                   ))}
                 </div>
-              </article>
+              </Card>
             );
           })}
+
+          {plannedServices.length > 0 && (
+            <Card className="divide-y divide-border py-0">
+              {plannedServices.map((service) => {
+                const serviceFeed = MEMBER_SERVICE_FEED_CARDS.find((feedCard) => feedCard.serviceId === service.id);
+                const metrics = serviceFeed?.metrics ?? [];
+                const notifications = serviceFeed?.notifications ?? PLANNED_SERVICE_NOTIFICATIONS;
+
+                return (
+                  <article key={service.id} className="grid gap-x-4 gap-y-1 py-2 opacity-75 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] sm:items-center">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <IconBadge as="span" size="sm" tone="strong">
+                        <Icon className="size-4 text-ink-2" name={service.iconName} />
+                      </IconBadge>
+                      <div className="flex min-w-0 flex-col-reverse">
+                        <h3 className="text-xs text-ink-2">{service.description}</h3>
+                        <p className="text-sm font-semibold text-foreground">{service.name}</p>
+                      </div>
+                      <span className="ml-auto shrink-0 text-xs font-medium text-ink-2">준비 중</span>
+                    </div>
+
+                    {metrics.length > 0 && (
+                      <div className="grid grid-cols-2 gap-3 sm:col-span-2">
+                        {metrics.map((metric) => (
+                          <Link key={metric.label} className="min-w-0 pb-2 hover:bg-surface-strong hover:underline active:bg-background" href={metric.href}>
+                            <StatCard label={metric.label} value={metric.value} />
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-x-2">
+                      {notifications.map((notification) => (
+                        <Link
+                          key={notification.id}
+                          href={notification.href}
+                          className="grid min-h-11 content-center px-1 py-1 hover:bg-surface-strong hover:underline active:bg-background"
+                        >
+                          <h4 className="text-xs font-medium text-foreground">{notification.title}</h4>
+                          <time className="text-xs tabular-nums text-ink-2">{notification.timeText}</time>
+                        </Link>
+                      ))}
+                    </div>
+                  </article>
+                );
+              })}
+            </Card>
+          )}
         </div>
       </section>
     </section>

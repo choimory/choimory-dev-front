@@ -1,7 +1,7 @@
-import { Chip } from '@/shared/ui/Chip';
 import { Icon } from '@/shared/ui/Icon';
 import { ListRow } from '@/shared/ui/ListRow';
 
+import { TargetPreviewMetrics } from './TargetPreviewLink';
 import { getTargetTypeLabel, getTargetIconName, getTargetToneClassName } from '../model/feedTargetView';
 import type { FeedWatchTarget } from '../model/feedTypes';
 
@@ -15,20 +15,20 @@ export function TargetListLink({ href, rightText, target }: { href: string; righ
   return (
     <ListRow
       href={href}
+      className="active:bg-surface-strong"
       leading={(
-        <span className={`grid size-10 place-items-center rounded-full ${getTargetToneClassName(target.type)}`}>
+        <span className={`grid size-10 place-items-center rounded-input ${getTargetToneClassName(target.type)}`}>
           <Icon className="size-5" name={getTargetIconName(target.type)} />
         </span>
       )}
-      trailing={<span className="text-xs font-bold text-primary">{rightText}</span>}
+      trailing={<TargetPreviewMetrics target={target} trailingText={rightText} />}
     >
       <span className="min-w-0">
-        <span className="flex items-center gap-2">
-          <span className="truncate text-sm font-bold text-foreground">{target.name}</span>
-          <Chip size="sm" className="shrink-0">{getTargetTypeLabel(target.type)}</Chip>
+        <span className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          <span className="min-w-0 text-sm font-semibold text-foreground">{target.name}</span>
+          <span className="text-xs text-muted">{getTargetTypeLabel(target.type)}</span>
         </span>
-        <span className="mt-1 block truncate text-xs text-muted">{target.summary}</span>
-        <span className="mt-1 block truncate text-xs text-muted">{target.statusText} · {target.metricText}</span>
+        <span className="mt-1 block text-xs text-muted">{target.summary}</span>
       </span>
     </ListRow>
   );

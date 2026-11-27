@@ -31,7 +31,7 @@ describe('StatCard', () => {
   it('size에 따라 값 글자 크기가 달라진다', () => {
     const { rerender } = render(<StatCard label="라벨" value="값" />);
 
-    expect(screen.getByText('값')).toHaveClass('text-xl');
+    expect(screen.getByText('값')).toHaveClass('text-2xl');
 
     // sm 크기로 다시 렌더링하면 값 글자가 작아진다
     rerender(<StatCard label="라벨" value="값" size="sm" />);

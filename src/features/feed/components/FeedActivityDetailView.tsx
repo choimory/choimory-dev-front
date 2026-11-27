@@ -31,24 +31,26 @@ export function FeedActivityDetailView({ activity, isLoggedIn }: FeedActivityDet
         serviceName="feed"
         serviceHref="/feed"
         leading={
-          <Link className="grid size-10 place-items-center rounded-[10px] text-foreground" href="/feed/me" aria-label="내 피드로 돌아가기">
+          <Link className="key grid size-10 place-items-center rounded-input text-foreground" href="/feed/me" aria-label="내 피드로 돌아가기">
             <Icon name="chevronLeft" />
           </Link>
         }
       />
 
-      <AppContent className="grid gap-4">
-        <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="activity-detail-title">
-          <p className="text-sm font-bold text-primary">{activity.source}</p>
-          <h1 id="activity-detail-title" className="mt-1 text-2xl font-black leading-tight text-foreground">
+      <AppContent className="grid min-w-0 gap-6">
+        <section className="pt-2" aria-labelledby="activity-detail-title">
+          <h1 id="activity-detail-title" className="min-w-0 break-words font-display text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
             {activity.title}
           </h1>
-          <time className="mt-2 block text-sm text-muted">{activity.timeText}</time>
+          <dl className="mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-3 border-y border-border py-3 text-sm">
+            <dt className="break-words font-medium text-ink-2">{activity.source}</dt>
+            <dd className="tabular-nums text-muted"><time>{activity.timeText}</time></dd>
+          </dl>
         </section>
 
         <Card as="section" aria-labelledby="activity-body-title">
-          <h2 id="activity-body-title" className="text-base font-bold text-foreground">알림 내용</h2>
-          <p className="mt-2 text-sm leading-6 text-muted">
+          <h2 id="activity-body-title" className="font-display text-lg font-semibold text-foreground">알림 내용</h2>
+          <p className="mt-2 text-base leading-6 text-ink-2">
             실제 알림 API가 연결되기 전까지 상세 화면의 정보 구조를 먼저 확인하고 있어요. 이후 원본 대상, 발생 조건, 재알림 설정을 이 화면에 연결할 예정이에요.
           </p>
         </Card>

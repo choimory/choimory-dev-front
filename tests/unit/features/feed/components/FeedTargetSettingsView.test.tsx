@@ -19,13 +19,13 @@ function isToggleOn(label: RegExp) {
  * 토글은 isToggleOn 헬퍼로 켜짐 상태를 읽습니다.
  */
 describe('FeedTargetSettingsView', () => {
-  it('설정 헤더에 종류 라벨, 대상 이름, 안내 문구를 보여준다', () => {
+  it('설정 헤더에 종류 라벨, 대상 이름 제목, 안내 문구를 보여준다', () => {
     render(<FeedTargetSettingsView isLoggedIn target={FEED_ITEM_TARGET_FIXTURE} />);
 
     const header = screen.getByRole('region', { name: '기계식 키보드' });
 
     expect(within(header).getByText('아이템')).toBeInTheDocument();
-    expect(within(header).getByText('feed / settings')).toBeInTheDocument();
+    expect(within(header).getByRole('heading', { level: 1, name: '기계식 키보드' })).toBeInTheDocument();
     expect(within(header).getByText('내가 어떻게 알림을 받을지 조정해보세요.')).toBeInTheDocument();
   });
 

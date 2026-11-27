@@ -3,7 +3,10 @@
 import Link from 'next/link';
 import { useRef } from 'react';
 
+import { Card } from '@/shared/ui/Card';
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
+import { IconButton } from '@/shared/ui/IconButton';
 
 import type { PlatformService } from '../model/platformHomeTypes';
 
@@ -14,13 +17,8 @@ type ServiceLauncherCardProps = {
   services: PlatformService[]; // 런처에 표시할 서비스 목록
 };
 
-/** 서비스 강조 색상별 클래스 */
-const SERVICE_TONE_CLASS_NAME: Record<PlatformService['tone'], string> = {
-  blue: 'text-primary bg-primary-soft',
-  green: 'text-accent-green bg-accent-green-soft',
-  orange: 'text-accent-orange bg-accent-orange-soft',
-  purple: 'text-accent-purple bg-accent-purple-soft',
-};
+/** 런처 좌우 이동 버튼의 터치 영역 */
+const LAUNCHER_ARROW_CLASS_NAME = 'relative after:absolute after:-inset-1';
 
 /**
  * 플랫폼 하위 서비스를 하나의 카드 안에 아이콘 런처로 표시합니다.
@@ -39,61 +37,57 @@ export function ServiceLauncherCard({ services }: ServiceLauncherCardProps) {
   const handleScroll = (direction: 'left' | 'right') => {
     scrollContainerRef.current?.scrollBy({
       left: direction === 'left' ? -240 : 240,
-      behavior: 'smooth',
+      behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
     });
   };
 
   return (
-    <section className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-3xl border border-border bg-surface p-4 shadow-[0_18px_50px_rgba(0,0,0,0.16)]" aria-label="서비스 런처">
-      <button
-        className="grid size-10 place-items-center rounded-full bg-surface-strong text-foreground"
-        type="button"
-        aria-label="이전 서비스 보기"
+    <Card as="section" padding="sm" className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2" aria-label="서비스 런처">
+      <IconButton
+        className={LAUNCHER_ARROW_CLASS_NAME}
+        ariaLabel="이전 서비스 보기"
         onClick={() => handleScroll('left')}
       >
         <Icon className="size-5" name="chevronLeft" />
-      </button>
+      </IconButton>
 
-      <div ref={scrollContainerRef} className="flex gap-3 overflow-x-hidden scroll-smooth">
+      <div ref={scrollContainerRef} className="flex items-center gap-1 overflow-x-auto p-1 [scrollbar-width:none]">
         {services.map((service) => {
           const serviceContent = (
             <>
-              <span className={`relative grid size-12 place-items-center rounded-2xl border border-border/60 shadow-sm ${SERVICE_TONE_CLASS_NAME[service.tone]}`}>
-                <Icon name={service.iconName} />
+              <IconBadge as="span" size="xs" tone="strong">
+                <Icon className="size-4 text-ink-2" name={service.iconName} />
+              </IconBadge>
+              <span className="grid justify-items-start whitespace-nowrap">
+                <span className="text-xs font-medium text-foreground">{service.name}</span>
                 {service.status === 'planned' && (
-                  <span className="absolute -right-1 -top-1 rounded-full bg-surface px-1.5 py-0.5 text-[10px] font-bold text-muted shadow-sm">
-                    예정
-                  </span>
+                  <span className="text-xs text-ink-2">예정</span>
                 )}
-              </span>
-              <span className={`max-w-full text-xs font-medium leading-4 ${service.status === 'planned' ? 'text-muted' : 'text-foreground group-hover:text-primary'}`}>
-                {service.name}
               </span>
             </>
           );
 
           return service.status === 'active' ? (
-            <Link key={service.id} className="group grid w-20 shrink-0 justify-items-center gap-2 rounded-2xl p-2 text-center transition hover:bg-surface-strong" href={service.href}>
+            <Link key={service.id} className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-input px-2 hover:bg-surface-strong active:bg-background" href={service.href}>
               {serviceContent}
             </Link>
           ) : (
-            <button key={service.id} className="grid w-20 shrink-0 cursor-not-allowed justify-items-center gap-2 rounded-2xl p-2 text-center opacity-75" type="button" aria-disabled="true">
+            <button key={service.id} className="relative inline-flex h-10 shrink-0 cursor-not-allowed items-center gap-1.5 px-2 opacity-75 after:absolute after:inset-x-0 after:-inset-y-0.5" type="button" aria-disabled="true">
               {serviceContent}
             </button>
           );
         })}
       </div>
 
-      <button
-        className="grid size-10 place-items-center rounded-full bg-surface-strong text-foreground"
-        type="button"
-        aria-label="다음 서비스 보기"
+      <IconButton
+        className={LAUNCHER_ARROW_CLASS_NAME}
+        ariaLabel="다음 서비스 보기"
         onClick={() => handleScroll('right')}
       >
         <span className="rotate-180">
           <Icon className="size-5" name="chevronLeft" />
         </span>
-      </button>
-    </section>
+      </IconButton>
+    </Card>
   );
 }

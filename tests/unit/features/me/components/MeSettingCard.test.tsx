@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -34,10 +34,10 @@ describe('MeSettingCard', () => {
     expect(screen.getByText('테마를 선택해요.')).toBeInTheDocument();
   });
 
-  it('일반 항목은 "열기" 라벨과 기본 색상을 사용한다', () => {
+  it('일반 항목은 "열기" 라벨을 사용한다', () => {
     render(<MeSettingCard item={NORMAL_ITEM} onSelect={() => {}} />);
 
-    expect(screen.getByText('열기')).toHaveClass('bg-surface-strong', 'text-foreground');
+    expect(within(screen.getByRole('button')).getByText('열기')).toBeInTheDocument();
   });
 
   it('위험 항목은 "탈퇴" 라벨과 위험 색상을 사용한다', () => {

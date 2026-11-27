@@ -5,8 +5,9 @@ import { useState } from 'react';
 import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
-import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Button } from '@/shared/ui/Button';
+import { ListRow } from '@/shared/ui/ListRow';
 import { Modal } from '@/shared/ui/Modal';
 import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 
@@ -57,15 +58,15 @@ export function PlatformNoticeView({ isLoggedIn }: PlatformNoticeViewProps) {
           description="플랫폼과 하위 서비스의 변경사항을 모아봐요."
         />
 
-        <section className="grid gap-3" aria-label="공지사항 목록">
+        <section className="grid border-t border-border" aria-label="공지사항 목록">
           {PLATFORM_NOTICES.map((notice) => (
-            <button key={notice.id} className="rounded-2xl border border-border bg-surface p-4 text-left transition hover:bg-surface-strong" type="button" onClick={() => setSelectedNotice(notice)}>
-              <div className="flex items-start justify-between gap-3">
-                <h2 className="text-base font-bold text-foreground">{notice.title}</h2>
-                <time className="shrink-0 text-xs text-muted">{notice.dateText}</time>
+            <ListRow key={notice.id} className="transition-none active:bg-surface" padding="md" onClick={() => setSelectedNotice(notice)}>
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1">
+                <h2 className="text-base font-semibold leading-snug text-foreground">{notice.title}</h2>
+                <time className="mt-0.5 whitespace-nowrap text-xs tabular-nums text-muted">{notice.dateText}</time>
+                <p className="col-span-full text-sm leading-6 text-ink-2">{notice.description}</p>
               </div>
-              <p className="mt-2 text-sm leading-6 text-muted">{notice.description}</p>
-            </button>
+            </ListRow>
           ))}
         </section>
       </AppContent>
@@ -83,21 +84,17 @@ export function PlatformNoticeView({ isLoggedIn }: PlatformNoticeViewProps) {
         <Modal labelledBy="notice-dialog-title" onClose={() => setSelectedNotice(null)} placement="bottom" overlay="dark" size="lg" padding="lg">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <p className="flex items-center gap-1 text-sm font-bold text-primary">
-                <BrandLogo size="sm" isAnimated={false} />
-                <span>/ notice</span>
-              </p>
-              <h2 id="notice-dialog-title" className="mt-2 text-2xl font-black leading-tight text-foreground">
+              <h2 id="notice-dialog-title" className="text-display-s leading-tight text-foreground">
                 {selectedNotice.title}
               </h2>
-              <time className="mt-2 block text-xs text-muted">{selectedNotice.dateText}</time>
+              <time className="mt-2 block text-xs tabular-nums text-muted">{selectedNotice.dateText}</time>
             </div>
-            <button className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-surface-strong text-sm font-bold text-muted" type="button" onClick={() => setSelectedNotice(null)}>
+            <Button className="relative shrink-0 after:absolute after:inset-x-0 after:-inset-y-0.5" variant="secondary" onClick={() => setSelectedNotice(null)}>
               닫기
-            </button>
+            </Button>
           </div>
-          <div className="mt-4 rounded-2xl bg-surface-strong p-4">
-            <p className="text-sm leading-6 text-foreground">{selectedNotice.content}</p>
+          <div className="mt-4 border-t border-border pt-4">
+            <p className="text-sm leading-6 text-ink-2">{selectedNotice.content}</p>
           </div>
         </Modal>
       )}

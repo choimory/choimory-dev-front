@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { Button } from '@/shared/ui/Button';
+import { Card } from '@/shared/ui/Card';
 
 import type { LoginViewModel } from '../model/authTypes';
 
@@ -25,8 +26,12 @@ type LoginViewProps = {
 const SOCIAL_LOGIN_BUTTON_CLASS_NAME: Record<LoginViewModel['socialProviders'][number]['id'], string> = {
   naver: 'border-[#03c75a] bg-[#03c75a] text-white',
   kakao: 'border-[#fee500] bg-[#fee500] text-[#191919]',
-  google: 'border-border bg-surface-strong text-foreground',
+  google: 'border-rule-2 bg-surface-strong text-foreground',
 };
+
+/** 로그인 입력창 공통 클래스 */
+const INPUT_CLASS_NAME =
+  'h-10 min-w-0 rounded-input border border-muted bg-background px-3 text-base text-foreground hover:border-ink-2 focus:border-primary focus-visible:outline-focus disabled:opacity-50';
 
 /**
  * 로그인 폼을 표시하는 화면입니다.
@@ -46,22 +51,21 @@ export function LoginView({
 }: LoginViewProps) {
   return (
     <AppFrame>
-      <main className="mx-auto grid min-h-dvh w-full max-w-[440px] content-center px-5 py-12">
-        <section className="rounded-3xl border border-border bg-surface p-6 shadow-[0_18px_50px_rgba(0,0,0,0.22)]">
-          <Link className="inline-flex" href="/" aria-label="choimory.dev 홈">
+      <main className="mx-auto grid min-h-dvh w-full max-w-[440px] content-center px-4 py-8 sm:py-12">
+        <header className="mb-5">
+          <Link className="inline-flex min-h-11 items-center rounded-input hover:opacity-80 focus-visible:outline-focus active:opacity-65" href="/" aria-label="choimory.dev 홈">
             <BrandLogo size="md" />
           </Link>
+          <h1 className="mt-5 min-w-0 font-display text-display font-semibold text-foreground">{viewModel.title}</h1>
+          <p className="mt-1 text-sm leading-6 text-muted">{viewModel.description}</p>
+        </header>
 
-          <div className="mt-8">
-            <h1 className="text-2xl font-bold tracking-normal text-foreground">{viewModel.title}</h1>
-            <p className="mt-2 text-sm leading-6 text-muted">{viewModel.description}</p>
-          </div>
-
-          <form className="mt-7 grid gap-4" onSubmit={onSubmit}>
-            <label className="grid gap-2 text-sm font-medium text-foreground">
+        <Card as="section" className="sm:p-5">
+          <form className="grid gap-3" onSubmit={onSubmit}>
+            <label className="grid gap-1 text-sm font-medium text-foreground">
               이메일
               <input
-                className="h-12 rounded-[12px] border border-border bg-surface-strong px-4 text-base text-foreground outline-none transition focus:border-primary"
+                className={INPUT_CLASS_NAME}
                 name="email"
                 placeholder="you@example.com"
                 type="email"
@@ -70,10 +74,10 @@ export function LoginView({
               />
             </label>
 
-            <label className="grid gap-2 text-sm font-medium text-foreground">
+            <label className="grid gap-1 text-sm font-medium text-foreground">
               비밀번호
               <input
-                className="h-12 rounded-[12px] border border-border bg-surface-strong px-4 text-base text-foreground outline-none transition focus:border-primary"
+                className={INPUT_CLASS_NAME}
                 name="password"
                 placeholder="비밀번호"
                 type="password"
@@ -93,13 +97,13 @@ export function LoginView({
             </Button>
           </form>
 
-          <div className="mt-4 grid gap-3">
-            <Link className="grid h-12 place-items-center rounded-[12px] border border-border bg-surface text-sm font-bold text-foreground transition hover:bg-surface-strong" href={viewModel.signupLink.href}>
-              {viewModel.signupLink.label}
-            </Link>
-          </div>
+          <Link className="key hit-area mt-3 grid h-10 w-full place-items-center text-sm font-semibold" href={viewModel.signupLink.href}>
+            {viewModel.signupLink.label}
+          </Link>
+        </Card>
 
-          <div className="my-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3 text-xs text-muted">
+        <div className="mt-5">
+          <div className="mb-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3 text-xs text-muted">
             <span className="h-px bg-border" />
             <span>또는</span>
             <span className="h-px bg-border" />
@@ -109,7 +113,7 @@ export function LoginView({
             {viewModel.socialProviders.map((provider) => (
               <button
                 key={provider.id}
-                className={`h-11 rounded-[12px] border px-4 text-sm font-bold ${SOCIAL_LOGIN_BUTTON_CLASS_NAME[provider.id]}`}
+                className={`relative h-10 rounded-input border px-4 text-sm font-semibold after:absolute after:-inset-y-0.5 after:inset-x-0 enabled:hover:brightness-95 focus-visible:outline-focus enabled:active:shadow-(--shadow-key-press) disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-transform motion-safe:duration-(--dur-micro) motion-safe:enabled:active:translate-y-0.5 ${SOCIAL_LOGIN_BUTTON_CLASS_NAME[provider.id]}`}
                 type="button"
               >
                 {provider.label}
@@ -117,10 +121,10 @@ export function LoginView({
             ))}
           </div>
 
-          <p className="mt-5 text-center text-xs leading-5 text-muted">
+          <p className="mt-3 text-xs leading-5 text-muted">
             아직 실제 소셜 로그인 연동 전이라 버튼은 화면 구성 확인용이에요.
           </p>
-        </section>
+        </div>
       </main>
     </AppFrame>
   );

@@ -24,19 +24,19 @@ type FeedMenuViewProps = {
 };
 
 /** feed 메뉴별 화면 문구 */
-const FEED_MENU_COPY: Record<FeedMenuKind, { eyebrow: string; title: string; description: string }> = {
+const FEED_MENU_COPY: Record<FeedMenuKind, { domainPath: string; title: string; description: string }> = {
   popular: {
-    eyebrow: 'feed / popular',
+    domainPath: 'feed / popular',
     title: '실시간 순위',
     description: '등록과 반응이 늘고 있는 아이템, 스트리머, 아티스트를 모아봐요.',
   },
   observations: {
-    eyebrow: 'feed / observations',
+    domainPath: 'feed / observations',
     title: '관찰',
     description: '가격, 방송, 신곡처럼 계속 지켜볼 대상을 확인해보세요.',
   },
   me: {
-    eyebrow: 'feed / me',
+    domainPath: 'feed / me',
     title: '내 피드',
     description: '내가 등록한 관찰 대상과 알림 설정으로 이동해요.',
   },
@@ -62,16 +62,16 @@ export function FeedMenuView({ menuKind, viewModel }: FeedMenuViewProps) {
         serviceName="feed"
         serviceHref="/feed"
         leading={
-          <Link className="grid size-10 place-items-center rounded-[10px] text-foreground" href="/feed" aria-label="feed 홈으로 돌아가기">
+          <Link className="grid size-11 place-items-center rounded-input text-foreground hover:bg-surface-strong active:bg-surface-strong" href="/feed" aria-label="feed 홈으로 돌아가기">
             <Icon name="chevronLeft" />
           </Link>
         }
       />
 
-      <AppContent className="grid gap-3">
+      <AppContent className="grid gap-6">
         {menuKind !== 'me' && (
           <PageIntroCard
-            domainPath={copy.eyebrow}
+            domainPath={copy.domainPath}
             title={copy.title}
             description={copy.description}
           />

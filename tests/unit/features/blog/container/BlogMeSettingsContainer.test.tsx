@@ -11,7 +11,6 @@ describe('BlogMeSettingsContainer', () => {
   it('내 blog 설정 화면을 보여준다', () => {
     render(<BlogMeSettingsContainer authStatus="member" />);
 
-    expect(screen.getByText('/ blog / me')).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '설정' })).toBeInTheDocument();
   });
 

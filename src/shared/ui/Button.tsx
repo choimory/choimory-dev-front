@@ -4,25 +4,26 @@ import type { ButtonHTMLAttributes } from 'react';
  * 버튼 컴포넌트의 Props
  */
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'secondary' | 'outline-danger'; // 버튼 종류 (기본 primary: 강조색, secondary: 보조, outline-danger: 위험 테두리)
-  size?: 'md' | 'lg';                                    // 크기 (기본 md: 높이 40px, lg: 높이 48px)
+  variant?: 'primary' | 'secondary' | 'outline-danger'; // 버튼 종류 (기본 primary: 코발트 키, secondary: 회색 키, outline-danger: 위험색 테두리와 글자의 회색 키)
+  size?: 'md' | 'lg';                                    // 크기 (기본 md: 높이 40px, lg: 높이 48px, 인증 화면의 제출 버튼용)
 };
 
-/** 버튼 종류별 클래스 */
+/** 버튼 종류별 클래스 (키캡 모양은 globals.css의 .key / .key-primary) */
 const BUTTON_VARIANT_CLASS_NAME: Record<NonNullable<ButtonProps['variant']>, string> = {
-  primary: 'bg-primary text-primary-foreground',
-  secondary: 'bg-surface-strong text-muted',
-  'outline-danger': 'border border-accent-red text-accent-red',
+  primary: 'key key-primary bg-primary text-primary-foreground',
+  secondary: 'key text-foreground',
+  'outline-danger': 'key border border-accent-red text-accent-red',
 };
 
 /** 버튼 크기별 클래스 */
 const BUTTON_SIZE_CLASS_NAME: Record<NonNullable<ButtonProps['size']>, string> = {
-  md: 'h-10 rounded-[10px]',
-  lg: 'h-12 rounded-[12px]',
+  md: 'h-10 rounded-input',
+  lg: 'h-12 rounded-input',
 };
 
 /**
- * 텍스트가 들어가는 공용 버튼입니다. 등록, 취소, 로그인 같은 동작에 사용합니다.
+ * 텍스트가 들어가는 공용 키캡 버튼입니다. 등록, 취소, 로그인 같은 동작에 사용합니다.
+ * 한 화면의 주요 동작 하나만 primary(코발트 키)를 쓰고, 나머지는 secondary를 씁니다.
  * type을 따로 지정하지 않으면 button으로 동작합니다.
  *
  * @param props 컴포넌트 Props
@@ -30,7 +31,7 @@ const BUTTON_SIZE_CLASS_NAME: Record<NonNullable<ButtonProps['size']>, string> =
  */
 export function Button({ variant = 'primary', size = 'md', type = 'button', className, children, ...rest }: ButtonProps) {
   const buttonClassName = [
-    'px-4 text-sm font-bold',
+    'hit-area inline-flex items-center justify-center gap-2 whitespace-nowrap px-4 text-sm font-semibold',
     BUTTON_SIZE_CLASS_NAME[size],
     BUTTON_VARIANT_CLASS_NAME[variant],
     className,

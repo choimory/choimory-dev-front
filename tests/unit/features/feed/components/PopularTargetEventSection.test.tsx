@@ -14,7 +14,6 @@ describe('PopularTargetEventSection', () => {
     render(<PopularTargetEventSection activities={FEED_ACTIVITIES_FIXTURE} />);
 
     expect(screen.getByRole('region', { name: '최근 이벤트' })).toBeInTheDocument();
-    expect(screen.getByText('feed / event')).toBeInTheDocument();
   });
 
   it('알림마다 제목, 출처, 시간을 가진 링크를 보여준다', () => {

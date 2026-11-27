@@ -6,9 +6,9 @@
  */
 export function FormField({ label, placeholder }: { label: string; placeholder: string }) {
   return (
-    <label className="grid gap-2">
-      <span className="text-sm font-bold text-foreground">{label}</span>
-      <input className="h-11 rounded-[10px] border border-border bg-surface-strong px-3 text-sm text-foreground outline-none focus:border-primary" placeholder={placeholder} />
+    <label className="grid min-w-0 gap-1">
+      <span className="text-sm font-medium text-foreground">{label}</span>
+      <input className="h-10 min-w-0 rounded-input border border-muted bg-background px-3 text-sm tabular-nums text-foreground hover:bg-surface-strong focus:border-primary disabled:opacity-50" placeholder={placeholder} />
     </label>
   );
 }

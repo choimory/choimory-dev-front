@@ -9,7 +9,7 @@ type IconButtonProps = {
   onClick?: () => void;                    // 클릭 핸들러
   disabled?: boolean;                      // 비활성화 여부
   size?: 'sm' | 'md' | 'lg';               // 크기 (sm 32px, 기본 md 36px, lg 40px)
-  tone?: 'muted' | 'danger' | 'ghost';     // 색상 톤 (기본 muted: 배경 + 흐린 글자, danger: 배경 + 위험색, ghost: 배경 없음, 색은 className으로 지정)
+  tone?: 'muted' | 'danger' | 'ghost';     // 색상 톤 (기본 muted: 회색 키 + 흐린 글자, danger: 회색 키 + 위험색, ghost: 배경 없음, 색은 className으로 지정)
   className?: string;                      // 추가 클래스 (ghost 색상, shrink-0 등)
 };
 
@@ -22,9 +22,9 @@ const ICON_BUTTON_SIZE_CLASS_NAME: Record<NonNullable<IconButtonProps['size']>, 
 
 /** 버튼 색상 톤별 클래스 */
 const ICON_BUTTON_TONE_CLASS_NAME: Record<NonNullable<IconButtonProps['tone']>, string> = {
-  muted: 'bg-surface-strong text-muted',
-  danger: 'bg-surface-strong text-accent-red',
-  ghost: '',
+  muted: 'key text-muted hover:text-foreground',
+  danger: 'key text-accent-red',
+  ghost: 'transition-colors hover:bg-surface-strong',
 };
 
 /**
@@ -35,7 +35,7 @@ const ICON_BUTTON_TONE_CLASS_NAME: Record<NonNullable<IconButtonProps['tone']>, 
  */
 export function IconButton({ ariaLabel, children, onClick, disabled, size = 'md', tone = 'muted', className }: IconButtonProps) {
   const buttonClassName = [
-    'grid place-items-center rounded-[10px] disabled:opacity-35',
+    'hit-area grid shrink-0 place-items-center rounded-input disabled:cursor-not-allowed disabled:opacity-35',
     ICON_BUTTON_SIZE_CLASS_NAME[size],
     ICON_BUTTON_TONE_CLASS_NAME[tone],
     className,

@@ -10,11 +10,10 @@ import { BLOG_POSTS_FIXTURE } from '../../../../fixtures/blog';
  * 비회원용 blog 섹션의 소개 제목, 안내 3가지, 로그인과 회원가입 링크, 둘러보는 글 목록과 참여하기 링크를 확인합니다.
  */
 describe('BlogGuestSection', () => {
-  it('소개 제목과 로고 경로를 보여준다', () => {
+  it('소개 제목을 보여준다', () => {
     render(<BlogGuestSection posts={BLOG_POSTS_FIXTURE} />);
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('글과 이미지를 둘러보고');
-    expect(screen.getByText('/ blog')).toBeInTheDocument();
   });
 
   it('공개, 로그인, 연결 안내 3가지를 보여준다', () => {

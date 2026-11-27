@@ -1,5 +1,4 @@
 import { Button } from '@/shared/ui/Button';
-import { Card } from '@/shared/ui/Card';
 import { IconBadge } from '@/shared/ui/IconBadge';
 import { ListRow } from '@/shared/ui/ListRow';
 
@@ -22,11 +21,11 @@ type BlogMemberFeedSectionProps = {
  */
 export function BlogMemberFeedSection({ tabs, posts }: BlogMemberFeedSectionProps) {
   return (
-    <div className="grid gap-3">
-      <Card as="section">
+    <div className="grid gap-4">
+      <section>
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h1 className="text-xl font-bold">blog</h1>
+            <h1 className="text-display font-semibold">blog</h1>
             <p className="mt-1 text-sm leading-5 text-muted">
               인스타그램처럼 글, 이미지, 댓글, 팔로우를 다루는 서비스예요.
             </p>
@@ -36,14 +35,14 @@ export function BlogMemberFeedSection({ tabs, posts }: BlogMemberFeedSectionProp
           </Button>
         </div>
 
-        <div className="mt-3 flex flex-wrap gap-2" role="tablist" aria-label="blog 피드 필터">
+        <div className="tray mt-4 grid auto-cols-fr grid-flow-col gap-1 p-1" role="tablist" aria-label="blog 피드 필터">
           {tabs.map((tab) => (
             <button
               key={tab.label}
-              className={`h-9 rounded-full px-3 text-sm ${
+              className={`relative h-8 whitespace-nowrap rounded-input px-1 text-sm font-medium after:absolute after:-inset-y-1.5 after:inset-x-0 disabled:opacity-45 ${
                 tab.isActive
-                  ? 'bg-primary font-bold text-primary-foreground'
-                  : 'border border-border bg-surface text-muted'
+                  ? 'bg-primary text-primary-foreground shadow-key-press'
+                  : 'text-muted hover:bg-surface hover:text-foreground active:bg-surface'
               }`}
               type="button"
               role="tab"
@@ -53,23 +52,23 @@ export function BlogMemberFeedSection({ tabs, posts }: BlogMemberFeedSectionProp
             </button>
           ))}
         </div>
-      </Card>
+      </section>
 
       <ListRow
         as="section"
         ariaLabel="글 작성"
         leading={(
-          <IconBadge tone="primary" className="text-sm font-bold">
+          <IconBadge tone="strong" className="text-sm font-semibold text-foreground!">
             C
           </IconBadge>
         )}
       >
-        <button className="h-10 rounded-[10px] bg-surface-strong px-3 text-left text-sm text-muted" type="button">
+        <Button variant="secondary" className="justify-start">
           무슨 생각을 공유할까요?
-        </button>
+        </Button>
       </ListRow>
 
-      <section className="grid gap-3" aria-label="blog 피드">
+      <section className="grid" aria-label="blog 피드">
         {posts.map((post) => (
           <BlogPostCard key={post.id} post={post} />
         ))}

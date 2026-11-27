@@ -46,22 +46,24 @@ export function BlogUserBlogView({ isLoggedIn, nickname, posts }: BlogUserBlogVi
         serviceName="blog"
         serviceHref="/blog"
         leading={
-          <Link className="grid size-10 place-items-center rounded-[10px] text-foreground" href="/blog" aria-label="blog 홈으로 돌아가기">
+          <Link className="grid size-10 place-items-center rounded-input text-foreground hover:bg-surface-strong active:bg-surface-strong" href="/blog" aria-label="blog 홈으로 돌아가기">
             <Icon name="chevronLeft" />
           </Link>
         }
       />
 
-      <AppContent className="grid gap-3">
+      <AppContent className="grid gap-4">
         <PageIntroCard domainPath={`blog / @${profile.nickname}`} />
 
         <BlogProfileCard headingId="blog-user-profile-title" profile={profile} onSelectRelation={setRelationModal} />
 
-        <section className="grid gap-3" aria-labelledby="blog-user-post-title">
+        <section className="grid gap-2" aria-labelledby="blog-user-post-title">
           <SectionHeader domainPath="blog / post" title="포스트" headingId="blog-user-post-title" />
-          {posts.map((post) => (
-            <BlogPostCard key={post.id} post={post} />
-          ))}
+          <div className="grid">
+            {posts.map((post) => (
+              <BlogPostCard key={post.id} post={post} />
+            ))}
+          </div>
         </section>
       </AppContent>
 

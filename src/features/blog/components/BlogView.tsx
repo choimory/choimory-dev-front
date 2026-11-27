@@ -33,7 +33,7 @@ export function BlogView({ viewModel }: BlogViewProps) {
         serviceName="blog"
         serviceHref="/blog"
         leading={
-          <Link className="grid size-10 place-items-center rounded-[10px] text-foreground" href="/" aria-label="플랫폼 홈으로 돌아가기">
+          <Link className="grid size-10 place-items-center rounded-input text-foreground hover:bg-surface-strong active:bg-surface-strong" href="/" aria-label="플랫폼 홈으로 돌아가기">
             <Icon name="chevronLeft" />
           </Link>
         }

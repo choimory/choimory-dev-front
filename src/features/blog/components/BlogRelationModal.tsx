@@ -41,21 +41,21 @@ export function BlogRelationModal({ title, users, onClose }: BlogRelationModalPr
 
   return (
     <Modal title={title} labelledBy="blog-relation-modal-title" onClose={onClose}>
-      <div className="mt-4 grid gap-2">
+      <div className="mt-4 grid border-t border-border">
         {pageUsers.map((user) => (
           <ListRow
             key={user.id}
             as="article"
-            tone="strong"
+            className="px-0"
             leading={(
-              <IconBadge as="span" className="text-sm font-bold">
+              <IconBadge as="span" size="sm" tone="strong" className="text-sm font-semibold text-foreground!">
                 {user.initial}
               </IconBadge>
             )}
           >
             <span className="min-w-0">
-              <span className="block truncate text-sm font-bold text-foreground">{user.nickname}</span>
-              <span className="mt-1 block truncate text-xs text-muted">{user.summary}</span>
+              <span className="block text-sm font-semibold text-foreground">{user.nickname}</span>
+              <span className="mt-1 block text-xs leading-4 text-muted">{user.summary}</span>
             </span>
           </ListRow>
         ))}
@@ -64,7 +64,7 @@ export function BlogRelationModal({ title, users, onClose }: BlogRelationModalPr
         <IconButton ariaLabel="이전 목록" disabled={pageIndex === 0} onClick={() => setPageIndex((currentValue) => Math.max(0, currentValue - 1))}>
           <Icon name="chevronLeft" />
         </IconButton>
-        <span className="text-xs font-bold text-muted">
+        <span className="text-xs font-medium tabular-nums text-muted">
           {pageIndex + 1} / {pageCount}
         </span>
         <IconButton ariaLabel="다음 목록" disabled={pageIndex >= pageCount - 1} onClick={() => setPageIndex((currentValue) => Math.min(pageCount - 1, currentValue + 1))}>

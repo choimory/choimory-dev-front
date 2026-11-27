@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { Button } from '@/shared/ui/Button';
+import { Card } from '@/shared/ui/Card';
 
 import type { FieldErrors, SignupFormValues, SignupViewModel } from '../model/authTypes';
 
@@ -22,7 +23,7 @@ type SignupViewProps = {
 
 /** 입력창 공통 클래스 */
 const INPUT_CLASS_NAME =
-  'h-12 rounded-[12px] border border-border bg-surface-strong px-4 text-base text-foreground outline-none transition focus:border-primary';
+  'h-10 min-w-0 rounded-input border border-muted bg-background px-3 text-base text-foreground hover:border-ink-2 focus:border-primary focus-visible:outline-focus disabled:opacity-50';
 
 /** 필드 오류 메시지 클래스 */
 const FIELD_ERROR_CLASS_NAME = 'text-xs text-accent-red';
@@ -36,19 +37,18 @@ const FIELD_ERROR_CLASS_NAME = 'text-xs text-accent-red';
 export function SignupView({ viewModel, values, fieldErrors, formError, isSubmitting, onChange, onSubmit }: SignupViewProps) {
   return (
     <AppFrame>
-      <main className="mx-auto grid min-h-dvh w-full max-w-[440px] content-center px-5 py-12">
-        <section className="rounded-3xl border border-border bg-surface p-6 shadow-[0_18px_50px_rgba(0,0,0,0.22)]">
-          <Link className="inline-flex" href="/" aria-label="choimory.dev 홈">
+      <main className="mx-auto grid min-h-dvh w-full max-w-[440px] content-center px-4 py-8 sm:py-12">
+        <header className="mb-5">
+          <Link className="inline-flex min-h-11 items-center rounded-input hover:opacity-80 focus-visible:outline-focus active:opacity-65" href="/" aria-label="choimory.dev 홈">
             <BrandLogo size="md" />
           </Link>
+          <h1 className="mt-5 min-w-0 font-display text-display font-semibold text-foreground">{viewModel.title}</h1>
+          <p className="mt-1 text-sm leading-6 text-muted">{viewModel.description}</p>
+        </header>
 
-          <div className="mt-8">
-            <h1 className="text-2xl font-bold tracking-normal text-foreground">{viewModel.title}</h1>
-            <p className="mt-2 text-sm leading-6 text-muted">{viewModel.description}</p>
-          </div>
-
-          <form className="mt-7 grid gap-4" onSubmit={onSubmit}>
-            <label className="grid gap-2 text-sm font-medium text-foreground">
+        <Card as="section" className="sm:p-5">
+          <form className="grid gap-3" onSubmit={onSubmit}>
+            <label className="grid gap-1 text-sm font-medium text-foreground">
               닉네임
               <input
                 className={INPUT_CLASS_NAME}
@@ -61,7 +61,7 @@ export function SignupView({ viewModel, values, fieldErrors, formError, isSubmit
               {fieldErrors.nickname && <span className={FIELD_ERROR_CLASS_NAME}>{fieldErrors.nickname}</span>}
             </label>
 
-            <label className="grid gap-2 text-sm font-medium text-foreground">
+            <label className="grid gap-1 text-sm font-medium text-foreground">
               이메일
               <input
                 className={INPUT_CLASS_NAME}
@@ -74,7 +74,7 @@ export function SignupView({ viewModel, values, fieldErrors, formError, isSubmit
               {fieldErrors.email && <span className={FIELD_ERROR_CLASS_NAME}>{fieldErrors.email}</span>}
             </label>
 
-            <label className="grid gap-2 text-sm font-medium text-foreground">
+            <label className="grid gap-1 text-sm font-medium text-foreground">
               비밀번호
               <input
                 className={INPUT_CLASS_NAME}
@@ -87,7 +87,7 @@ export function SignupView({ viewModel, values, fieldErrors, formError, isSubmit
               {fieldErrors.password && <span className={FIELD_ERROR_CLASS_NAME}>{fieldErrors.password}</span>}
             </label>
 
-            <label className="grid gap-2 text-sm font-medium text-foreground">
+            <label className="grid gap-1 text-sm font-medium text-foreground">
               비밀번호 확인
               <input
                 className={INPUT_CLASS_NAME}
@@ -111,13 +111,13 @@ export function SignupView({ viewModel, values, fieldErrors, formError, isSubmit
             </Button>
           </form>
 
-          <div className="mt-5 flex items-center justify-between gap-3 text-sm">
+          <div className="mt-4 flex items-center justify-between gap-3 border-t border-border text-sm">
             <span className="text-muted">이미 계정이 있나요?</span>
-            <Link className="font-bold text-primary" href={viewModel.loginLink.href}>
+            <Link className="inline-flex min-h-11 items-center rounded-input font-semibold text-ink-2 underline decoration-rule-2 underline-offset-4 hover:text-foreground hover:decoration-current focus-visible:outline-focus active:opacity-65" href={viewModel.loginLink.href}>
               {viewModel.loginLink.label}
             </Link>
           </div>
-        </section>
+        </Card>
       </main>
     </AppFrame>
   );

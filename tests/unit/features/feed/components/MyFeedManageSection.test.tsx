@@ -11,10 +11,9 @@ import { FEED_TARGETS_FIXTURE, FEED_VIEW_MODEL_FIXTURE } from '../../../../fixtu
  * 내 피드 관리의 프로필, 요약 카운팅, 설정 링크 목록, 관찰 대상 등록 모달(열기, 닫기 버튼, 배경 클릭)을 확인합니다.
  */
 describe('MyFeedManageSection', () => {
-  it('페이지 소개와 프로필 카드를 보여준다', () => {
+  it('프로필 카드를 보여준다', () => {
     render(<MyFeedManageSection summaries={FEED_VIEW_MODEL_FIXTURE.summaries} targets={FEED_TARGETS_FIXTURE} />);
 
-    expect(screen.getByText('/ feed / me')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: 'mory.dev' })).toBeInTheDocument();
     expect(screen.getByText('M')).toBeInTheDocument();
   });

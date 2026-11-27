@@ -14,7 +14,7 @@ describe('Card', () => {
     const card = screen.getByTestId('card');
 
     expect(card.tagName).toBe('DIV');
-    expect(card).toHaveClass('rounded-2xl', 'border', 'border-border', 'bg-surface', 'p-4');
+    expect(card).toHaveClass('cut', 'border', 'border-border', 'bg-surface', 'p-4');
     expect(card).toHaveTextContent('내용');
   });
 

@@ -9,10 +9,9 @@ import { BlogMeSettingsView } from '@/features/blog/components/BlogMeSettingsVie
  * 내 blog 설정 화면의 프로필과 추가 카운팅, 설정 카드 3개, 글작성 모달과 설정 변경 모달과 관계 모달의 열기와 닫기, 로그인 여부를 확인합니다.
  */
 describe('BlogMeSettingsView', () => {
-  it('내 blog 소개와 프로필 카드(공개 블로그 링크, 추가 카운팅)를 보여준다', () => {
+  it('내 blog 프로필 카드(공개 블로그 링크, 추가 카운팅)를 보여준다', () => {
     render(<BlogMeSettingsView isLoggedIn />);
 
-    expect(screen.getByText('/ blog / me')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'mory.dev 공개 블로그로 이동' })).toHaveAttribute('href', '/blog/mory.dev');
     expect(screen.getByText('내 댓글')).toBeInTheDocument();
     expect(screen.getByText('좋아요')).toBeInTheDocument();

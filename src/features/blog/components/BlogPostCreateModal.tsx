@@ -5,6 +5,7 @@ import { useState, type ChangeEvent } from 'react';
 import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon';
 import { IconButton } from '@/shared/ui/IconButton';
+import { ListRow } from '@/shared/ui/ListRow';
 import { Modal } from '@/shared/ui/Modal';
 
 /** 글 공개 범위 옵션 */
@@ -79,24 +80,25 @@ export function BlogPostCreateModal({ onClose }: BlogPostCreateModalProps) {
 
   return (
     <Modal title="글작성" labelledBy="blog-modal-title" onClose={onClose} className="max-h-[86vh] overflow-y-auto">
-      <div className="mt-4 grid gap-3">
+      <div className="mt-4 grid gap-4">
         <label className="grid gap-1.5">
-          <span className="text-xs font-bold text-muted">글제목</span>
-          <input className="h-10 w-full rounded-[10px] border border-border bg-surface-strong px-3 text-sm text-foreground outline-none placeholder:text-muted" placeholder="제목을 입력하세요" />
+          <span className="text-sm font-medium text-ink-2">글제목</span>
+          <input className="h-10 w-full rounded-input border border-muted bg-background px-3 text-sm text-foreground focus-visible:border-primary" placeholder="제목을 입력하세요" />
         </label>
         <label className="grid gap-1.5">
-          <span className="text-xs font-bold text-muted">글내용</span>
-          <textarea className="min-h-28 w-full resize-none rounded-[10px] border border-border bg-surface-strong p-3 text-sm leading-6 text-foreground outline-none placeholder:text-muted" placeholder="무슨 생각을 공유할까요?" />
+          <span className="text-sm font-medium text-ink-2">글내용</span>
+          <textarea className="min-h-28 w-full resize-none rounded-input border border-muted bg-background p-3 text-sm leading-6 text-foreground focus-visible:border-primary" placeholder="무슨 생각을 공유할까요?" />
         </label>
 
         <div className="grid gap-1.5">
-          <span className="text-xs font-bold text-muted">공개여부</span>
-          <div className="grid grid-cols-3 gap-1 rounded-2xl bg-surface-strong p-1">
+          <span className="text-sm font-medium text-ink-2">공개여부</span>
+          <div className="tray grid grid-cols-3 gap-1 p-1">
             {POST_VISIBILITY_OPTIONS.map((option) => (
               <button
                 key={option}
-                className={`h-9 rounded-xl text-xs font-black ${visibility === option ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
+                className={`h-8 rounded-input text-sm font-medium ${visibility === option ? 'bg-primary text-primary-foreground shadow-key-press' : 'text-muted hover:bg-surface hover:text-foreground active:bg-surface'}`}
                 type="button"
+                aria-pressed={visibility === option}
                 onClick={() => setVisibility(option)}
               >
                 {option}
@@ -106,13 +108,14 @@ export function BlogPostCreateModal({ onClose }: BlogPostCreateModalProps) {
         </div>
 
         <div className="grid gap-1.5">
-          <span className="text-xs font-bold text-muted">댓글허용여부</span>
-          <div className="grid grid-cols-3 gap-1 rounded-2xl bg-surface-strong p-1">
+          <span className="text-sm font-medium text-ink-2">댓글허용여부</span>
+          <div className="tray grid grid-cols-3 gap-1 p-1">
             {COMMENT_PERMISSION_OPTIONS.map((option) => (
               <button
                 key={option}
-                className={`h-9 rounded-xl text-xs font-black ${commentPermission === option ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
+                className={`h-8 rounded-input text-sm font-medium ${commentPermission === option ? 'bg-primary text-primary-foreground shadow-key-press' : 'text-muted hover:bg-surface hover:text-foreground active:bg-surface'}`}
                 type="button"
+                aria-pressed={commentPermission === option}
                 onClick={() => setCommentPermission(option)}
               >
                 {option}
@@ -122,48 +125,56 @@ export function BlogPostCreateModal({ onClose }: BlogPostCreateModalProps) {
         </div>
 
         <label className="grid gap-1.5">
-          <span className="text-xs font-bold text-muted">태그</span>
-          <input className="h-10 w-full rounded-[10px] border border-border bg-surface-strong px-3 text-sm text-foreground outline-none placeholder:text-muted" placeholder="frontend, blog, note" />
+          <span className="text-sm font-medium text-ink-2">태그</span>
+          <input className="h-10 w-full rounded-input border border-muted bg-background px-3 text-sm text-foreground focus-visible:border-primary" placeholder="frontend, blog, note" />
         </label>
 
         <div className="grid gap-1.5">
-          <span className="text-xs font-bold text-muted">사진첨부</span>
-          <label className="grid min-h-10 cursor-pointer place-items-center rounded-[10px] border border-border bg-surface-strong px-3 text-sm font-bold text-muted">
+          <span className="text-sm font-medium text-ink-2">사진첨부</span>
+          <label className="key grid h-10 cursor-pointer place-items-center px-3 text-sm font-semibold hover:bg-surface-strong active:bg-surface-strong focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-focus">
             사진 선택
             <input className="sr-only" type="file" accept="image/*" multiple onChange={handlePhotoChange} />
           </label>
           {photos.length > 0 && (
-            <div className="grid gap-2 rounded-2xl bg-surface-strong p-3" aria-label="선택한 사진">
+            <div className="mt-1 grid border-t border-border" aria-label="선택한 사진">
               {photos.map((photo, index) => (
-                <article key={photo.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl bg-surface p-2">
-                  <span
-                    className="size-14 rounded-[10px] bg-cover bg-center"
-                    style={{ backgroundImage: `url(${photo.previewUrl})` }}
-                    aria-hidden="true"
-                  />
+                <ListRow
+                  key={photo.id}
+                  as="article"
+                  className="gap-2 px-0"
+                  leading={(
+                    <span
+                      className="cut-sm size-10 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${photo.previewUrl})` }}
+                      aria-hidden="true"
+                    />
+                  )}
+                  trailing={(
+                    <div className="grid grid-cols-3 gap-1">
+                      <IconButton ariaLabel={`${photo.name} 앞으로 이동`} size="sm" disabled={index === 0} onClick={() => movePhoto(index, -1)}>
+                        <Icon className="size-4 rotate-90" name="chevronLeft" />
+                      </IconButton>
+                      <IconButton ariaLabel={`${photo.name} 뒤로 이동`} size="sm" disabled={index === photos.length - 1} onClick={() => movePhoto(index, 1)}>
+                        <Icon className="size-4 -rotate-90" name="chevronLeft" />
+                      </IconButton>
+                      <IconButton ariaLabel={`${photo.name} 제거`} size="sm" tone="danger" onClick={() => removePhoto(photo.id)}>
+                        <Icon className="size-4" name="x" />
+                      </IconButton>
+                    </div>
+                  )}
+                >
                   <div className="min-w-0">
-                    <p className="truncate text-xs font-bold text-foreground">{photo.name}</p>
-                    <p className="mt-1 text-xs text-muted">{index + 1}번째 사진</p>
+                    <p className="truncate text-xs font-semibold text-foreground">{photo.name}</p>
+                    <p className="mt-1 text-xs tabular-nums text-muted">{index + 1}번째 사진</p>
                   </div>
-                  <div className="grid grid-cols-3 gap-1">
-                    <IconButton ariaLabel={`${photo.name} 앞으로 이동`} size="sm" disabled={index === 0} onClick={() => movePhoto(index, -1)}>
-                      <Icon className="size-4 rotate-90" name="chevronLeft" />
-                    </IconButton>
-                    <IconButton ariaLabel={`${photo.name} 뒤로 이동`} size="sm" disabled={index === photos.length - 1} onClick={() => movePhoto(index, 1)}>
-                      <Icon className="size-4 -rotate-90" name="chevronLeft" />
-                    </IconButton>
-                    <IconButton ariaLabel={`${photo.name} 제거`} size="sm" tone="danger" onClick={() => removePhoto(photo.id)}>
-                      <Icon className="size-4" name="x" />
-                    </IconButton>
-                  </div>
-                </article>
+                </ListRow>
               ))}
             </div>
           )}
         </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-2">
+      <div className="mt-5 flex justify-end gap-3 border-t border-border pt-4">
         <Button variant="secondary" onClick={onClose}>
           취소
         </Button>

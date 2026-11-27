@@ -7,7 +7,6 @@ import { IconBadge } from '@/shared/ui/IconBadge';
 import { IconButton } from '@/shared/ui/IconButton';
 import { ListRow } from '@/shared/ui/ListRow';
 import { Modal } from '@/shared/ui/Modal';
-import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
 import { StatCard } from '@/shared/ui/StatCard';
 
@@ -33,45 +32,38 @@ export function MyFeedManageSection({ summaries, targets }: { summaries: FeedVie
 
   return (
     <>
-      <PageIntroCard domainPath="feed / me" />
-
-      <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="feed-me-profile-title">
-        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
-          <div className="grid size-16 place-items-center rounded-3xl bg-primary text-xl font-black text-primary-foreground">
+      <section className="grid gap-6" aria-labelledby="feed-me-profile-title">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 px-1">
+          <IconBadge size="xl" tone="strong" className="text-lg font-semibold text-ink-2!">
             {FEED_ME_PROFILE.initial}
-          </div>
+          </IconBadge>
           <div className="min-w-0">
-            <h1 id="feed-me-profile-title" className="text-2xl font-black leading-tight text-foreground">
+            <h1 id="feed-me-profile-title" className="font-display text-display font-semibold leading-tight text-foreground">
               {FEED_ME_PROFILE.nickname}
             </h1>
             <p className="mt-2 text-sm leading-6 text-muted">{FEED_ME_PROFILE.description}</p>
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="내 피드 요약">
+        <div className="grid grid-cols-2 gap-3 min-[360px]:grid-cols-4" aria-label="내 피드 요약">
           {summaries.map((summary) => (
             <StatCard key={summary.label} label={summary.label} value={summary.value} />
           ))}
         </div>
       </section>
 
-      <ListRow
-        as="section"
-        ariaLabel="관찰 대상 추가"
-        leading={(
-          <IconBadge tone="primary">
-            <Icon name="plus" />
-          </IconBadge>
-        )}
-      >
-        <button className="h-10 rounded-[10px] bg-surface-strong px-3 text-left text-sm text-muted" type="button" onClick={() => setIsCreateFormOpen(true)}>
-          관찰할 아이템, 스트리머, 아티스트를 등록하세요
-        </button>
-      </ListRow>
+      <section aria-label="관찰 대상 추가">
+        <ListRow className="min-h-11 w-full border-t px-0 py-1 active:bg-surface-strong" onClick={() => setIsCreateFormOpen(true)}>
+          <span className="flex items-center gap-2 text-xs font-medium text-foreground sm:text-sm">
+            <Icon className="size-5 shrink-0 text-primary" name="plus" />
+            <span>관찰할 아이템, 스트리머, 아티스트를 등록하세요</span>
+          </span>
+        </ListRow>
+      </section>
 
       {isCreateFormOpen && (
-        <Modal labelledBy="feed-create-target-title" onClose={() => setIsCreateFormOpen(false)} overlay="dark" size="md" className="grid max-h-[calc(100vh-3rem)] overflow-y-auto">
-          <div className="mb-3 flex justify-end">
+        <Modal labelledBy="feed-create-target-title" onClose={() => setIsCreateFormOpen(false)} overlay="dark" size="md" className="relative max-h-[calc(100dvh-3rem)] overflow-y-auto">
+          <div className="absolute end-4 top-4">
             <IconButton ariaLabel="관찰 대상 등록 닫기" onClick={() => setIsCreateFormOpen(false)}>
               <Icon name="x" />
             </IconButton>
@@ -80,9 +72,9 @@ export function MyFeedManageSection({ summaries, targets }: { summaries: FeedVie
         </Modal>
       )}
 
-      <section className="grid gap-3" aria-labelledby="feed-my-target-title">
+      <section className="grid gap-1" aria-labelledby="feed-my-target-title">
         <SectionHeader domainPath="feed / settings" title="내 알림 설정" headingId="feed-my-target-title" />
-        <div className="grid gap-3">
+        <div className="grid">
           {targets.map((target) => (
             <TargetListLink
               key={target.id}

@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { Card } from '@/shared/ui/Card';
+import { IconBadge } from '@/shared/ui/IconBadge';
 import { StatCard } from '@/shared/ui/StatCard';
 
 import type { BlogRelationUser } from './BlogRelationModal';
@@ -75,11 +77,11 @@ type BlogProfileCardProps = {
 export function BlogProfileCard({ headingId, profile, onSelectRelation, profileHref, extraStats }: BlogProfileCardProps) {
   const header = (
     <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
-      <div className="grid size-16 place-items-center rounded-3xl bg-primary text-xl font-black text-primary-foreground">
+      <IconBadge size="xl" tone="strong" className="text-xl font-semibold text-foreground!">
         {profile.initial}
-      </div>
+      </IconBadge>
       <div className="min-w-0">
-        <h1 id={headingId} className="text-2xl font-black leading-tight text-foreground">
+        <h1 id={headingId} className="text-display font-semibold leading-tight text-foreground">
           {profile.nickname}
         </h1>
         <p className="mt-2 text-sm leading-6 text-muted">{profile.description}</p>
@@ -88,16 +90,16 @@ export function BlogProfileCard({ headingId, profile, onSelectRelation, profileH
   );
 
   return (
-    <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby={headingId}>
+    <Card as="section" aria-labelledby={headingId}>
       {profileHref ? (
-        <Link className="block" href={profileHref} aria-label={`${profile.nickname} 공개 블로그로 이동`}>
+        <Link className="block hover:[&_h1]:underline active:[&_h1]:text-primary" href={profileHref} aria-label={`${profile.nickname} 공개 블로그로 이동`}>
           {header}
         </Link>
       ) : (
         header
       )}
 
-      <div className="mt-4 grid grid-cols-3 gap-2">
+      <div className="mt-5 grid grid-cols-3 gap-x-3 gap-y-4 sm:grid-cols-[repeat(auto-fit,minmax(5.5rem,1fr))] [&>button]:min-h-11 [&>button]:hover:bg-surface-strong [&>button]:active:bg-surface-strong">
         <StatCard label="작성 글" value={`${profile.postCount}`} />
         <StatCard label="팔로워" value={`${profile.followerCount}`} onClick={() => onSelectRelation('followers')} />
         <StatCard label="팔로잉" value={`${profile.followingCount}`} onClick={() => onSelectRelation('following')} />
@@ -105,6 +107,6 @@ export function BlogProfileCard({ headingId, profile, onSelectRelation, profileH
           <StatCard key={stat.label} label={stat.label} value={stat.value} />
         ))}
       </div>
-    </section>
+    </Card>
   );
 }

@@ -5,15 +5,21 @@ import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 
 /**
  * PageIntroCard 테스트
- * 화면 최상단 소개 영역이 로고와 경로만 보여주는 경우와 제목과 설명까지 보여주는 경우를 확인합니다.
+ * 화면 최상단 소개 영역이 제목·설명이 없으면 렌더링하지 않고, 있으면 제목과 설명을 보여주는지 확인합니다.
+ * 로고+경로 라벨은 상단 바가 보여주므로 소개 영역에는 표시하지 않습니다.
  */
 describe('PageIntroCard', () => {
-  it('로고와 도메인 경로만 있으면 제목과 설명은 표시하지 않는다', () => {
-    render(<PageIntroCard domainPath="blog / me" />);
+  it('제목과 설명이 없으면 아무것도 렌더링하지 않는다', () => {
+    const { container } = render(<PageIntroCard domainPath="blog / me" />);
 
-    expect(screen.getByLabelText('choimory.dev')).toBeInTheDocument();
-    expect(screen.getByText('/ blog / me')).toBeInTheDocument();
-    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('로고와 도메인 경로 라벨은 표시하지 않는다', () => {
+    render(<PageIntroCard domainPath="notice" title="공지사항" />);
+
+    expect(screen.queryByLabelText('choimory.dev')).not.toBeInTheDocument();
+    expect(screen.queryByText('/ notice')).not.toBeInTheDocument();
   });
 
   it('title과 description이 있으면 제목과 설명을 표시한다', () => {

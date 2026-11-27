@@ -70,7 +70,7 @@ describe('Modal', () => {
     const dialog = screen.getByRole('dialog');
 
     expect(dialog.parentElement).toHaveClass('place-items-center', 'bg-background/70');
-    expect(dialog).toHaveClass('max-w-sm', 'p-4', 'shadow-2xl');
+    expect(dialog).toHaveClass('max-w-sm', 'p-4', 'shadow-card');
   });
 
   it('placement, overlay, size, padding, className을 반영한다', () => {

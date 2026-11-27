@@ -17,7 +17,8 @@ describe('BlogPostCard', () => {
 
     expect(screen.getByRole('heading', { level: 2, name: 'mory.dev' })).toBeInTheDocument();
     expect(screen.getByText('M')).toBeInTheDocument();
-    expect(screen.getByText('프론트 구성 기획 · 8분 전')).toBeInTheDocument();
+    expect(screen.getByText('프론트 구성 기획')).toBeInTheDocument();
+    expect(screen.getByText('8분 전')).toBeInTheDocument();
   });
 
   it('제목, 본문, 좋아요 수, 댓글 수를 보여준다', () => {

@@ -33,16 +33,16 @@ export function ArtistDetailSection({ target }: { target: FeedWatchTarget }) {
   return (
     <>
       <Card as="section" aria-labelledby="feed-artist-summary-title">
-        <h2 id="feed-artist-summary-title" className="text-base font-bold text-foreground">신곡 관찰</h2>
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <StatCard size="sm" label="최근 신곡" value={detail.latestReleaseTitle} />
-          <StatCard size="sm" label="예정 발매" value={detail.upcomingReleaseText} />
+        <h2 id="feed-artist-summary-title" className="font-display text-lg font-semibold text-foreground">신곡 관찰</h2>
+        <div className="mt-3 grid sm:grid-cols-2 sm:gap-6 max-sm:*:flex max-sm:*:flex-row-reverse max-sm:*:items-baseline max-sm:*:justify-between max-sm:*:gap-3 max-sm:*:py-2 max-sm:[&>article>p:first-child]:text-right max-sm:[&>article>p:first-child]:text-base max-sm:[&>article>p:last-child]:mt-0 max-sm:[&>article>p:last-child]:shrink-0">
+          <StatCard label="최근 신곡" value={detail.latestReleaseTitle} />
+          <StatCard label="예정 발매" value={detail.upcomingReleaseText} />
         </div>
         <p className="mt-3 text-sm leading-6 text-muted">{detail.releaseTrendText}</p>
       </Card>
 
       <Card as="section" aria-labelledby="feed-artist-album-title">
-        <h2 id="feed-artist-album-title" className="text-base font-bold text-foreground">최근 앨범</h2>
+        <h2 id="feed-artist-album-title" className="font-display text-lg font-semibold text-foreground">최근 앨범</h2>
         <AlbumCarousel3d
           activeAlbumIndex={activeAlbumIndex}
           albums={detail.albums}

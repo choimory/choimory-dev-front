@@ -29,7 +29,7 @@ describe('BottomNavigation', () => {
 
     expect(screen.getByRole('link', { name: '공지사항' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: '홈' })).not.toHaveAttribute('aria-current');
-    expect(screen.getByRole('link', { name: '공지사항' })).toHaveClass('bg-primary-soft', 'text-primary');
+    expect(screen.getByRole('link', { name: '공지사항' })).toHaveClass('text-primary');
   });
 
   it('기본 폭은 wide이고 size=narrow를 반영한다', () => {

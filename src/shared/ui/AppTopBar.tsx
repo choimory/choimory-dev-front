@@ -31,7 +31,7 @@ export function AppTopBar({ serviceName, serviceHref, leading, size = 'wide', is
   const serviceLabel = serviceName ? `/ ${serviceName}` : null;
 
   return (
-    <header className="sticky top-0 z-20 border-b border-border bg-shell/95 backdrop-blur">
+    <header className="sticky top-0 z-20 border-b border-border bg-shell">
       <div className={`mx-auto flex min-h-16 w-full ${TOP_BAR_WIDTH_CLASS_NAME[size]} items-center gap-2 px-4 py-2 lg:px-0`}>
         {leading && <div className="shrink-0">{leading}</div>}
         <div className="grid min-w-0 shrink gap-0.5 min-[380px]:flex min-[380px]:items-baseline min-[380px]:gap-2">
@@ -39,12 +39,12 @@ export function AppTopBar({ serviceName, serviceHref, leading, size = 'wide', is
             <BrandLogo isAnimated={false} size="sm" />
           </Link>
           {serviceLabel && serviceHref && (
-            <Link className="w-fit text-xs font-bold text-muted hover:text-primary min-[380px]:text-sm" href={serviceHref}>
+            <Link className="w-fit whitespace-nowrap text-xs font-medium text-muted transition-colors hover:text-foreground min-[380px]:text-sm" href={serviceHref}>
               {serviceLabel}
             </Link>
           )}
           {serviceLabel && !serviceHref && (
-            <span className="w-fit text-xs font-bold text-muted min-[380px]:text-sm">
+            <span className="w-fit whitespace-nowrap text-xs font-medium text-muted min-[380px]:text-sm">
               {serviceLabel}
             </span>
           )}

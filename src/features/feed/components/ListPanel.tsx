@@ -1,22 +1,22 @@
-import { Card } from '@/shared/ui/Card';
+import { ListRow } from '@/shared/ui/ListRow';
 
 /**
- * 제목과 문자열 목록을 카드 안에 나열하는 패널입니다.
+ * 제목 아래에 문자열 목록을 구분선 행으로 나열합니다.
  *
  * @param props 컴포넌트 Props
  * @returns 목록 패널
  */
 export function ListPanel({ items, title }: { items: string[]; title: string }) {
   return (
-    <Card as="section" aria-labelledby="feed-streamer-event-title">
-      <h2 id="feed-streamer-event-title" className="text-base font-bold text-foreground">{title}</h2>
-      <div className="mt-3 grid gap-2">
+    <section aria-labelledby="feed-streamer-event-title">
+      <h2 id="feed-streamer-event-title" className="font-display text-lg font-semibold text-foreground">{title}</h2>
+      <div className="mt-2 grid border-t border-border">
         {items.map((item) => (
-          <p key={item} className="rounded-xl bg-surface-strong px-3 py-2 text-sm text-muted">
-            {item}
-          </p>
+          <ListRow key={item} className="px-0">
+            <p className="text-sm leading-5 text-ink-2">{item}</p>
+          </ListRow>
         ))}
       </div>
-    </Card>
+    </section>
   );
 }

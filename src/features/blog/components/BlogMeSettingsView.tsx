@@ -7,6 +7,7 @@ import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
+import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon';
 import { IconBadge } from '@/shared/ui/IconBadge';
 import { ListRow } from '@/shared/ui/ListRow';
@@ -76,13 +77,13 @@ export function BlogMeSettingsView({ isLoggedIn }: BlogMeSettingsViewProps) {
         serviceName="blog"
         serviceHref="/blog"
         leading={
-          <Link className="grid size-10 place-items-center rounded-[10px] text-foreground" href="/blog" aria-label="blog 홈으로 돌아가기">
+          <Link className="grid size-10 place-items-center rounded-input text-foreground hover:bg-surface-strong active:bg-surface-strong" href="/blog" aria-label="blog 홈으로 돌아가기">
             <Icon name="chevronLeft" />
           </Link>
         }
       />
 
-      <AppContent className="grid gap-3">
+      <AppContent className="grid gap-4">
         <PageIntroCard domainPath="blog / me" />
 
         <BlogProfileCard
@@ -97,34 +98,33 @@ export function BlogMeSettingsView({ isLoggedIn }: BlogMeSettingsViewProps) {
           as="section"
           ariaLabel="글 작성"
           leading={(
-            <IconBadge tone="primary" className="text-sm font-bold">
+            <IconBadge tone="strong" className="text-sm font-semibold text-foreground!">
               M
             </IconBadge>
           )}
         >
-          <button className="h-10 rounded-[10px] bg-surface-strong px-3 text-left text-sm text-muted" type="button" onClick={() => setIsPostCreateModalOpen(true)}>
+          <Button className="justify-start" onClick={() => setIsPostCreateModalOpen(true)}>
             무슨 생각을 공유할까요?
-          </button>
+          </Button>
         </ListRow>
 
         <section className="grid gap-2" aria-labelledby="blog-settings-title">
           <SectionHeader domainPath="blog / setting" title="설정" headingId="blog-settings-title" />
-          {BLOG_SETTING_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-surface p-4 text-left"
-              type="button"
-              onClick={() => setEditingSettingItem(item)}
-            >
-              <span className="min-w-0">
-                <span className="block text-sm font-bold text-foreground">{item.title}</span>
-                <span className="mt-1 block text-xs leading-5 text-muted">{item.description}</span>
-              </span>
-              <span className="rounded-full bg-surface-strong px-3 py-1 text-xs font-bold text-primary">
-                {item.value}
-              </span>
-            </button>
-          ))}
+          <div className="grid">
+            {BLOG_SETTING_ITEMS.map((item) => (
+              <ListRow
+                key={item.id}
+                className="min-h-11 active:bg-surface-strong"
+                onClick={() => setEditingSettingItem(item)}
+                trailing={<span className="whitespace-nowrap text-xs font-medium text-ink-2">{item.value}</span>}
+              >
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold text-foreground">{item.title}</span>
+                  <span className="mt-1 block text-xs leading-5 text-muted">{item.description}</span>
+                </span>
+              </ListRow>
+            ))}
+          </div>
         </section>
       </AppContent>
 

@@ -31,16 +31,18 @@ export function ItemDetailSection({ target }: { target: FeedWatchTarget }) {
   return (
     <>
       <Card as="section" aria-labelledby="feed-item-summary-title">
-        <h2 id="feed-item-summary-title" className="text-base font-bold text-foreground">가격 관찰</h2>
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <StatCard size="sm" label="현재 가격" value={detail.currentPrice} />
-          <StatCard size="sm" label="목표 가격" value={detail.targetPrice} />
+        <h2 id="feed-item-summary-title" className="font-display text-lg font-semibold text-foreground">가격 관찰</h2>
+        <div className="mt-3 grid sm:grid-cols-2 sm:gap-6 max-sm:*:flex max-sm:*:flex-row-reverse max-sm:*:items-baseline max-sm:*:justify-between max-sm:*:gap-3 max-sm:*:py-2 max-sm:[&>article>p:first-child]:text-right max-sm:[&>article>p:first-child]:text-base max-sm:[&>article>p:last-child]:mt-0 max-sm:[&>article>p:last-child]:shrink-0">
+          <StatCard label="현재 가격" value={detail.currentPrice} />
+          <StatCard label="목표 가격" value={detail.targetPrice} />
         </div>
-        <p className="mt-3 text-sm leading-6 text-muted">{detail.priceChangeText}</p>
+        <p className={`mt-3 text-sm leading-6 tabular-nums ${target.trendDirection === 'down' ? 'text-accent-red' : 'text-muted'}`}>
+          {detail.priceChangeText}
+        </p>
       </Card>
 
       <Card as="section" aria-labelledby="feed-item-chart-title">
-        <h2 id="feed-item-chart-title" className="text-base font-bold text-foreground">가격 변동 그래프</h2>
+        <h2 id="feed-item-chart-title" className="font-display text-lg font-semibold text-foreground">가격 변동 그래프</h2>
         <SegmentedTabs
           className="mt-4"
           items={detail.priceRanges}
@@ -67,12 +69,11 @@ export function ItemDetailSection({ target }: { target: FeedWatchTarget }) {
       </Card>
 
       <Card as="section" aria-labelledby="feed-item-source-title">
-        <h2 id="feed-item-source-title" className="text-base font-bold text-foreground">원본 링크</h2>
-        <p className="text-xs font-bold text-muted">원본 링크</p>
-        <a className="mt-2 block truncate text-sm font-bold text-primary" href={detail.sourceUrl} target="_blank" rel="noreferrer">
+        <h2 id="feed-item-source-title" className="font-display text-lg font-semibold text-foreground">원본 링크</h2>
+        <a className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground active:text-primary" href={detail.sourceUrl} target="_blank" rel="noreferrer">
           {detail.sourceName}
         </a>
-        <p className="mt-1 truncate text-xs text-muted">{detail.sourceUrl}</p>
+        <p className="cut-sm w-fit break-all bg-graphite px-2 py-1 font-mono text-xs text-graphite-ink">{detail.sourceUrl}</p>
       </Card>
     </>
   );

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 import { Button } from '@/shared/ui/Button';
-import { Card } from '@/shared/ui/Card';
 import { SegmentedTabs } from '@/shared/ui/SegmentedTabs';
 
 import { FormField } from './FormField';
@@ -33,13 +32,12 @@ export function FeedTargetCreateForm() {
   };
 
   return (
-    <Card as="section" aria-labelledby="feed-create-target-title">
+    <section aria-labelledby="feed-create-target-title">
       <div>
-        <p className="text-sm font-bold text-primary">feed / register</p>
-        <h2 id="feed-create-target-title" className="mt-1 text-base font-bold text-foreground">
+        <h2 id="feed-create-target-title" className="pe-11 font-display text-lg font-semibold tracking-display text-foreground">
           관찰 대상 등록
         </h2>
-        <p className="mt-2 text-sm leading-6 text-muted">API 연결 전까지 화면에 필요한 입력 형태만 먼저 확인하고 있어요.</p>
+        <p className="mt-2 pe-11 text-sm leading-6 text-muted">API 연결 전까지 화면에 필요한 입력 형태만 먼저 확인하고 있어요.</p>
       </div>
 
       <SegmentedTabs
@@ -50,7 +48,7 @@ export function FeedTargetCreateForm() {
         onChange={handleChangeTab}
       />
 
-      <div className="mt-4 grid gap-3">
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <FormField label="대상 이름" placeholder={activeTabId === 'item' ? '기계식 키보드' : activeTabId === 'streamer' ? 'mory_live' : 'artist.nova'} />
         <FormField label="설명" placeholder="관찰 대상의 요약 설명" />
         <FormField label="원본 링크" placeholder="https://example.com/original" />
@@ -81,12 +79,12 @@ export function FeedTargetCreateForm() {
         )}
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-3">
+      <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-4">
         <p className="text-sm text-muted">{isSubmitted ? '등록 준비가 완료됐어요.' : '저장 전 mock 입력값은 목록에 추가하지 않아요.'}</p>
-        <Button className="shrink-0" onClick={handleSubmit}>
+        <Button className="relative shrink-0 after:absolute after:-inset-y-0.5 after:inset-x-0" onClick={handleSubmit}>
           {isSubmitted ? '준비 완료' : '등록'}
         </Button>
       </div>
-    </Card>
+    </section>
   );
 }

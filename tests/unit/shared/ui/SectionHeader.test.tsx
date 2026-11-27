@@ -5,15 +5,16 @@ import { SectionHeader } from '@/shared/ui/SectionHeader';
 
 /**
  * SectionHeader 테스트
- * 섹션 헤더의 도메인 경로, 제목, headingId 연결과 우측 액션 링크 유무를 확인합니다.
+ * 섹션 헤더의 제목, headingId 연결과 우측 액션 링크 유무를 확인합니다.
+ * 도메인 경로 라벨은 상단 바가 보여주므로 섹션 헤더에는 표시하지 않습니다.
  */
 describe('SectionHeader', () => {
-  it('도메인 경로와 제목을 보여주고 headingId를 연결한다', () => {
+  it('제목을 보여주고 headingId를 연결하며 도메인 경로 라벨은 표시하지 않는다', () => {
     render(<SectionHeader domainPath="blog / setting" title="설정" headingId="setting-title" />);
 
     const heading = screen.getByRole('heading', { level: 2, name: '설정' });
 
-    expect(screen.getByText('blog / setting')).toBeInTheDocument();
+    expect(screen.queryByText('blog / setting')).not.toBeInTheDocument();
     expect(heading).toHaveAttribute('id', 'setting-title');
   });
 

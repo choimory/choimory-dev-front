@@ -10,11 +10,11 @@ import { PLATFORM_SERVICES_FIXTURE } from '../../../../fixtures/platformServices
  * 비회원 랜딩 섹션의 환영 제목, 로그인과 회원가입 링크, 서비스 특징 안내, 제공 중과 준비 중 서비스 구분을 확인합니다.
  */
 describe('GuestLandingSection', () => {
-  it('환영 제목과 로고 경로를 보여준다', () => {
+  it('환영 제목을 보여주고 그 제목으로 영역 이름을 붙인다', () => {
     render(<GuestLandingSection services={PLATFORM_SERVICES_FIXTURE} />);
 
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('블로그와 피드부터 둘러보고');
-    expect(screen.getByText('/ welcome')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /블로그와 피드부터 둘러보고/ })).toBeInTheDocument();
   });
 
   it('로그인과 회원가입 링크를 보여준다', () => {

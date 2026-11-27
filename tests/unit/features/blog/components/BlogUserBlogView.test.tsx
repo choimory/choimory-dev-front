@@ -8,13 +8,12 @@ import { BLOG_POSTS_FIXTURE } from '../../../../fixtures/blog';
 
 /**
  * BlogUserBlogView 테스트
- * 유저 blog 화면의 경로와 프로필(닉네임, 대문자 이니셜), 포스트 목록, 팔로워와 팔로잉 모달 열기와 닫기, 로그인 여부를 확인합니다.
+ * 유저 blog 화면의 프로필(닉네임, 대문자 이니셜), 포스트 목록, 팔로워와 팔로잉 모달 열기와 닫기, 로그인 여부를 확인합니다.
  */
 describe('BlogUserBlogView', () => {
-  it('페이지 소개에 유저 닉네임 경로를, 프로필에 닉네임과 대문자 이니셜을 보여준다', () => {
+  it('프로필에 닉네임과 대문자 이니셜을 보여준다', () => {
     render(<BlogUserBlogView isLoggedIn={false} nickname="jin.note" posts={BLOG_POSTS_FIXTURE} />);
 
-    expect(screen.getByText('/ blog / @jin.note')).toBeInTheDocument();
     const profile = screen.getByRole('region', { name: 'jin.note' });
 
     expect(within(profile).getByRole('heading', { level: 1, name: 'jin.note' })).toBeInTheDocument();

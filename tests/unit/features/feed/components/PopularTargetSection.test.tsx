@@ -11,11 +11,10 @@ import { FEED_TARGETS_FIXTURE } from '../../../../fixtures/feed';
  * 인기 관찰 대상 랭킹의 탭 4종, 종류별 필터, 순위와 추이 표시(아이콘, 색상), 등장 애니메이션 지연, 빈 목록을 확인합니다.
  */
 describe('PopularTargetSection', () => {
-  it('제목, 경로, "지금" 칩을 보여준다', () => {
+  it('제목과 "지금" 칩을 보여준다', () => {
     render(<PopularTargetSection targets={FEED_TARGETS_FIXTURE} />);
 
     expect(screen.getByRole('region', { name: '실시간 관찰 대상 랭킹' })).toBeInTheDocument();
-    expect(screen.getByText('feed / ranking')).toBeInTheDocument();
     expect(screen.getByText('지금')).toBeInTheDocument();
   });
 

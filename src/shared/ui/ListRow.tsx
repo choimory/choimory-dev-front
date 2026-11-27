@@ -11,7 +11,7 @@ type ListRowProps = {
   href?: string;                           // 이동 경로 (있으면 링크로 렌더링)
   onClick?: () => void;                    // 클릭 핸들러 (있으면 버튼으로 렌더링)
   as?: 'div' | 'article' | 'section';      // 정적 행의 태그 (기본 div)
-  tone?: 'default' | 'strong';             // 배경 톤 (default: 테두리 + bg-surface, strong: 테두리 없는 bg-surface-strong)
+  tone?: 'default' | 'strong';             // 배경 톤 (default: 아래쪽 구분선 행, strong: 테두리 없는 한 단계 진한 면)
   padding?: 'sm' | 'md';                   // 안쪽 여백 (기본 sm: p-3, md: p-4)
   isDimmed?: boolean;                      // 흐리게 표시 여부 (준비 중 항목 등)
   ariaLabel?: string;                      // 접근성 라벨
@@ -27,8 +27,8 @@ const LIST_ROW_PADDING_CLASS_NAME: Record<NonNullable<ListRowProps['padding']>, 
 
 /** 행 배경 톤별 클래스 */
 const LIST_ROW_TONE_CLASS_NAME: Record<NonNullable<ListRowProps['tone']>, string> = {
-  default: 'border border-border bg-surface',
-  strong: 'bg-surface-strong',
+  default: 'border-b border-border',
+  strong: 'rounded-input bg-surface-strong',
 };
 
 /** 좌측/우측 영역 유무별 열 클래스 (Tailwind가 정적으로 감지할 수 있도록 전체 문자열로 작성) */
@@ -42,6 +42,7 @@ const LIST_ROW_COLUMNS_CLASS_NAME = {
 /**
  * 좌측 영역, 본문, 우측 영역으로 이루어진 공용 목록 행입니다.
  * href가 있으면 링크로, onClick이 있으면 버튼으로, 둘 다 없으면 정적 행으로 렌더링합니다.
+ * 기본 톤은 아래쪽 1px 구분선으로 나뉜 행이며, 여러 행을 간격 없이 쌓아 목록을 만듭니다.
  * 기본 톤의 클릭 가능한 행은 hover 시 배경이 바뀝니다.
  *
  * @param props 컴포넌트 Props
@@ -64,11 +65,11 @@ export function ListRow({
   const columnsKey = leading && trailing ? 'both' : leading ? 'leading' : trailing ? 'trailing' : 'none';
   const isInteractive = Boolean(href || onClick);
   const rowClassName = [
-    'grid items-center gap-3 rounded-2xl',
+    'grid items-center gap-3',
     LIST_ROW_COLUMNS_CLASS_NAME[columnsKey],
     LIST_ROW_TONE_CLASS_NAME[tone],
     LIST_ROW_PADDING_CLASS_NAME[padding],
-    isInteractive && tone === 'default' && 'transition hover:bg-surface-strong',
+    isInteractive && tone === 'default' && 'transition-colors hover:bg-surface-strong',
     onClick && 'text-left',
     isDimmed && 'opacity-75',
     className,

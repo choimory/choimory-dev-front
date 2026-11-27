@@ -8,13 +8,18 @@
  */
 export function SettingToggle({ description, isOn, label, onToggle }: { description: string; isOn: boolean; label: string; onToggle: () => void }) {
   return (
-    <button className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-surface p-4 text-left" type="button" onClick={onToggle}>
-      <span>
-        <span className="block text-sm font-bold text-foreground">{label}</span>
+    <button
+      className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-surface-strong active:bg-background"
+      type="button"
+      aria-pressed={isOn}
+      onClick={onToggle}
+    >
+      <span className="min-w-0">
+        <span className="block text-sm font-semibold text-foreground">{label}</span>
         <span className="mt-1 block text-sm leading-5 text-muted">{description}</span>
       </span>
-      <span className={`grid h-7 w-12 shrink-0 items-center rounded-full p-1 transition ${isOn ? 'justify-end bg-primary' : 'justify-start bg-surface-strong'}`} aria-hidden>
-        <span className="size-5 rounded-full bg-white shadow-sm" />
+      <span className={`grid h-8 w-13 shrink-0 items-center rounded-input border p-1 ${isOn ? 'justify-end border-primary bg-primary' : 'justify-start border-muted bg-surface-strong'}`} aria-hidden>
+        <span className={`size-5 rounded-[3px] ${isOn ? 'bg-primary-foreground' : 'bg-muted'}`} />
       </span>
     </button>
   );

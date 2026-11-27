@@ -23,7 +23,8 @@ choimory.dev 서비스의 프론트엔드 프로젝트입니다.
 | 언어 | TypeScript 5 (`strict: true`) |
 | UI | React 19.3.0 |
 | 스타일 | Tailwind CSS v4 (PostCSS 방식) |
-| 폰트 | Geist Sans / Geist Mono |
+| 폰트 | IBM Plex Sans KR(본문·한글), Familjen Grotesk(제목·숫자의 라틴 문자), JetBrains Mono(코드·기계값), Geist Mono(로고 전용) |
+| 디자인 시스템 | Cobalt 테마 기반 자체 시스템 (`design.md`, 아래 [디자인 시스템](#디자인-시스템) 참고) |
 | 린트 | ESLint 9 + eslint-config-next (Flat Config) |
 | 테스트 | Vitest 5 + React Testing Library + jest-dom + user-event (jsdom 환경) |
 | 패키지 매니저 | npm |
@@ -100,15 +101,17 @@ src/
 │   ├── feed/observations/[observationId]/page.tsx
 │   ├── feed/popular/page.tsx
 │   ├── feed/targets/[targetId]/page.tsx
+│   ├── base.css                      # 기본 요소 규칙 (포커스 링, 제목 서체, 모션 줄이기 등)
 │   ├── favicon.ico
-│   ├── globals.css
-│   ├── layout.tsx
+│   ├── globals.css                   # 다크 모드 값, 기존 토큰 이름 연결, 로고 토큰, 공용 재료 클래스
+│   ├── layout.tsx                    # 폰트 로드 (next/font, <html>에 변수 클래스)
 │   ├── login/page.tsx
 │   ├── me/page.tsx
 │   ├── notice/page.tsx
 │   ├── page.tsx
 │   ├── services/page.tsx
-│   └── signup/page.tsx
+│   ├── signup/page.tsx
+│   └── tokens.css                    # 디자인 토큰 원본 (Tailwind v4 @theme, 라이트 기준)
 │
 ├── features/
 │   ├── auth/
@@ -143,6 +146,8 @@ src/
     └── ui/
 
 env/                   # APP_ENV별 환경변수 (git 제외)
+
+design.md              # 고정된 디자인 시스템 문서 (화면 작업 시 기준)
 
 tests/
 ├── fixtures/          # 테스트용 데이터 (feature별 픽스처)
@@ -193,23 +198,23 @@ vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더
 현재 구현된 주요 화면 요소는 다음과 같습니다.
 
 - 플랫폼 홈
-  - `choimory.dev` 브랜드 로고
-  - 애니메이션 없는 브랜드 로고를 활용한 depth 라벨
+  - `choimory.dev` 브랜드 로고 (상단바와 홈 중앙)
+  - 상단바의 로고 + 서비스 경로(`/ feed` 등)로 현재 위치 표시
   - 통합 검색바
   - 좌우 화살표로 넘기는 서비스 런처
   - 전체 서비스 메뉴
   - 상세 모달을 제공하는 공지사항 메뉴
-  - 타이핑 애니메이션 브랜드 로고와 도메인 경로를 보여주는 공용 페이지 소개 영역(공지사항, 서비스, blog 인기/팔로잉, feed 인기/관찰, 프로필형 화면 공통 사용)
+  - 제목과 설명을 보여주는 공용 페이지 소개 영역(공지사항, 서비스, blog 인기/팔로잉, feed 인기/관찰 등)
   - 비회원 사용자용 서비스 소개 섹션
-  - 로그인 사용자용 내정보 프로필 카드
-  - 로그인 사용자용 서비스별 대형 피드 카드
+  - 로그인 사용자용 내정보 프로필 패널
+  - 로그인 사용자용 서비스별 패널(숫자 줄과 알림 행), 준비 중 서비스는 한 패널 안의 행으로 묶음
   - 플랫폼형 하단 네비게이션
 - blog
   - 피드 필터
   - 글 작성 진입 영역
-  - 게시글 카드
+  - 게시글 카드 (이미지 데이터가 없으면 이미지 아이콘 자리 표시)
   - 인기, 팔로잉, 내 blog 설정/관리, 공개 유저 blog 메인 화면
-  - 인기 화면 상단 검색어, 멘션, 팔로워, 태그 탭형 5개 실시간 랭킹 카드
+  - 인기 화면 상단 검색어, 멘션, 팔로워, 태그 탭형 5개 실시간 랭킹 (순위 변동은 상태색 글자로 표시)
   - 팔로잉 화면 상단 팔로워/팔로잉 탭, 검색 버튼, 화살표 paging, 관계 액션 버튼
   - 내 blog 설정/관리 화면과 유저 blog 메인 화면이 공용으로 쓰는 프로필 카드(아바타, 닉네임, 소개, 작성 글/팔로워/팔로잉 카운팅)
   - 팔로워, 팔로잉 카운트 클릭 모달과 modal paging
@@ -219,10 +224,10 @@ vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더
   - 아이템 가격 알림 소개
   - 스트리머 방송/이벤트 알림 소개
   - 아티스트 신곡/앨범/참여곡 알림 소개
-  - 로그인 사용자용 관찰 대상 요약 카드
-  - 아이템, 스트리머, 아티스트가 섞인 관찰 대상 목록
+  - 로그인 사용자용 관찰 대상 요약 숫자 줄
+  - 아이템, 스트리머, 아티스트가 섞인 관찰 대상 목록 (행 오른쪽에 현재값을 큰 숫자로, 목표·변동은 그 아래)
   - 전체, 아이템, 스트리머, 아티스트 탭과 순차 등장 애니메이션을 포함한 인기 관찰 대상 랭킹 화면
-  - 가격 요약, 그래프, 원본 링크, 방송 기록, 채팅 기록, 앨범 carousel을 카드별로 분리한 관찰 대상 공통 상세 화면
+  - 가격 요약, 그래프, 원본 링크, 방송 기록, 채팅 기록, 앨범 carousel을 섹션별로 나눈 관찰 대상 공통 상세 화면 (좁은 화면에서는 요약 숫자를 라벨·값 목록으로 표시)
   - 가격 그래프 hover/click tooltip, 방송 기록 클릭 popover와 빈 영역 닫기/긴 내용 내부 스크롤, 중앙 정렬 앨범/트랙 상세 modal
   - 프로필 카드와 관찰대상 등록 modal, 저장 버튼이 있는 내 feed 관리 홈과 대상별 알림 설정 상세
   - 기존 관찰 상세와 알림 상세 호환 화면
@@ -239,6 +244,99 @@ vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더
   - 설정 카드 클릭으로 여는 2차 인증 모달
   - 2차 인증 사용 여부와 인증 방식 선택 UI
   - 설정 카드 클릭으로 여는 회원 탈퇴 확인 모달
+
+---
+
+## 디자인 시스템
+
+화면의 색, 폰트, 표면, 컨트롤 규칙은 루트의 `design.md`에 고정되어 있습니다. 화면을 만들거나 고칠 때는 이 문서를 기준으로 하고, 시스템을 바꿀 때는 `design.md`부터 고칩니다.
+
+### 방향
+
+| 항목 | 내용 |
+|---|---|
+| 테마 | Cobalt (hallmark 테마 기반). 얇은 구분선, 키캡 버튼, 대각선 두 모서리를 깎은 패널, 코발트 강조색 하나 |
+| 화면 성격 | 앱 화면. 셸(상단바 + 하단 네비게이션) 안에서 목록·숫자·폼 중심으로 구성 |
+| 모드 | 다크가 기본(`:root`), 라이트는 `[data-theme="light"]`. 두 모드 토큰은 모두 준비돼 있고 전환 기능은 아직 없음 |
+| 대표 요소 | 관찰 목록: 구분선 행 위의 표 형식 숫자 |
+
+### 토큰 구조
+
+```mermaid
+flowchart TD
+    T["tokens.css<br/>@theme static · Cobalt 라이트 값 (원본)<br/>--color-paper, --color-ink, --color-accent, 폰트, 라운드, 그림자"]
+    D["globals.css<br/>:root:not(light) · 다크에서 바뀌는 값만 덮어씀"]
+    M["globals.css<br/>@theme inline · 기존 토큰 이름 → Cobalt 역할 연결"]
+    L["globals.css<br/>로고 전용 토큰 (--logo-*, --font-logo)<br/>리디자인 전 값으로 고정"]
+    C["globals.css @layer components<br/>.cut · .key · .tray · .hit-area"]
+    U["Tailwind 유틸리티<br/>bg-primary · text-muted · border-border<br/>bg-paper-2 · font-display · rounded-card"]
+    S["shared/ui 공용 컴포넌트"]
+    F["features/*/components 화면"]
+    B["BrandLogo"]
+
+    T --> M
+    D --> M
+    M --> U
+    T --> U
+    U --> S
+    C --> S
+    S --> F
+    U --> F
+    L --> B
+```
+
+- 컴포넌트와 테스트가 쓰는 기존 이름(`primary`, `surface`, `muted`, `accent-*` 등)은 그대로 두고 값만 Cobalt 역할로 연결합니다.
+
+| 기존 이름 | Cobalt 역할 |
+|---|---|
+| `background` / `shell`·`surface` / `surface-strong` | paper / paper-2 / paper-3 |
+| `foreground` / `muted` / `border` | ink / muted / rule |
+| `primary` / `primary-foreground` / `primary-soft` | accent / accent-ink / accent-wash |
+| `accent-green` / `accent-orange` / `accent-red` / `accent-purple` | success / warning / error / violet (상태 표시 전용) |
+
+- 새로 만드는 화면은 Cobalt 이름(`bg-paper-2`, `text-ink-2`, `border-rule`, `font-display`, `rounded-card`, `rounded-input`)도 쓸 수 있습니다.
+- 글자 크기는 Tailwind 기본 `text-xs`~`text-3xl`을 그대로 쓰고, 추가 크기로 `text-md`, `text-title`, `text-section`, `text-display-s`, `text-display`를 둡니다.
+
+### 폰트
+
+| 역할 | 폰트 | 유틸리티 |
+|---|---|---|
+| 본문, 한글 전체 | IBM Plex Sans KR | 기본(`font-sans`) |
+| 제목, 숫자의 라틴 문자 | Familjen Grotesk (한글은 Plex Sans KR로 대체) | `font-display` |
+| 코드, URL, 기계값 | JetBrains Mono | `font-mono` |
+| 로고 | Geist Mono | `font-logo` (로고 전용) |
+
+- 폰트 변수는 `layout.tsx`에서 `<html>`에 붙여 `:root`의 토큰에서 읽을 수 있게 합니다.
+- 굵기는 400(본문), 500(라벨·보조), 600(제목·강조) 세 가지만 씁니다.
+- 한글은 `word-break: keep-all`로 어절 단위 줄바꿈을 합니다.
+
+### 공용 재료 클래스
+
+| 클래스 | 용도 |
+|---|---|
+| `.cut` / `.cut-sm` | 대각선 두 모서리를 깎은 패널·태그. `corner-shape` 미지원 브라우저는 일반 라운드(8px / 6px) |
+| `.key` / `.key-primary` | 아래 모서리가 있는 키캡 버튼. hover에 1px 뜨고, 누르면 가라앉고, 비활성은 흐림. primary는 코발트 |
+| `.tray` | 탭·옵션 키가 놓이는 오목한 트레이 |
+| `.hit-area` | 보이는 크기(32~40px)는 그대로 두고 실제 터치 영역을 최소 44px로 넓힘 |
+
+### 화면 규칙
+
+- 강조색(코발트)은 주요 동작, 현재 선택, 상태 표시에만 씁니다. 주요 버튼은 화면당 하나이며, 상단바 로그인/로그아웃은 보조 키입니다.
+- 목록은 카드 여러 개 대신 `ListRow` 구분선 행으로 만들고, 패널 안에 테두리 있는 패널을 넣지 않습니다.
+- 알약 모양(`rounded-full`), 제목 위 경로형 라벨, 가운데 점(·)으로 이어 붙인 메타 문구, 그라디언트 장식은 쓰지 않습니다.
+- 상태는 배경 칩이 아니라 상태색 글자로 표시합니다.
+- 색과 폰트는 토큰 유틸리티로만 지정합니다. 직접 색 값은 네이버(`#03c75a`)·카카오(`#fee500`) 로그인 버튼만 예외입니다.
+- 모든 인터랙티브 요소는 hover, `:focus-visible`, active, disabled 상태를 가집니다. 모션은 상태 변화에만 쓰고 `prefers-reduced-motion`에 대응합니다.
+
+### 로고
+
+- `shared/ui/BrandLogo.tsx`와 타이핑 애니메이션은 디자인 시스템과 분리되어 있습니다.
+- 색과 폰트는 `globals.css`의 로고 전용 토큰(`--logo-ink`, `--logo-brace`, `--logo-dot`, `--logo-paren`, `--font-logo`)에 다크·라이트 각각 고정 값으로 들어 있어, 시스템 색을 바꿔도 로고는 바뀌지 않습니다.
+
+### 알려진 예외와 남은 일
+
+- 네이버 로그인 버튼의 흰 글자 대비(2.25:1)는 네이버 브랜드 색 유지를 위한 예외입니다.
+- 테마 전환 기능, `Modal` 키보드 포커스 처리(포커스 이동·가두기, Esc 닫기), 홈 서비스 런처의 넘침 감지 화살표, 내 피드 설정의 하위 스위치 비활성 표시는 아직 없습니다.
 
 ---
 
@@ -278,17 +376,17 @@ vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더
 
 | 컴포넌트 | 용도 | 주요 props |
 |---|---|---|
-| `Card` | 테두리와 배경이 있는 기본 카드 | `as`(div, section, article), `tone`(default, strong), `padding`(sm, md) |
-| `Chip` | 짧은 상태나 분류를 보여주는 알약 | `size`(sm, md), `tone`(muted, surface) |
-| `IconBadge` | 아이콘이나 이니셜을 담는 원형 배지 | `as`, `size`(xs~xl), `tone`(primary, soft, strong, surface) |
-| `SegmentedTabs` | 같은 영역 안의 보기 전환 탭 | `items`, `activeId`, `onChange`, `ariaLabel`, `size` |
-| `ListRow` | 좌측, 본문, 우측으로 이루어진 목록 행 | `leading`, `trailing`, `href`/`onClick`(링크/버튼), `tone`, `padding`, `isDimmed` |
-| `Button` | 텍스트 버튼 | `variant`(primary, secondary, outline-danger), `size`(md, lg) |
-| `IconButton` | 아이콘만 있는 정사각 버튼 | `ariaLabel`(필수), `size`(sm~lg), `tone`(muted, danger, ghost) |
+| `Card` | 1px 구분선 패널(대각선 두 모서리를 깎음). `strong`은 패널 안쪽용 테두리 없는 면 | `as`(div, section, article), `tone`(default, strong), `padding`(sm, md) |
+| `Chip` | 짧은 분류를 보여주는 모서리 깎은 작은 태그 (알약 모양 아님) | `size`(sm, md), `tone`(muted, surface) |
+| `IconBadge` | 아이콘이나 이니셜을 담는 사각 타일 | `as`, `size`(xs~xl), `tone`(primary, soft, strong, surface) |
+| `SegmentedTabs` | 오목한 트레이 안의 보기 전환 탭, 선택 탭은 눌린 코발트 키 | `items`, `activeId`, `onChange`, `ariaLabel`, `size` |
+| `ListRow` | 좌측, 본문, 우측으로 이루어진 아래 구분선 목록 행 (간격 없이 쌓아 목록 구성) | `leading`, `trailing`, `href`/`onClick`(링크/버튼), `tone`, `padding`, `isDimmed` |
+| `Button` | 키캡 텍스트 버튼. primary는 화면당 하나 | `variant`(primary, secondary, outline-danger), `size`(md 40px, lg 48px) |
+| `IconButton` | 아이콘만 있는 정사각 버튼 (터치 영역 44px) | `ariaLabel`(필수), `size`(sm~lg), `tone`(muted, danger, ghost) |
 | `Modal` | `document.body` 포털 모달 | `labelledBy`, `onClose`, `title`, `placement`, `overlay`, `size`, `padding` |
 
 - `ListRow`는 `href`가 있으면 링크로, `onClick`이 있으면 버튼으로, 둘 다 없으면 정적 행으로 렌더링한다.
-- `strong` 톤의 `ListRow`는 테두리와 hover 효과가 없다.
+- `strong` 톤의 `ListRow`는 구분선과 hover 효과가 없는 한 단계 진한 면이다.
 - `Modal`은 배경을 누르면 `onClose`를 호출하고 패널 안쪽 클릭은 막는다. `title`을 주면 제목과 닫기 버튼 헤더를 렌더링한다.
 - `feed`의 대상 종류별 라벨, 아이콘, 색상 클래스는 `features/feed/model/feedTargetView.ts`의 함수를 사용한다.
 
@@ -301,10 +399,11 @@ vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더
 - 검색 오버레이는 `document.body` portal 기반으로 렌더링하여 화면 전체 기준으로 표시한다.
 - 알림과 서비스 팝오버도 `document.body` portal 기반으로 렌더링하여 화면 빈 영역 클릭으로 닫히게 한다.
 - 브랜드 로고는 `shared/ui/BrandLogo.tsx`를 사용하며 화면별로 애니메이션 여부를 조정한다.
-- 화면 최상단 eyebrow(로고 포함)는 `shared/ui/PageIntroCard.tsx`를 공용으로 사용한다. 도메인 목록 화면은 title/description을 함께 쓰고, 프로필 카드가 뒤따르는 화면(`blog / me`, `feed / me`, `blog / @{nickname}`, 게시글 상세 등)은 eyebrow만 쓴다.
-- 페이지 내부 섹션 구분용 eyebrow(로고 없음)는 `shared/ui/SectionHeader.tsx`를 공용으로 사용하며, 우측 액션 링크가 필요하면 `action` prop을 쓴다.
-- eyebrow 텍스트는 `{서비스} / {도메인}` 슬래시 포맷으로 통일하고, heading은 간결한 명사형으로 쓴다. description은 `PageIntroCard`(화면 최상단)에서만 쓰고 따뜻한 안내형 문구로 작성하며, `SectionHeader`에는 description을 쓰지 않는다.
-- 숫자와 라벨을 보여주는 통계 카드는 `shared/ui/StatCard.tsx`를 공용으로 사용하며, 클릭 가능 여부는 `onClick` prop으로 정한다.
+- 화면 최상단 소개 영역은 `shared/ui/PageIntroCard.tsx`를 공용으로 사용한다. 제목과 설명을 보여주며, 둘 다 없으면 아무것도 렌더링하지 않는다.
+- 페이지 내부 섹션 제목은 `shared/ui/SectionHeader.tsx`를 공용으로 사용하며, 우측 액션 링크가 필요하면 `action` prop을 쓴다.
+- 제목 위 경로형 라벨(eyebrow)은 쓰지 않는다. 현재 위치는 상단바의 로고와 서비스 경로가 보여준다. `PageIntroCard`, `SectionHeader`의 `domainPath` prop은 호환을 위해 받지만 화면에는 표시하지 않는다.
+- heading은 간결한 명사형으로 쓴다. description은 `PageIntroCard`(화면 최상단)에서만 쓰고 따뜻한 안내형 문구로 작성하며, `SectionHeader`에는 description을 쓰지 않는다.
+- 숫자와 라벨을 보여주는 통계는 `shared/ui/StatCard.tsx`를 공용으로 사용한다. `lg`는 위쪽 구분선 위의 큰 표 형식 숫자, `sm`은 진한 면이며, 클릭 가능 여부는 `onClick` prop으로 정한다.
 - 좁은 레이아웃은 로그인/회원가입 같은 예외 화면에만 제한적으로 사용한다.
 - 개발 확인용 공통 모델은 `shared/model`에 둔다.
 

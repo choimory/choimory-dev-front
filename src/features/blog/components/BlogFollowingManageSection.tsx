@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { Button } from '@/shared/ui/Button';
+import { Card } from '@/shared/ui/Card';
 import { Icon } from '@/shared/ui/Icon';
 import { IconBadge } from '@/shared/ui/IconBadge';
 import { IconButton } from '@/shared/ui/IconButton';
@@ -93,11 +95,10 @@ export function BlogFollowingManageSection() {
   };
 
   return (
-    <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="blog-following-manage-title">
+    <Card as="section" aria-labelledby="blog-following-manage-title">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-bold text-primary">blog / following</p>
-          <h2 id="blog-following-manage-title" className="mt-1 text-xl font-black leading-tight text-foreground">
+          <h2 id="blog-following-manage-title" className="text-section font-semibold leading-tight text-foreground">
             관계 목록
           </h2>
           <p className="mt-2 text-sm leading-6 text-muted">
@@ -113,7 +114,7 @@ export function BlogFollowingManageSection() {
 
       {isSearchOpen && (
         <input
-          className="mt-3 h-10 w-full rounded-[10px] border border-border bg-surface-strong px-3 text-sm text-foreground outline-none placeholder:text-muted"
+          className="mt-3 h-10 w-full rounded-input border border-muted bg-background px-3 text-sm text-foreground focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-45"
           placeholder="닉네임이나 설명으로 검색"
           value={searchText}
           onChange={(event) => {
@@ -123,34 +124,38 @@ export function BlogFollowingManageSection() {
         />
       )}
 
-      <div className="mt-4 grid gap-2">
+      <div className="mt-2 grid">
         {pageUsers.map((user) => (
           <ListRow
             key={user.id}
             as="article"
-            tone="strong"
+            className="gap-2 px-0"
             leading={(
-              <IconBadge as="span" className="text-sm font-bold">
+              <IconBadge as="span" size="sm" tone="strong" className="text-sm font-semibold text-foreground!">
                 {user.initial}
               </IconBadge>
             )}
             trailing={(
-              <button className="h-9 shrink-0 rounded-[10px] bg-surface px-3 text-xs font-bold text-muted" type="button">
+              <Button variant="secondary" className="shrink-0 px-2 text-xs">
                 {activeTabId === 'following' ? '언팔로우' : '팔로우'}
-              </button>
+              </Button>
             )}
           >
             <span className="min-w-0">
               <span className="flex min-w-0 items-center gap-2">
-                <span className="truncate text-sm font-bold text-foreground">{user.nickname}</span>
-                {user.hasNewPost && <span className="size-2 rounded-full bg-primary" aria-label="새 글 있음" />}
+                <span className="min-w-0 break-words text-sm font-semibold text-foreground">{user.nickname}</span>
+                {user.hasNewPost && (
+                  <span className="shrink-0 text-primary" role="img" aria-label="새 글 있음">
+                    <Icon className="size-3.5" name="note" />
+                  </span>
+                )}
               </span>
-              <span className="mt-1 block truncate text-xs text-muted">{user.description}</span>
+              <span className="mt-1 block text-xs leading-4 text-muted">{user.description}</span>
             </span>
           </ListRow>
         ))}
         {pageUsers.length === 0 && (
-          <p className="rounded-2xl bg-surface-strong p-4 text-center text-sm text-muted">
+          <p className="border-b border-border py-4 text-sm text-muted">
             검색 결과가 없어요.
           </p>
         )}
@@ -160,13 +165,13 @@ export function BlogFollowingManageSection() {
         <IconButton ariaLabel="이전 목록" disabled={safePageIndex === 0} onClick={() => setPageIndex((currentValue) => Math.max(0, currentValue - 1))}>
           <Icon name="chevronLeft" />
         </IconButton>
-        <span className="text-xs font-bold text-muted">
+        <span className="text-xs font-medium tabular-nums text-muted">
           {safePageIndex + 1} / {pageCount}
         </span>
         <IconButton ariaLabel="다음 목록" disabled={safePageIndex >= pageCount - 1} onClick={() => setPageIndex((currentValue) => Math.min(pageCount - 1, currentValue + 1))}>
           <Icon className="size-5 rotate-180" name="chevronLeft" />
         </IconButton>
       </div>
-    </section>
+    </Card>
   );
 }

@@ -6,6 +6,7 @@ import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
 import { Card } from '@/shared/ui/Card';
 import { Icon } from '@/shared/ui/Icon';
+import { StatCard } from '@/shared/ui/StatCard';
 
 import type { FeedObservationItem } from '../model/feedTypes';
 
@@ -31,35 +32,31 @@ export function FeedObservationDetailView({ isLoggedIn, observation }: FeedObser
         serviceName="feed"
         serviceHref="/feed"
         leading={
-          <Link className="grid size-10 place-items-center rounded-[10px] text-foreground" href="/feed/observations" aria-label="관찰 목록으로 돌아가기">
+          <Link className="key grid size-10 place-items-center rounded-input text-foreground" href="/feed/observations" aria-label="관찰 목록으로 돌아가기">
             <Icon name="chevronLeft" />
           </Link>
         }
       />
 
-      <AppContent className="grid gap-4">
-        <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="observation-detail-title">
-          <p className="text-sm font-bold text-primary">{observation.category}</p>
-          <h1 id="observation-detail-title" className="mt-1 text-2xl font-black leading-tight text-foreground">
+      <AppContent className="grid min-w-0 gap-6">
+        <section className="pt-2" aria-labelledby="observation-detail-title">
+          <h1 id="observation-detail-title" className="min-w-0 break-words font-display text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
             {observation.title}
           </h1>
-          <p className="mt-2 text-sm leading-6 text-muted">{observation.status}</p>
+          <dl className="mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-3 border-y border-border py-3 text-sm">
+            <dt className="break-words font-medium text-ink-2">{observation.category}</dt>
+            <dd className="text-muted">{observation.status}</dd>
+          </dl>
         </section>
 
-        <section className="grid grid-cols-2 gap-2" aria-label="관찰 상태 요약">
-          <Card as="article">
-            <p className="text-2xl font-black text-foreground">ON</p>
-            <p className="mt-1 text-xs text-muted">관찰 상태</p>
-          </Card>
-          <Card as="article">
-            <p className="text-2xl font-black text-foreground">9</p>
-            <p className="mt-1 text-xs text-muted">최근 알림</p>
-          </Card>
+        <section className="grid grid-cols-2 gap-4 sm:gap-6" aria-label="관찰 상태 요약">
+          <StatCard label="관찰 상태" value="ON" />
+          <StatCard label="최근 알림" value="9" />
         </section>
 
         <Card as="section" aria-labelledby="observation-rule-title">
-          <h2 id="observation-rule-title" className="text-base font-bold text-foreground">관찰 조건</h2>
-          <p className="mt-2 text-sm leading-6 text-muted">
+          <h2 id="observation-rule-title" className="font-display text-lg font-semibold text-foreground">관찰 조건</h2>
+          <p className="mt-2 text-base leading-6 text-ink-2">
             실제 연동 전까지는 mock 조건을 표시하고 있어요. 이후 스트리머 활동, 가격 조건, 콘텐츠 업로드 조건을 이 화면에서 관리할 예정이에요.
           </p>
         </Card>

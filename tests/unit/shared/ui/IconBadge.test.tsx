@@ -14,7 +14,7 @@ describe('IconBadge', () => {
     const badge = screen.getByText('C');
 
     expect(badge.tagName).toBe('DIV');
-    expect(badge).toHaveClass('size-10', 'rounded-full', 'bg-primary-soft', 'text-primary');
+    expect(badge).toHaveClass('size-10', 'rounded-input', 'bg-primary-soft', 'text-primary');
   });
 
   it.each([

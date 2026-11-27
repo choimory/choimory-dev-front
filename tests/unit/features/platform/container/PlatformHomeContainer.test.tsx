@@ -11,7 +11,7 @@ describe('PlatformHomeContainer', () => {
   it('guest 상태이면 비회원 랜딩을 보여준다', () => {
     render(<PlatformHomeContainer authStatus="guest" />);
 
-    expect(screen.getByText('/ welcome')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /블로그와 피드부터 둘러보고/ })).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: '내 서비스 피드' })).not.toBeInTheDocument();
   });
 

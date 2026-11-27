@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import { Chip } from '@/shared/ui/Chip';
 import { ListRow } from '@/shared/ui/ListRow';
 import { SegmentedTabs } from '@/shared/ui/SegmentedTabs';
 
@@ -26,11 +25,11 @@ const FEED_RANKING_TABS: FeedRankingTab[] = [
   { id: 'artist', label: '아티스트' },
 ];
 
-/** feed target 순위 변화별 badge 클래스 */
+/** feed target 순위 변화별 글자색 */
 const TARGET_TREND_CLASS_NAME: Record<FeedWatchTarget['trendDirection'], string> = {
-  up: 'bg-primary-soft text-primary',
-  down: 'bg-accent-red/15 text-accent-red',
-  same: 'bg-surface text-muted',
+  up: 'text-primary',
+  down: 'text-accent-red',
+  same: 'text-muted',
 };
 
 /** feed target 순위 변화별 아이콘 */
@@ -51,46 +50,38 @@ export function PopularTargetSection({ targets }: { targets: FeedWatchTarget[] }
   const rankingTargets = activeTabId === 'all' ? targets : targets.filter((target) => target.type === activeTabId);
 
   return (
-    <section className="rounded-3xl border border-border bg-surface p-5" aria-labelledby="feed-popular-target-title">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm font-bold text-primary">feed / ranking</p>
-          <h2 id="feed-popular-target-title" className="mt-1 text-xl font-black leading-tight text-foreground">
-            실시간 관찰 대상 랭킹
-          </h2>
-        </div>
-        <Chip>
-          지금
-        </Chip>
+    <section className="grid gap-2" aria-labelledby="feed-popular-target-title">
+      <div className="flex items-baseline justify-between gap-3 px-1 pt-4">
+        <h2 id="feed-popular-target-title" className="font-display text-lg font-semibold tracking-display text-foreground">
+          실시간 관찰 대상 랭킹
+        </h2>
+        <span className="shrink-0 text-xs font-medium text-muted">지금</span>
       </div>
 
-      <SegmentedTabs className="mt-4" items={FEED_RANKING_TABS} activeId={activeTabId} ariaLabel="feed 인기 랭킹 종류" onChange={setActiveTabId} />
+      <SegmentedTabs items={FEED_RANKING_TABS} activeId={activeTabId} ariaLabel="feed 인기 랭킹 종류" onChange={setActiveTabId} />
 
-      <div className="mt-4 grid gap-2">
+      <div className="grid">
         {rankingTargets.map((target, index) => (
           <ListRow
             key={target.id}
             href={`/feed/targets/${target.id}`}
-            tone="strong"
-            className="blog-ranking-enter"
+            className="blog-ranking-enter active:bg-surface-strong"
             style={{ animationDelay: `${index * 70}ms` }}
             leading={(
-              <span className="grid size-9 place-items-center rounded-xl bg-surface text-sm font-black text-primary">
+              <span className="w-6 text-center text-sm font-semibold tabular-nums text-ink-2">
                 {target.rank}
               </span>
             )}
             trailing={(
-              <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${TARGET_TREND_CLASS_NAME[target.trendDirection]}`}>
+              <span className={`inline-flex max-w-28 items-center gap-1 text-xs font-medium tabular-nums ${TARGET_TREND_CLASS_NAME[target.trendDirection]}`}>
                 <span aria-hidden="true">{TARGET_TREND_ICON[target.trendDirection]}</span>
                 {target.trendText}
               </span>
             )}
           >
-            <span className="min-w-0">
-              <span className="flex items-center gap-2">
-                <span className="truncate text-sm font-bold text-foreground">{target.name}</span>
-                <Chip size="sm" tone="surface" className="shrink-0">{getTargetTypeLabel(target.type)}</Chip>
-              </span>
+            <span className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span className="min-w-0 text-sm font-semibold text-foreground">{target.name}</span>
+              <span className="text-xs text-muted">{getTargetTypeLabel(target.type)}</span>
             </span>
           </ListRow>
         ))}

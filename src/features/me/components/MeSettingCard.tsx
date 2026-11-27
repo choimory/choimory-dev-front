@@ -1,4 +1,5 @@
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
 import { ListRow } from '@/shared/ui/ListRow';
 
 import type { MeSettingItem } from '../model/meTypes';
@@ -24,20 +25,20 @@ export function MeSettingCard({ item, onSelect }: MeSettingCardProps) {
   return (
     <ListRow
       onClick={() => onSelect(item)}
-      padding="md"
+      className="w-full transition-none last:border-b-0 focus-visible:relative focus-visible:z-10 focus-visible:-outline-offset-2 focus-visible:outline-focus enabled:active:opacity-75 disabled:cursor-not-allowed disabled:opacity-50"
       leading={(
-        <span className={`grid size-11 place-items-center rounded-2xl ${isDanger ? 'bg-accent-orange-soft text-accent-red' : 'bg-primary-soft text-primary'}`}>
+        <IconBadge as="span" size="sm" tone="strong" className={isDanger ? 'text-accent-red' : 'text-ink-2'}>
           <Icon name={item.iconName} />
-        </span>
+        </IconBadge>
       )}
       trailing={(
-        <span className={`grid h-9 place-items-center rounded-[10px] px-3 text-sm font-bold ${isDanger ? 'border border-accent-red text-accent-red' : 'bg-surface-strong text-foreground'}`}>
+        <span className={`whitespace-nowrap text-sm font-medium ${isDanger ? 'inline-flex h-8 items-center rounded-input border border-accent-red px-2 text-accent-red' : 'px-2 text-ink-2'}`}>
           {actionLabel}
         </span>
       )}
     >
       <div className="min-w-0">
-        <h2 className="text-sm font-bold text-foreground">{item.title}</h2>
+        <h2 className="text-sm font-semibold text-foreground">{item.title}</h2>
         <p className="mt-1 text-sm leading-5 text-muted">{item.description}</p>
       </div>
     </ListRow>

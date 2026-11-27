@@ -35,15 +35,15 @@ const BOTTOM_NAVIGATION_WIDTH_CLASS_NAME: Record<NonNullable<BottomNavigationPro
 export function BottomNavigation({ items, size = 'wide' }: BottomNavigationProps) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 pointer-events-none">
-      <nav className={`pointer-events-auto mx-auto grid h-[70px] w-[calc(100%-2rem)] ${BOTTOM_NAVIGATION_WIDTH_CLASS_NAME[size]} grid-cols-4 gap-1 border border-b-0 border-border bg-shell px-2 py-2 sm:rounded-t-2xl`}>
+      <nav className={`pointer-events-auto mx-auto grid h-16 w-full ${BOTTOM_NAVIGATION_WIDTH_CLASS_NAME[size]} grid-cols-4 border-t border-border bg-shell px-2 sm:w-[calc(100%-2rem)] sm:border-x`}>
         {items.map((item) => (
           <Link
             key={item.label}
             aria-current={item.isActive ? 'page' : undefined}
-            className={`grid place-items-center gap-1 rounded-[10px] text-[11px] ${
+            className={`relative grid content-center justify-items-center gap-1 text-[11px] transition-colors ${
               item.isActive
-                ? 'bg-primary-soft font-bold text-primary'
-                : 'text-muted hover:bg-surface-strong'
+                ? 'font-semibold text-primary before:absolute before:inset-x-5 before:top-0 before:h-0.5 before:bg-primary'
+                : 'font-medium text-muted hover:text-foreground'
             }`}
             href={item.href}
           >

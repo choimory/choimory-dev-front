@@ -10,8 +10,8 @@ type ChipProps = HTMLAttributes<HTMLSpanElement> & {
 
 /** 칩 크기별 클래스 */
 const CHIP_SIZE_CLASS_NAME: Record<NonNullable<ChipProps['size']>, string> = {
-  sm: 'px-2 py-0.5 text-[11px]',
-  md: 'px-2.5 py-1 text-xs',
+  sm: 'px-1.5 py-0.5 text-[11px]',
+  md: 'px-2 py-0.5 text-xs',
 };
 
 /** 칩 배경 톤별 클래스 */
@@ -21,14 +21,14 @@ const CHIP_TONE_CLASS_NAME: Record<NonNullable<ChipProps['tone']>, string> = {
 };
 
 /**
- * 짧은 상태나 분류를 알약 모양으로 보여주는 공용 칩입니다.
+ * 짧은 상태나 분류를 모서리를 깎은 작은 태그로 보여주는 공용 칩입니다.
  *
  * @param props 컴포넌트 Props
  * @returns 칩
  */
 export function Chip({ size = 'md', tone = 'muted', className, children, ...rest }: ChipProps) {
   const chipClassName = [
-    'rounded-full font-bold text-muted',
+    'cut-sm inline-flex items-center whitespace-nowrap border border-border font-medium leading-4 text-muted',
     CHIP_TONE_CLASS_NAME[tone],
     CHIP_SIZE_CLASS_NAME[size],
     className,

@@ -15,7 +15,7 @@ type AppFrameProps = {
  */
 export function AppFrame({ children }: AppFrameProps) {
   return (
-    <div className="min-h-dvh bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-primary)_8%,transparent),transparent_28%,transparent_72%,color-mix(in_srgb,var(--color-accent-green)_7%,transparent)),var(--color-background)] text-foreground">
+    <div className="min-h-dvh bg-background text-foreground">
       {children}
     </div>
   );

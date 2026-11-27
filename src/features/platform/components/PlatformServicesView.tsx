@@ -3,8 +3,8 @@ import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
 import { BottomNavigation } from '@/shared/ui/BottomNavigation';
-import { Chip } from '@/shared/ui/Chip';
 import { Icon } from '@/shared/ui/Icon';
+import { IconBadge } from '@/shared/ui/IconBadge';
 import { ListRow } from '@/shared/ui/ListRow';
 import { PageIntroCard } from '@/shared/ui/PageIntroCard';
 
@@ -16,14 +16,6 @@ import type { PlatformService } from '../model/platformHomeTypes';
 type PlatformServicesViewProps = {
   isLoggedIn: boolean;       // 로그인 여부
   services: PlatformService[]; // 플랫폼 서비스 목록
-};
-
-/** 서비스 강조 색상별 클래스 */
-const SERVICE_TONE_CLASS_NAME: Record<PlatformService['tone'], string> = {
-  blue: 'text-primary bg-primary-soft',
-  green: 'text-accent-green bg-accent-green-soft',
-  orange: 'text-accent-orange bg-accent-orange-soft',
-  purple: 'text-accent-purple bg-accent-purple-soft',
 };
 
 /**
@@ -43,23 +35,23 @@ export function PlatformServicesView({ isLoggedIn, services }: PlatformServicesV
           description="현재 열린 서비스와 준비 중인 서비스를 한 화면에서 확인해보세요."
         />
 
-        <section className="grid gap-3" aria-label="서비스 목록">
+        <section className="grid border-t border-border" aria-label="서비스 목록">
           {services.map((service) => {
             const leading = (
-              <span className={`grid size-12 shrink-0 place-items-center rounded-2xl border border-border/60 ${SERVICE_TONE_CLASS_NAME[service.tone]}`}>
-                <Icon name={service.iconName} />
-              </span>
+              <IconBadge as="span" size="md" tone="strong">
+                <Icon className="text-ink-2" name={service.iconName} />
+              </IconBadge>
             );
             const body = (
               <span className="min-w-0">
-                <span className="block text-base font-bold text-foreground">{service.name}</span>
-                <span className="mt-1 block text-sm leading-5 text-muted">{service.description}</span>
+                <span className="block text-base font-semibold text-foreground">{service.name}</span>
+                <span className="mt-1 block text-sm leading-5 text-ink-2">{service.description}</span>
               </span>
             );
             const trailing = (
-              <Chip className="shrink-0">
+              <span className="whitespace-nowrap text-xs font-medium text-ink-2">
                 {service.status === 'active' ? '이동' : '준비 중'}
-              </Chip>
+              </span>
             );
 
             if (service.status === 'planned') {
@@ -71,7 +63,7 @@ export function PlatformServicesView({ isLoggedIn, services }: PlatformServicesV
             }
 
             return (
-              <ListRow key={service.id} href={service.href} padding="md" leading={leading} trailing={trailing}>
+              <ListRow key={service.id} href={service.href} padding="md" className="transition-none active:bg-surface" leading={leading} trailing={trailing}>
                 {body}
               </ListRow>
             );

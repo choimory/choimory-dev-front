@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon';
 
 /**
@@ -12,21 +13,24 @@ import { Icon } from '@/shared/ui/Icon';
 export function PlatformSearchBar() {
   return (
     <form
-      className="mt-5 flex h-14 items-center gap-3 rounded-full border border-primary bg-surface px-4 shadow-[0_18px_50px_rgba(0,0,0,0.18)]"
+      className="mt-5 flex min-h-11 items-center gap-3"
       role="search"
       onSubmit={(event) => {
         event.preventDefault();
       }}
     >
-      <Icon className="size-5 text-muted" name="search" />
-      <input
-        className="min-w-0 flex-1 bg-transparent text-base text-foreground outline-none placeholder:text-muted"
-        placeholder="서비스나 내용을 검색하세요"
-        type="search"
-      />
-      <button className="h-9 rounded-full bg-primary px-4 text-sm font-bold text-primary-foreground" type="submit">
+      <label className="relative flex min-h-11 min-w-0 flex-1 items-center">
+        <Icon className="pointer-events-none absolute inset-y-0 left-3 my-auto size-4 text-muted" name="search" />
+        <input
+          className="cut-sm h-10 w-full border border-muted bg-surface pr-3 pl-9 text-sm text-foreground hover:bg-surface-strong focus-visible:border-focus"
+          aria-label="서비스나 내용을 검색하세요"
+          placeholder="서비스나 내용을 검색하세요"
+          type="search"
+        />
+      </label>
+      <Button className="relative shrink-0 after:absolute after:inset-x-0 after:-inset-y-0.5" type="submit" variant="secondary">
         검색
-      </button>
+      </Button>
     </form>
   );
 }

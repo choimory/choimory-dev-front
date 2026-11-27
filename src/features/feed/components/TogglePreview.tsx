@@ -6,10 +6,10 @@
  */
 export function TogglePreview({ label }: { label: string }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-[10px] bg-surface-strong px-3 py-2">
-      <span className="text-sm font-bold text-foreground">{label}</span>
-      <span className="grid h-7 w-12 justify-end rounded-full bg-primary p-1" aria-hidden>
-        <span className="size-5 rounded-full bg-white shadow-sm" />
+    <div className="flex min-h-10 items-center justify-between gap-3 border-b border-border py-2">
+      <span className="text-sm font-medium text-foreground">{label}</span>
+      <span className="grid h-6 w-10 shrink-0 justify-end rounded-input bg-primary p-1" aria-hidden>
+        <span className="size-4 rounded-sm bg-primary-foreground" />
       </span>
     </div>
   );

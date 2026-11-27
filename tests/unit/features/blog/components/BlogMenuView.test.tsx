@@ -17,7 +17,6 @@ describe('BlogMenuView', () => {
     render(<BlogMenuView menuKind="popular" viewModel={VIEW_MODEL} />);
 
     expect(screen.getByRole('heading', { level: 1, name: '실시간 순위' })).toBeInTheDocument();
-    expect(screen.getByText('blog / popular', { exact: false })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '실시간 랭킹' })).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: '관계 목록' })).not.toBeInTheDocument();
   });

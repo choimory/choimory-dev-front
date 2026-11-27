@@ -1,71 +1,113 @@
+/* Hallmark · shape: app screen · genre: modern-minimal · theme: Cobalt (deal 3/3, seed personal-developer-platform-hub-a772·f695c75a·2026-11-27·r0) · redesign: full
+ * nav: kept (top bar + bottom navigation) · signature: the watch list, figures in tabular grotesk on hairline rows · states: the ones the screens have
+ * axes: light/grotesk-sans/cool · posture: restrained · modes: light+dark (dark default) · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S3 R5 V3 · weakest: S, a cobalt console could front any dev tool; carried instead by the code-shaped wordmark and the watch list's tabular figures on hairline rows */
+/* Hallmark · waive 39b · the tall buttons are whole list rows, album covers and setting rows, each a single row target, not a control · rows on /notice, /me, /blog/me and the album shelf stay one tap */
+/* Hallmark · waive 71 · each flagged h3 titles its own hairline row (feed guest rows on /feed, planned-service rows on / member), so the gap measured under it is the next row · these rows are split by hairlines, not headed sections */
+/* Hallmark · dismissed F19 · the 900 weight is only the frozen wordmark on / ; the system itself runs 400, 500 and 600 */
+/* Hallmark · note 40 · Naver login keeps its brand green with white text (2.25:1) by owner decision; recorded as an open exception, not waived */
+/* Hallmark · dropped path eyebrows (/ welcome, / blog, / notice, blog / ranking, blog / following, feed / ranking, feed / register, feed / target, feed / settings, me / settings, logo + path on page intros) · the top bar already shows the logo and the path */
+/* Hallmark · dropped repeated subtitles "원본 채널" and "원본 링크" under same-named heads, album cover decorative bars · duplicates of the heading and ornament */
+/* Hallmark · finish-review: subagent ×2 (Claude Opus 5.5, GPT Sol 6.2) · fix · 13 findings · 10 resolved 1 partial (one-line 최근 알림 on streamer detail is still a panel) 2 to owner (launcher arrows need overflow logic, sub-switches while watching is off) · gap: dark default under a light-paper theme, no theme toggle yet */
+/* Hallmark · reworded "..." to "…" in BlogPostCard · F2; middle-dot meta lines split into separate elements, words unchanged · 63 */
 @import "tailwindcss";
+@import "./tokens.css";
+@import "./base.css" layer(base);
 
-:root {
-  --background: #101418;
-  --foreground: #ecf2f8;
-  --shell: #161b22;
-  --surface: #1d232b;
-  --surface-strong: #252c35;
-  --muted: #aeb8c5;
-  --border: #343d49;
-  --primary: #7aa2ff;
-  --primary-foreground: #06111f;
-  --primary-soft: #1c2b4a;
-  --accent-green: #60d7b2;
-  --accent-green-soft: #15382f;
-  --accent-orange: #ffb26f;
-  --accent-orange-soft: #3d2918;
-  --accent-purple: #b79cff;
-  --accent-purple-soft: #30264b;
-  --accent-red: #ff8f8f;
+/*
+ * 다크 모드 (기본값)
+ * tokens.css는 Cobalt 라이트 값이 원본이고, 여기서는 다크에서 바뀌는 토큰만 다시 계산해 덮어쓴다.
+ * 규칙: references/dark-mode.md. hue는 두 모드에서 같고, 그림자 대신 밝기로 층을 나눈다.
+ */
+:root:not([data-theme="light"]) {
   color-scheme: dark;
+  --color-paper: oklch(15.5% 0.012 258);
+  --color-paper-2: oklch(18.5% 0.014 258);
+  --color-paper-3: oklch(21.5% 0.016 258);
+  --color-ink: oklch(94% 0.01 250);
+  --color-ink-2: oklch(82% 0.015 255);
+  --color-muted: oklch(69% 0.018 256);
+  --color-rule: oklch(28% 0.016 258);
+  --color-rule-2: oklch(36% 0.018 258);
+  --color-graphite: oklch(12% 0.018 262);
+  --color-graphite-2: oklch(17% 0.022 262);
+  --color-graphite-ink: oklch(93% 0.01 250);
+  --color-graphite-muted: oklch(69% 0.022 256);
+  --color-accent: oklch(70% 0.14 258);
+  --color-accent-2: oklch(80% 0.11 254);
+  --color-accent-wash: oklch(25% 0.05 258);
+  --color-accent-ink: oklch(16% 0.03 262);
+  --color-focus: oklch(70% 0.14 258);
+  --color-accent-deep: oklch(60% 0.16 260);
+  --color-accent-edge: oklch(50% 0.14 260);
+  --color-key-face: oklch(23% 0.016 258);
+  --color-key-edge: oklch(11% 0.016 258);
+  --color-error: oklch(72% 0.14 25);
+  --color-error-wash: oklch(25% 0.045 25);
+  --color-success: oklch(75% 0.12 160);
+  --color-success-wash: oklch(25% 0.04 160);
+  --color-warning: oklch(80% 0.12 70);
+  --color-warning-wash: oklch(26% 0.04 70);
+  --color-violet: oklch(75% 0.11 295);
+  --color-violet-wash: oklch(25% 0.045 295);
+  --shadow-card: none;
+  --shadow-key: 0 3px 0 0 var(--color-key-edge), inset 0 1px 0 oklch(100% 0 0 / 0.06);
+  --shadow-key-accent: 0 3px 0 0 var(--color-accent-edge), inset 0 1px 0 oklch(100% 0 0 / 0.18);
+  --shadow-key-press: inset 0 1px 2px oklch(0% 0 0 / 0.4);
+  --shadow-tray: inset 0 1px 2px oklch(0% 0 0 / 0.35);
 }
 
 [data-theme="light"] {
-  --background: #ffffff;
-  --foreground: #17202a;
-  --shell: #f8fafc;
-  --surface: #ffffff;
-  --surface-strong: #f2f6fa;
-  --muted: #657386;
-  --border: #d9e1ea;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-  --primary-soft: #e8f0ff;
-  --accent-green: #0f8b6d;
-  --accent-green-soft: #e5f6f1;
-  --accent-orange: #cf6d17;
-  --accent-orange-soft: #fff1e4;
-  --accent-purple: #7c3aed;
-  --accent-purple-soft: #f1eaff;
-  --accent-red: #d64545;
   color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-shell: var(--shell);
-  --color-surface: var(--surface);
-  --color-surface-strong: var(--surface-strong);
-  --color-muted: var(--muted);
-  --color-border: var(--border);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary-soft: var(--primary-soft);
-  --color-accent-green: var(--accent-green);
-  --color-accent-green-soft: var(--accent-green-soft);
-  --color-accent-orange: var(--accent-orange);
-  --color-accent-orange-soft: var(--accent-orange-soft);
-  --color-accent-purple: var(--accent-purple);
-  --color-accent-purple-soft: var(--accent-purple-soft);
-  --color-accent-red: var(--accent-red);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/*
+ * 로고 전용 토큰
+ * 로고는 디자인 시스템과 분리해 리디자인 전 값을 그대로 고정한다. 바꾸지 않는다.
+ */
+:root {
+  --logo-ink: #ecf2f8;
+  --logo-brace: #7aa2ff;
+  --logo-dot: #60d7b2;
+  --logo-paren: #ffb26f;
 }
 
-* {
-  box-sizing: border-box;
+[data-theme="light"] {
+  --logo-ink: #17202a;
+  --logo-brace: #2563eb;
+  --logo-dot: #0f8b6d;
+  --logo-paren: #cf6d17;
+}
+
+/*
+ * 기존 토큰 이름 → Cobalt 역할
+ * 컴포넌트와 테스트가 쓰는 이름(bg-primary, text-muted 등)은 그대로 두고 값만 Cobalt로 바꾼다.
+ * muted는 Cobalt와 이름이 같아 tokens.css 값을 그대로 쓴다.
+ */
+@theme inline {
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-ink);
+  --color-shell: var(--color-paper-2);
+  --color-surface: var(--color-paper-2);
+  --color-surface-strong: var(--color-paper-3);
+  --color-border: var(--color-rule);
+  --color-primary: var(--color-accent);
+  --color-primary-foreground: var(--color-accent-ink);
+  --color-primary-soft: var(--color-accent-wash);
+  --color-accent-green: var(--color-success);
+  --color-accent-green-soft: var(--color-success-wash);
+  --color-accent-orange: var(--color-warning);
+  --color-accent-orange-soft: var(--color-warning-wash);
+  --color-accent-purple: var(--color-violet);
+  --color-accent-purple-soft: var(--color-violet-wash);
+  --color-accent-red: var(--color-error);
+  --color-logo-ink: var(--logo-ink);
+  --color-logo-brace: var(--logo-brace);
+  --color-logo-dot: var(--logo-dot);
+  --color-logo-paren: var(--logo-paren);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-outlier);
+  --font-logo: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 html,
@@ -73,13 +115,124 @@ body {
   height: 100%;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+/*
+ * 한글 조판 보정
+ * - 한글은 어절 단위로 줄을 바꾼다 (단어 중간 줄바꿈 방지).
+ * - base.css의 제목 폭 제한(20ch 등)은 라틴 기준이라 한글 제목이 반토막 나므로 풀고,
+ *   폭은 앱 화면의 컬럼 폭이 정한다.
+ */
+@layer base {
+  html {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  h1,
+  h2,
+  h3 {
+    max-width: none;
+  }
+
+  ::placeholder {
+    color: var(--color-muted);
+    opacity: 1;
+  }
+}
+
+/*
+ * Cobalt 재료 (공용 컴포넌트가 쓰는 표면과 컨트롤)
+ * - .cut / .cut-sm: 대각선 두 모서리를 깎은 패널·태그. corner-shape 미지원 브라우저는 일반 라운드.
+ * - .key / .key-primary: 아래 모서리가 있는 키캡 버튼. hover에 1px 뜨고, 누르면 가라앉음.
+ * - .tray: 탭·옵션 키가 놓이는 오목한 트레이.
+ * - .hit-area: 보이는 크기(32~40px)는 그대로 두고 실제 눌리는 영역을 최소 44px로 넓힌다.
+ */
+:root {
+  --tray: var(--color-paper-3);
+}
+
+:root:not([data-theme="light"]) {
+  --tray: oklch(12.5% 0.012 258);
+}
+
+@theme inline {
+  --color-tray: var(--tray);
+}
+
+@layer components {
+  .cut {
+    border-radius: var(--radius-card);
+  }
+
+  .cut-sm {
+    border-radius: var(--radius-input);
+  }
+
+  @supports (corner-shape: bevel) {
+    .cut {
+      border-radius: var(--cut-l) 4px var(--cut-l) 4px;
+      corner-shape: bevel round bevel round;
+    }
+
+    .cut-sm {
+      border-radius: var(--cut) 2px var(--cut) 2px;
+      corner-shape: bevel round bevel round;
+    }
+  }
+
+  .key {
+    border: var(--rule-hair) solid var(--color-rule-2);
+    border-radius: var(--radius-input);
+    background: var(--color-key-face);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-key);
+    transition:
+      transform var(--dur-micro) var(--ease-out),
+      box-shadow var(--dur-micro) var(--ease-out);
+  }
+
+  .key:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .key:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: var(--shadow-key-press);
+  }
+
+  .key:disabled,
+  .key[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.45;
+    box-shadow: none;
+  }
+
+  .key-primary {
+    border-color: var(--color-accent-edge);
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    box-shadow: var(--shadow-key-accent);
+  }
+
+  .hit-area {
+    position: relative;
+  }
+
+  .hit-area::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+
+  .tray {
+    border: var(--rule-hair) solid var(--color-rule);
+    border-radius: var(--radius-input);
+    background: var(--tray);
+    box-shadow: var(--shadow-tray);
+  }
 }
 
 @keyframes brand-logo-typewriter {

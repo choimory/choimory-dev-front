@@ -29,8 +29,8 @@ const MODAL_PLACEMENT_CLASS_NAME: Record<NonNullable<ModalProps['placement']>, s
 
 /** 모달 배경 막 종류별 클래스 */
 const MODAL_OVERLAY_CLASS_NAME: Record<NonNullable<ModalProps['overlay']>, { overlay: string; panel: string }> = {
-  soft: { overlay: 'bg-background/70', panel: 'shadow-2xl' },
-  dark: { overlay: 'bg-black/60', panel: 'shadow-[0_24px_80px_rgba(0,0,0,0.34)]' },
+  soft: { overlay: 'bg-background/70', panel: 'shadow-card' },
+  dark: { overlay: 'bg-black/60', panel: 'shadow-card' },
 };
 
 /** 모달 최대 폭별 클래스 */
@@ -69,12 +69,12 @@ export function Modal({
   }
 
   const overlayClassName = [
-    'fixed inset-0 z-50 grid backdrop-blur-sm',
+    'fixed inset-0 z-50 grid',
     MODAL_PLACEMENT_CLASS_NAME[placement],
     MODAL_OVERLAY_CLASS_NAME[overlay].overlay,
   ].join(' ');
   const panelClassName = [
-    'w-full rounded-3xl border border-border bg-surface',
+    'cut w-full border border-border bg-surface',
     MODAL_SIZE_CLASS_NAME[size],
     MODAL_PADDING_CLASS_NAME[padding],
     MODAL_OVERLAY_CLASS_NAME[overlay].panel,
@@ -86,7 +86,7 @@ export function Modal({
       <section className={panelClassName} role="dialog" aria-modal="true" aria-labelledby={labelledBy} onClick={(event) => event.stopPropagation()}>
         {title && (
           <div className="flex items-center justify-between gap-3">
-            <h2 id={labelledBy} className="text-lg font-black text-foreground">{title}</h2>
+            <h2 id={labelledBy} className="font-display text-lg font-semibold tracking-display text-foreground">{title}</h2>
             <IconButton ariaLabel="닫기" onClick={onClose}>
               <Icon name="x" />
             </IconButton>

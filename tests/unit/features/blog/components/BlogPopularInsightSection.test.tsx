@@ -58,8 +58,8 @@ describe('BlogPopularInsightSection', () => {
 
     const [up, newItem, down, , same] = screen.getAllByRole('article');
 
-    expect(within(up).getByText('12').closest('span')).toHaveClass('bg-primary-soft', 'text-primary');
-    expect(within(newItem).getByText('NEW').closest('span')).toHaveClass('bg-accent-green-soft', 'text-accent-green');
+    expect(within(up).getByText('12').closest('span')).toHaveClass('text-primary');
+    expect(within(newItem).getByText('NEW').closest('span')).toHaveClass('text-accent-green');
     expect(within(down).getByText('2').closest('span')).toHaveClass('text-accent-red');
     expect(within(same).getByText('1').closest('span')).toHaveClass('text-muted');
   });

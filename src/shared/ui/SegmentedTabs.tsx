@@ -33,14 +33,15 @@ const SEGMENTED_TABS_SIZE_CLASS_NAME: Record<NonNullable<SegmentedTabsProps<stri
 };
 
 /**
- * 같은 영역 안에서 보기를 전환하는 공용 세그먼트 탭입니다. 선택된 탭은 강조색으로 표시합니다.
+ * 같은 영역 안에서 보기를 전환하는 공용 세그먼트 탭입니다.
+ * 오목한 트레이 안에 탭이 놓이고, 선택된 탭은 눌린 코발트 키로 표시합니다.
  *
  * @param props 컴포넌트 Props
  * @returns 세그먼트 탭
  */
 export function SegmentedTabs<TId extends string>({ items, activeId, ariaLabel, onChange, size = 'sm', className }: SegmentedTabsProps<TId>) {
   const tabsClassName = [
-    'grid gap-1 rounded-2xl bg-surface-strong p-1',
+    'tray grid gap-1 p-1',
     SEGMENTED_TABS_COLUMNS_CLASS_NAME[items.length],
     className,
   ].filter(Boolean).join(' ');
@@ -53,7 +54,7 @@ export function SegmentedTabs<TId extends string>({ items, activeId, ariaLabel, 
         return (
           <button
             key={item.id}
-            className={`h-9 rounded-xl font-black transition ${SEGMENTED_TABS_SIZE_CLASS_NAME[size]} ${isActive ? 'bg-primary text-primary-foreground' : 'text-muted'}`}
+            className={`hit-area h-8 rounded-[5px] font-semibold transition-colors ${SEGMENTED_TABS_SIZE_CLASS_NAME[size]} ${isActive ? 'bg-primary text-primary-foreground shadow-key-press' : 'text-muted hover:text-foreground'}`}
             type="button"
             role="tab"
             aria-selected={isActive}
