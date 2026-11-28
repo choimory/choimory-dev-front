@@ -4,7 +4,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { LoginLink } from '@/features/auth/components/LoginLink';
+import { useAuth } from '@/features/auth/context/AuthContext';
 import { platformHomeViewModel } from '@/features/platform/model/platformHomeTypes';
+import { hardNavigate } from '@/shared/navigation/hardNavigate';
 
 import { BrandLogo } from './BrandLogo';
 import { Icon } from './Icon';
@@ -49,6 +52,9 @@ const NOTIFICATION_SERVICE_LABEL: Record<NotificationService, string> = {
   feed: '피드',
 };
 
+/** 상단바 로그인, 로그아웃 버튼 클래스 */
+const AUTH_BUTTON_CLASS_NAME = 'key hit-area grid h-9 shrink-0 place-items-center whitespace-nowrap px-3 text-sm font-semibold min-[380px]:px-4';
+
 /** 상단바 아이콘 버튼 클래스 */
 const TOP_BAR_ICON_BUTTON_CLASS_NAME = 'hit-area hidden size-10 place-items-center rounded-input text-foreground transition-colors hover:bg-surface-strong min-[380px]:grid';
 
@@ -69,16 +75,27 @@ const SEARCH_FORM_CLASS_NAME = [
 
 /**
  * 상단바의 검색, 알림, 로그인 액션을 담당합니다.
+ * 로그아웃 버튼을 누르면 로그아웃한 뒤 홈으로 전체 이동합니다.
+ * 로그인 필요 화면에서는 로그인 가드가 동시에 로그인 화면으로 보내려 하므로, 진행 중인 이동을 덮어쓰도록 전체 이동을 씁니다.
  *
  * @param props 컴포넌트 Props
  * @returns 상단바 액션 영역
  */
 export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
+  const { logout } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isServiceOpen, setIsServiceOpen] = useState(false);
   const [notificationTab, setNotificationTab] = useState<NotificationTab>('all');
   const filteredNotificationItems = notificationTab === 'all' ? NOTIFICATION_ITEMS : NOTIFICATION_ITEMS.filter((item) => item.service === notificationTab);
+
+  /**
+   * 로그아웃하고 홈으로 전체 이동합니다.
+   */
+  const handleLogout = async (): Promise<void> => {
+    await logout();
+    hardNavigate('/');
+  };
 
   return (
     <div className="relative ml-auto flex shrink-0 items-center gap-1 min-[380px]:gap-2">
@@ -116,9 +133,15 @@ export function TopBarActions({ isLoggedIn }: TopBarActionsProps) {
       >
         <Icon name="grid" />
       </button>
-      <Link className="key hit-area grid h-9 shrink-0 place-items-center whitespace-nowrap px-3 text-sm font-semibold min-[380px]:px-4" href={isLoggedIn ? '/' : '/login'}>
-        {isLoggedIn ? '로그아웃' : '로그인'}
-      </Link>
+      {isLoggedIn ? (
+        <button className={AUTH_BUTTON_CLASS_NAME} type="button" onClick={handleLogout}>
+          로그아웃
+        </button>
+      ) : (
+        <LoginLink className={AUTH_BUTTON_CLASS_NAME}>
+          로그인
+        </LoginLink>
+      )}
 
       {isNotificationOpen && typeof document !== 'undefined' && createPortal(
         <div className="fixed inset-0 z-30 bg-transparent" role="presentation" onClick={() => setIsNotificationOpen(false)}>

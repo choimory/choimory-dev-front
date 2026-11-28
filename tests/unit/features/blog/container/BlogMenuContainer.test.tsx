@@ -1,32 +1,63 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BlogMenuContainer } from '@/features/blog/container/BlogMenuContainer';
 
+import { createAuthWrapper } from '../../../../fixtures/auth';
+
+const replace = vi.fn();
+
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/blog/following',
+  useRouter: () => ({ replace, push: vi.fn() }),
+}));
+
 /**
  * BlogMenuContainer 테스트
- * 컨테이너가 menuKind에 맞는 메뉴 화면을 보여주고 authStatus를 상단바에 반영하는지 확인합니다.
+ * 실시간 순위의 공개 접근과 팔로잉 메뉴의 로그인 가드를 확인합니다.
  */
 describe('BlogMenuContainer', () => {
-  it('menuKind에 맞는 메뉴 화면을 보여준다', () => {
-    const { rerender } = render(<BlogMenuContainer authStatus="guest" menuKind="popular" />);
-
-    expect(screen.getByRole('heading', { level: 1, name: '실시간 순위' })).toBeInTheDocument();
-
-    // following 메뉴로 다시 렌더링한다
-    rerender(<BlogMenuContainer authStatus="guest" menuKind="following" />);
-
-    expect(screen.getByRole('heading', { level: 1, name: '팔로잉' })).toBeInTheDocument();
+  beforeEach(() => {
+    replace.mockClear();
   });
 
-  it('authStatus에 따라 상단바 링크가 달라진다', () => {
-    const { rerender } = render(<BlogMenuContainer authStatus="guest" menuKind="popular" />);
+  it('실시간 순위는 비로그인으로도 화면을 보여주고 이동하지 않는다', () => {
+    render(<BlogMenuContainer menuKind="popular" />, { wrapper: createAuthWrapper('guest') });
+
+    expect(screen.getByRole('heading', { level: 1, name: '실시간 순위' })).toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it('팔로잉은 로그인 상태이면 화면을 보여준다', () => {
+    render(<BlogMenuContainer menuKind="following" />, { wrapper: createAuthWrapper('member') });
+
+    expect(screen.getByRole('heading', { level: 1, name: '팔로잉' })).toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it('팔로잉은 비로그인이면 화면을 숨기고 로그인 화면으로 이동한다', () => {
+    render(<BlogMenuContainer menuKind="following" />, { wrapper: createAuthWrapper('guest') });
+
+    expect(screen.queryByRole('heading', { level: 1, name: '팔로잉' })).not.toBeInTheDocument();
+    expect(replace).toHaveBeenCalledWith('/login?next=%2Fblog%2Ffollowing');
+  });
+
+  it('팔로잉에서 로그인 상태를 복원하는 중이면 화면을 숨기고 이동하지 않는다', () => {
+    render(<BlogMenuContainer menuKind="following" />, { wrapper: createAuthWrapper('guest', { state: 'loading' }) });
+
+    expect(screen.queryByRole('heading', { level: 1, name: '팔로잉' })).not.toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it('인증 컨텍스트의 상태에 따라 상단바 링크가 달라진다', () => {
+    const { unmount } = render(<BlogMenuContainer menuKind="popular" />, { wrapper: createAuthWrapper('guest') });
 
     expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
 
-    // member 상태로 다시 렌더링한다
-    rerender(<BlogMenuContainer authStatus="member" menuKind="popular" />);
+    // 회원 인증 상태로 다시 마운트한다
+    unmount();
+    render(<BlogMenuContainer menuKind="popular" />, { wrapper: createAuthWrapper('member') });
 
-    expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
   });
 });

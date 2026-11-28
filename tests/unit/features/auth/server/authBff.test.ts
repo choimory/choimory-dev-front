@@ -4,11 +4,18 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { jsonResponse, memberTokenData } from '../../../../fixtures/api';
 import { handleLogin, handleLogout, handleReissue, toAccessTokenResponse } from '@/features/auth/server/authBff';
 import { clearRefreshCookie, getRefreshCookie, setRefreshCookie } from '@/shared/auth/refreshCookie';
+import { clearSessionCookies, setAccessCookie, setSessionHintCookie } from '@/shared/auth/sessionCookies';
 
 vi.mock('@/shared/auth/refreshCookie', () => ({
   setRefreshCookie: vi.fn(),
   getRefreshCookie: vi.fn(),
   clearRefreshCookie: vi.fn(),
+}));
+
+vi.mock('@/shared/auth/sessionCookies', () => ({
+  setAccessCookie: vi.fn(),
+  setSessionHintCookie: vi.fn(),
+  clearSessionCookies: vi.fn(),
 }));
 
 /**
@@ -46,7 +53,7 @@ describe('authBff', () => {
   });
 
   describe('handleLogin', () => {
-    it('member-api에 로그인하고 Refresh Token은 쿠키에, Access Token은 본문에 담는다', async () => {
+    it('member-api에 로그인하고 쿠키 세 개를 저장한 뒤 Access Token을 응답한다', async () => {
       fetchMock.mockResolvedValue(jsonResponse(200, 'OK', memberTokenData));
 
       const response = await handleLogin(jsonRequest('{"email":"a@b.com","password":"Password1!"}'));
@@ -55,6 +62,8 @@ describe('authBff', () => {
       expect(fetchMock.mock.calls[0][0]).toBe('http://member-api/v1/login');
       expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ email: 'a@b.com', password: 'Password1!' });
       expect(setRefreshCookie).toHaveBeenCalledWith('refresh-1', 1209599);
+      expect(setAccessCookie).toHaveBeenCalledExactlyOnceWith(memberTokenData.accessToken, memberTokenData.accessExpiresIn);
+      expect(setSessionHintCookie).toHaveBeenCalledExactlyOnceWith(memberTokenData.refreshExpiresIn);
       expect(response.status).toBe(200);
       expect(body.data).toEqual({ accessToken: 'access-1', tokenType: 'Bearer', accessExpiresIn: 1799 });
       expect(JSON.stringify(body)).not.toContain('refresh-1');
@@ -81,6 +90,8 @@ describe('authBff', () => {
       expect(response.status).toBe(401);
       expect(await response.json()).toMatchObject({ name: 'UNAUTHORIZED' });
       expect(setRefreshCookie).not.toHaveBeenCalled();
+      expect(setAccessCookie).not.toHaveBeenCalled();
+      expect(setSessionHintCookie).not.toHaveBeenCalled();
     });
 
     it('member-api에 연결하지 못하면 502를 응답한다', async () => {
@@ -93,16 +104,25 @@ describe('authBff', () => {
   });
 
   describe('handleReissue', () => {
-    it('쿠키의 Refresh Token으로 재발급하고 쿠키를 새 값으로 교체한다', async () => {
+    it('쿠키의 Refresh Token으로 재발급하고 쿠키 세 개를 갱신한다', async () => {
+      const reissuedToken = {
+        ...memberTokenData,
+        accessToken: crypto.randomUUID(),
+        refreshToken: crypto.randomUUID(),
+        accessExpiresIn: 1800,
+        refreshExpiresIn: 1209600,
+      };
       vi.mocked(getRefreshCookie).mockResolvedValue('old-refresh');
-      fetchMock.mockResolvedValue(jsonResponse(200, 'OK', { ...memberTokenData, refreshToken: 'refresh-2' }));
+      fetchMock.mockResolvedValue(jsonResponse(200, 'OK', reissuedToken));
 
       const response = await handleReissue();
 
       expect(fetchMock.mock.calls[0][0]).toBe('http://member-api/v1/member/reissue');
       expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ refreshToken: 'old-refresh' });
-      expect(setRefreshCookie).toHaveBeenCalledWith('refresh-2', 1209599);
-      expect((await response.json()).data.accessToken).toBe('access-1');
+      expect(setRefreshCookie).toHaveBeenCalledExactlyOnceWith(reissuedToken.refreshToken, reissuedToken.refreshExpiresIn);
+      expect(setAccessCookie).toHaveBeenCalledExactlyOnceWith(reissuedToken.accessToken, reissuedToken.accessExpiresIn);
+      expect(setSessionHintCookie).toHaveBeenCalledExactlyOnceWith(reissuedToken.refreshExpiresIn);
+      expect((await response.json()).data.accessToken).toBe(reissuedToken.accessToken);
     });
 
     it('쿠키가 없으면 member-api를 호출하지 않고 401을 응답한다', async () => {
@@ -114,14 +134,15 @@ describe('authBff', () => {
       expect(fetchMock).not.toHaveBeenCalled();
     });
 
-    it('Refresh Token이 거부되면 쿠키를 삭제하고 오류를 전달한다', async () => {
+    it.each([400, 401])('member-api가 %i를 응답하면 쿠키 세 개를 삭제하고 오류를 전달한다', async (status) => {
       vi.mocked(getRefreshCookie).mockResolvedValue('old-refresh');
-      fetchMock.mockResolvedValue(jsonResponse(401, 'INVALID_TOKEN'));
+      fetchMock.mockResolvedValue(jsonResponse(status, 'INVALID_TOKEN'));
 
       const response = await handleReissue();
 
-      expect(response.status).toBe(401);
+      expect(response.status).toBe(status);
       expect(clearRefreshCookie).toHaveBeenCalledTimes(1);
+      expect(clearSessionCookies).toHaveBeenCalledTimes(1);
     });
 
     it('서버 오류면 쿠키를 지우지 않아 다시 시도할 수 있다', async () => {
@@ -132,6 +153,10 @@ describe('authBff', () => {
 
       expect(response.status).toBe(500);
       expect(clearRefreshCookie).not.toHaveBeenCalled();
+      expect(clearSessionCookies).not.toHaveBeenCalled();
+      expect(setRefreshCookie).not.toHaveBeenCalled();
+      expect(setAccessCookie).not.toHaveBeenCalled();
+      expect(setSessionHintCookie).not.toHaveBeenCalled();
     });
   });
 
@@ -147,6 +172,7 @@ describe('authBff', () => {
       expect(fetchMock.mock.calls[0][1].headers).toMatchObject({ Authorization: 'Bearer access-1' });
       expect(response.status).toBe(200);
       expect(clearRefreshCookie).toHaveBeenCalledTimes(1);
+      expect(clearSessionCookies).toHaveBeenCalledTimes(1);
     });
 
     it('쿠키가 없으면 member-api를 호출하지 않고 성공 처리한다', async () => {
@@ -157,6 +183,7 @@ describe('authBff', () => {
       expect(response.status).toBe(200);
       expect(fetchMock).not.toHaveBeenCalled();
       expect(clearRefreshCookie).toHaveBeenCalledTimes(1);
+      expect(clearSessionCookies).toHaveBeenCalledTimes(1);
     });
 
     it('member-api가 실패해도 쿠키는 삭제하고 오류를 전달한다', async () => {
@@ -167,6 +194,7 @@ describe('authBff', () => {
 
       expect(response.status).toBe(500);
       expect(clearRefreshCookie).toHaveBeenCalledTimes(1);
+      expect(clearSessionCookies).toHaveBeenCalledTimes(1);
     });
   });
 });

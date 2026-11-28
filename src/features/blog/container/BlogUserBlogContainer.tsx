@@ -1,12 +1,15 @@
+'use client';
+
+import { useAuth } from '@/features/auth/context/AuthContext';
+
 import { BlogUserBlogView } from '../components/BlogUserBlogView';
-import { blogViewModel, type BlogAuthStatus } from '../model/blogTypes';
+import { blogViewModel } from '../model/blogTypes';
 
 /**
  * 유저 blog 화면 Container Props입니다.
  */
 type BlogUserBlogContainerProps = {
-  authStatus: BlogAuthStatus; // 화면 확인용 인증 상태
-  nickname: string;           // 표시할 유저 닉네임
+  nickname: string; // 표시할 유저 닉네임
 };
 
 /**
@@ -15,7 +18,9 @@ type BlogUserBlogContainerProps = {
  * @param props Container Props
  * @returns 유저 blog 화면
  */
-export function BlogUserBlogContainer({ authStatus, nickname }: BlogUserBlogContainerProps) {
+export function BlogUserBlogContainer({ nickname }: BlogUserBlogContainerProps) {
+  const { authStatus } = useAuth();
+
   return (
     <BlogUserBlogView
       isLoggedIn={authStatus === 'member'}

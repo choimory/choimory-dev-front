@@ -27,7 +27,7 @@ describe('BlogView', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'blog' })).toBeInTheDocument();
     expect(screen.getByRole('tablist', { name: 'blog 피드 필터' })).toBeInTheDocument();
-    expect(within(screen.getAllByRole('banner')[0]).getByRole('link', { name: '로그아웃' })).toBeInTheDocument();
+    expect(within(screen.getAllByRole('banner')[0]).getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
   });
 
   it('상단바에 blog 서비스명과 플랫폼 홈으로 돌아가는 링크를 보여준다', () => {

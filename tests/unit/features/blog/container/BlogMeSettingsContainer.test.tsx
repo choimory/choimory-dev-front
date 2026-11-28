@@ -1,27 +1,38 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BlogMeSettingsContainer } from '@/features/blog/container/BlogMeSettingsContainer';
 
+import { createAuthWrapper } from '../../../../fixtures/auth';
+
+const replace = vi.fn();
+
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/',
+  useRouter: () => ({ replace, push: vi.fn() }),
+}));
+
 /**
  * BlogMeSettingsContainer 테스트
- * 컨테이너가 내 blog 설정 화면을 보여주고 authStatus가 member일 때만 로그인 상태로 전달하는지 확인합니다.
+ * 컨테이너가 로그인한 사용자에게만 내 blog 설정 화면을 보여주고, 비로그인이면 로그인 화면으로 이동하는지 확인합니다.
  */
 describe('BlogMeSettingsContainer', () => {
-  it('내 blog 설정 화면을 보여준다', () => {
-    render(<BlogMeSettingsContainer authStatus="member" />);
-
-    expect(screen.getByRole('region', { name: '설정' })).toBeInTheDocument();
+  beforeEach(() => {
+    replace.mockClear();
   });
 
-  it('authStatus가 member일 때만 로그인 상태로 전달한다', () => {
-    const { rerender } = render(<BlogMeSettingsContainer authStatus="guest" />);
+  it('로그인 상태이면 내 blog 설정 화면과 로그아웃 버튼을 보여준다', () => {
+    render(<BlogMeSettingsContainer />, { wrapper: createAuthWrapper('member') });
 
-    expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: '설정' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
+  });
 
-    // member 상태로 다시 렌더링한다
-    rerender(<BlogMeSettingsContainer authStatus="member" />);
+  it('비로그인이면 화면을 숨기고 로그인 화면으로 이동한다', () => {
+    render(<BlogMeSettingsContainer />, { wrapper: createAuthWrapper('guest') });
 
-    expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: '설정' })).not.toBeInTheDocument();
+    expect(replace).toHaveBeenCalledWith('/login');
   });
 });

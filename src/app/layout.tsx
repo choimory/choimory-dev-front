@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Familjen_Grotesk, Geist_Mono, IBM_Plex_Sans_KR, JetBrains_Mono } from "next/font/google";
+import { AuthProvider } from "@/features/auth/context/AuthContext";
 import "./globals.css";
 
 /** 본문과 한글 전체 */
@@ -50,7 +51,7 @@ export default function RootLayout({
       className={`${plexSansKr.variable} ${familjenGrotesk.variable} ${jetbrainsMono.variable} ${geistMono.variable}`}
     >
       <body className="antialiased">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

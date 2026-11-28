@@ -1,5 +1,10 @@
-import Link from 'next/link';
+'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { LoginLink } from '@/features/auth/components/LoginLink';
+import { buildLoginHref } from '@/shared/auth/redirect';
 import { Card } from '@/shared/ui/Card';
 import { SectionHeader } from '@/shared/ui/SectionHeader';
 
@@ -20,6 +25,9 @@ type BlogGuestSectionProps = {
  * @returns 비회원용 blog 섹션
  */
 export function BlogGuestSection({ posts }: BlogGuestSectionProps) {
+  const pathname = usePathname();
+  const loginHref = buildLoginHref(pathname ?? '/'); // 로그인 후 지금 보던 페이지로 돌아오는 주소
+
   return (
     <div className="grid gap-6">
       <Card as="section" aria-labelledby="blog-guest-title">
@@ -30,9 +38,9 @@ export function BlogGuestSection({ posts }: BlogGuestSectionProps) {
           비회원은 공개 게시글을 볼 수 있고, 로그인하면 글쓰기, 좋아요, 댓글, 팔로우를 사용할 수 있어요.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <Link className="key key-primary inline-flex h-10 items-center px-4 text-sm font-semibold" href="/login">
+          <LoginLink className="key key-primary inline-flex h-10 items-center px-4 text-sm font-semibold">
             로그인
-          </Link>
+          </LoginLink>
           <Link className="key inline-flex h-10 items-center px-4 text-sm font-semibold" href="/signup">
             회원가입
           </Link>
@@ -58,7 +66,7 @@ export function BlogGuestSection({ posts }: BlogGuestSectionProps) {
           domainPath="blog / preview"
           title="둘러보는 글"
           headingId="blog-public-preview-title"
-          action={{ label: '참여하기', href: '/login' }}
+          action={{ label: '참여하기', href: loginHref }}
         />
         <div className="grid">
           {posts.map((post) => (

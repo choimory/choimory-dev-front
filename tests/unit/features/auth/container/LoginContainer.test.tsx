@@ -6,10 +6,13 @@ import { authApi } from '@/features/auth/api/authApi';
 import { LoginContainer } from '@/features/auth/container/LoginContainer';
 import { ApiError } from '@/shared/api/apiTypes';
 
-const push = vi.fn();
+import { createAuthValue } from '../../../../fixtures/auth';
+import { AuthContext } from '@/features/auth/context/AuthContext';
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push }),
+const hardNavigate = vi.fn();
+
+vi.mock('@/shared/navigation/hardNavigate', () => ({
+  hardNavigate: (path: string) => hardNavigate(path),
 }));
 
 vi.mock('@/features/auth/api/authApi', () => ({
@@ -18,7 +21,7 @@ vi.mock('@/features/auth/api/authApi', () => ({
 
 /**
  * LoginContainer 테스트
- * 컨테이너가 로그인 화면을 보여주고, 로그인 성공 시 홈으로 이동하며 실패 시 오류를 보여주는지 확인합니다.
+ * 컨테이너가 로그인 화면을 보여주고, 로그인 성공 시 홈으로 전체 이동하며 실패 시 오류를 보여주는지 확인합니다.
  */
 describe('LoginContainer', () => {
   beforeEach(() => {
@@ -32,7 +35,7 @@ describe('LoginContainer', () => {
     expect(screen.getByRole('button', { name: '카카오로 로그인' })).toBeInTheDocument();
   });
 
-  it('로그인에 성공하면 입력한 값으로 API를 호출하고 홈으로 이동한다', async () => {
+  it('로그인에 성공하면 입력한 값으로 API를 호출하고 홈으로 전체 이동한다', async () => {
     vi.mocked(authApi.login).mockResolvedValue({ accessToken: 'a', tokenType: 'Bearer', accessExpiresIn: 1799 });
     render(<LoginContainer />);
 
@@ -41,8 +44,35 @@ describe('LoginContainer', () => {
     await userEvent.type(screen.getByLabelText('비밀번호'), 'Password1!');
     await userEvent.click(screen.getByRole('button', { name: '로그인' }));
 
-    await waitFor(() => expect(push).toHaveBeenCalledWith('/'));
+    await waitFor(() => expect(hardNavigate).toHaveBeenCalledWith('/'));
     expect(authApi.login).toHaveBeenCalledWith({ email: 'mory@example.com', password: 'Password1!' });
+  });
+
+  it('redirectTo가 있으면 로그인 성공 후 그 경로로 전체 이동한다', async () => {
+    vi.mocked(authApi.login).mockResolvedValue({ accessToken: 'a', tokenType: 'Bearer', accessExpiresIn: 1799 });
+    render(<LoginContainer redirectTo="/feed/me" />);
+
+    await userEvent.type(screen.getByLabelText('이메일'), 'mory@example.com');
+    await userEvent.type(screen.getByLabelText('비밀번호'), 'Password1!');
+    await userEvent.click(screen.getByRole('button', { name: '로그인' }));
+
+    await waitFor(() => expect(hardNavigate).toHaveBeenCalledWith('/feed/me'));
+  });
+
+  it('로그인에 성공하면 인증 상태를 로그인으로 반영한다', async () => {
+    vi.mocked(authApi.login).mockResolvedValue({ accessToken: 'a', tokenType: 'Bearer', accessExpiresIn: 1799 });
+    const authValue = createAuthValue('guest');
+    render(
+      <AuthContext.Provider value={authValue}>
+        <LoginContainer />
+      </AuthContext.Provider>,
+    );
+
+    await userEvent.type(screen.getByLabelText('이메일'), 'mory@example.com');
+    await userEvent.type(screen.getByLabelText('비밀번호'), 'Password1!');
+    await userEvent.click(screen.getByRole('button', { name: '로그인' }));
+
+    await waitFor(() => expect(authValue.markLoggedIn).toHaveBeenCalledTimes(1));
   });
 
   it('로그인에 실패하면 오류 메시지를 보여주고 이동하지 않는다', async () => {
@@ -52,6 +82,6 @@ describe('LoginContainer', () => {
     await userEvent.click(screen.getByRole('button', { name: '로그인' }));
 
     expect(await screen.findByRole('alert')).toHaveTextContent('이메일 또는 비밀번호가 올바르지 않아요.');
-    expect(push).not.toHaveBeenCalled();
+    expect(hardNavigate).not.toHaveBeenCalled();
   });
 });

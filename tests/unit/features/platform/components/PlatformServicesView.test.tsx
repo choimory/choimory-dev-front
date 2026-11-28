@@ -52,7 +52,7 @@ describe('PlatformServicesView', () => {
     // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<PlatformServicesView isLoggedIn services={[]} />);
 
-    expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
   });
 
   it('하단 네비게이션에서 서비스가 활성 상태다', () => {

@@ -103,6 +103,6 @@ describe('FeedTargetDetailView', () => {
     // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<FeedTargetDetailView isLoggedIn target={FEED_ITEM_TARGET_FIXTURE} />);
 
-    expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
   });
 });

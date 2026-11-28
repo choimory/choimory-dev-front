@@ -69,7 +69,7 @@ describe('PlatformNoticeView', () => {
     // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<PlatformNoticeView isLoggedIn />);
 
-    expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
   });
 
   it('하단 네비게이션에서 공지사항이 활성 상태다', () => {

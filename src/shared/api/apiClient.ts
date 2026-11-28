@@ -1,3 +1,5 @@
+import { buildLoginHref } from '@/shared/auth/redirect';
+
 import { ApiError } from './apiTypes';
 import { httpRequest, type HttpMethod } from './httpClient';
 import { refreshAccessToken } from './tokenRefresher';
@@ -102,13 +104,12 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
 }
 
 /**
- * 로그인 화면으로 이동합니다.
+ * 로그인 화면으로 이동합니다. 로그인한 뒤 지금 보던 페이지로 돌아오도록 현재 경로를 함께 넘깁니다.
  */
 function redirectToLogin(): void {
   if (typeof window !== 'undefined') {
     // 메모리의 인증 상태를 함께 비우려고 라우터 이동이 아닌 전체 이동을 쓴다.
-    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
-    window.location.assign('/login');
+    window.location.assign(buildLoginHref(window.location.pathname));
   }
 }
 

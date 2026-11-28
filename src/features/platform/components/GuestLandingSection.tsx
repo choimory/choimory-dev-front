@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { LoginLink } from '@/features/auth/components/LoginLink';
+
 import { Card } from '@/shared/ui/Card';
 import { Icon } from '@/shared/ui/Icon';
 import { IconBadge } from '@/shared/ui/IconBadge';
@@ -39,9 +41,9 @@ export function GuestLandingSection({ services }: GuestLandingSectionProps) {
             비회원은 공개 글과 서비스 구성을 확인할 수 있고, 로그인하면 개인 피드와 알림 요약을 이어서 사용할 수 있어요.
           </p>
           <div className="mt-3 flex min-h-11 flex-wrap items-center gap-3">
-            <Link className="key relative inline-grid h-10 place-items-center px-4 text-sm font-semibold after:absolute after:inset-x-0 after:-inset-y-0.5" href="/login">
+            <LoginLink className="key relative inline-grid h-10 place-items-center px-4 text-sm font-semibold after:absolute after:inset-x-0 after:-inset-y-0.5">
               로그인
-            </Link>
+            </LoginLink>
             <Link className="key relative inline-grid h-10 place-items-center px-4 text-sm font-semibold after:absolute after:inset-x-0 after:-inset-y-0.5" href="/signup">
               회원가입
             </Link>

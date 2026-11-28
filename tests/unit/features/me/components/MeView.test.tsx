@@ -19,8 +19,21 @@ async function openSetting(title: string) {
  * 모달 열기는 openSetting 헬퍼로 묶었습니다.
  */
 describe('MeView', () => {
+  it('로그인 여부에 따라 상단바 버튼이 달라진다', () => {
+    const { unmount } = render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
+
+    expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
+
+    // 비로그인 상태로 다시 렌더링하면 로그인 링크가 나온다
+    unmount();
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn={false} />);
+
+    expect(screen.getByRole('link', { name: '로그인' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '로그아웃' })).not.toBeInTheDocument();
+  });
+
   it('프로필 카드에 닉네임, 이메일, 소개와 홈 링크를 보여준다', () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     expect(screen.getByRole('heading', { level: 1, name: 'mory.dev' })).toBeInTheDocument();
     expect(screen.getByText('mory@example.com')).toBeInTheDocument();
@@ -33,14 +46,14 @@ describe('MeView', () => {
   });
 
   it('로그인 상태의 상단바와 활성화된 하단 네비게이션을 보여준다', () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
-    expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: '내 정보' })).toHaveAttribute('aria-current', 'page');
   });
 
   it('설정 항목마다 카드를 보여준다', () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     const settings = screen.getByRole('region', { name: '마이페이지 설정' });
 
@@ -48,13 +61,13 @@ describe('MeView', () => {
   });
 
   it('처음에는 설정 모달이 열려 있지 않다', () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('개인정보 변경 모달은 이메일(읽기 전용), 닉네임, 자기소개를 기존 값으로 채워 보여준다', async () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     const dialog = await openSetting('개인정보 변경');
 
@@ -68,7 +81,7 @@ describe('MeView', () => {
   });
 
   it('개인정보 변경 모달에서 닉네임을 수정할 수 있다', async () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     // 개인정보 변경 모달을 연다
     const dialog = await openSetting('개인정보 변경');
@@ -82,7 +95,7 @@ describe('MeView', () => {
   });
 
   it('사이트 설정 모달은 테마 3종을 보여주고 system이 기본 선택이다', async () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     const dialog = await openSetting('사이트 설정');
 
@@ -92,7 +105,7 @@ describe('MeView', () => {
   });
 
   it('사이트 설정 모달에서 테마를 바꿀 수 있다', async () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     // 사이트 설정 모달을 연다
     const dialog = await openSetting('사이트 설정');
@@ -104,7 +117,7 @@ describe('MeView', () => {
   });
 
   it('2차 인증 모달은 사용 여부와 인증 방식을 보여주고 모바일 앱 인증은 비활성이다', async () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     const dialog = await openSetting('2차 인증');
 
@@ -116,7 +129,7 @@ describe('MeView', () => {
   });
 
   it('회원 탈퇴 모달은 위험 안내와 탈퇴 절차 확인 버튼을 보여준다', async () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     const dialog = await openSetting('회원 탈퇴');
 
@@ -126,7 +139,7 @@ describe('MeView', () => {
   });
 
   it('모달에서 설정 항목에 맞는 내용만 보여준다', async () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     const dialog = await openSetting('사이트 설정');
 
@@ -135,7 +148,7 @@ describe('MeView', () => {
   });
 
   it('닫기 버튼을 누르면 모달이 닫힌다', async () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     // 개인정보 변경 모달을 연 뒤
     const dialog = await openSetting('개인정보 변경');
@@ -146,7 +159,7 @@ describe('MeView', () => {
   });
 
   it('모달 배경을 누르면 모달이 닫힌다', async () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     // 회원 탈퇴 모달을 연 뒤
     const dialog = await openSetting('회원 탈퇴');
@@ -157,7 +170,7 @@ describe('MeView', () => {
   });
 
   it('다른 설정을 열면 이전 모달 내용은 사라지고 새 내용으로 바뀐다', async () => {
-    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} />);
+    render(<MeView viewModel={ME_VIEW_MODEL_FIXTURE} isLoggedIn />);
 
     // 개인정보 변경 모달을 열었다가 닫고
     const profileDialog = await openSetting('개인정보 변경');
@@ -170,7 +183,7 @@ describe('MeView', () => {
   });
 
   it('설정 항목이 없으면 설정 영역이 비어 있다', () => {
-    render(<MeView viewModel={{ ...ME_VIEW_MODEL_FIXTURE, settingItems: [] }} />);
+    render(<MeView viewModel={{ ...ME_VIEW_MODEL_FIXTURE, settingItems: [] }} isLoggedIn />);
 
     expect(screen.getByRole('region', { name: '마이페이지 설정' })).toBeEmptyDOMElement();
   });

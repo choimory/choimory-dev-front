@@ -1,27 +1,35 @@
+'use client';
+
+import { RequireAuth } from '@/features/auth/components/RequireAuth';
+import { useAuth } from '@/features/auth/context/AuthContext';
+
 import { FeedObservationDetailView } from '../components/FeedObservationDetailView';
-import { feedViewModel, type FeedAuthStatus } from '../model/feedTypes';
+import { feedViewModel } from '../model/feedTypes';
 
 /**
  * feed 관찰 상세 Container Props입니다.
  */
 type FeedObservationDetailContainerProps = {
-  authStatus: FeedAuthStatus; // 화면 확인용 인증 상태
   observationId: string;      // 관찰 항목 고유 ID
 };
 
 /**
  * feed 관찰 상세 화면의 데이터 흐름을 담당하는 Container입니다.
+ * 로그인한 사용자에게만 보여주고, 비로그인이면 로그인 화면으로 이동합니다.
  *
  * @param props Container Props
  * @returns feed 관찰 상세 화면
  */
-export function FeedObservationDetailContainer({ authStatus, observationId }: FeedObservationDetailContainerProps) {
+export function FeedObservationDetailContainer({ observationId }: FeedObservationDetailContainerProps) {
+  const { authStatus } = useAuth();
   const observation = feedViewModel.observations.find((item) => item.id === observationId) ?? feedViewModel.observations[0];
 
   return (
-    <FeedObservationDetailView
-      isLoggedIn={authStatus === 'member'}
-      observation={observation}
-    />
+    <RequireAuth>
+      <FeedObservationDetailView
+        isLoggedIn={authStatus === 'member'}
+        observation={observation}
+      />
+    </RequireAuth>
   );
 }

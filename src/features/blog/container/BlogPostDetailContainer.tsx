@@ -1,12 +1,15 @@
+'use client';
+
+import { useAuth } from '@/features/auth/context/AuthContext';
+
 import { BlogPostDetailView } from '../components/BlogPostDetailView';
-import { blogViewModel, type BlogAuthStatus } from '../model/blogTypes';
+import { blogViewModel } from '../model/blogTypes';
 
 /**
  * blog 게시글 상세 Container Props입니다.
  */
 type BlogPostDetailContainerProps = {
-  authStatus: BlogAuthStatus; // 화면 확인용 인증 상태
-  postId: string;             // 게시글 고유 ID
+  postId: string; // 게시글 고유 ID
 };
 
 /**
@@ -15,7 +18,9 @@ type BlogPostDetailContainerProps = {
  * @param props Container Props
  * @returns blog 게시글 상세 화면
  */
-export function BlogPostDetailContainer({ authStatus, postId }: BlogPostDetailContainerProps) {
+export function BlogPostDetailContainer({ postId }: BlogPostDetailContainerProps) {
+  const { authStatus } = useAuth();
+
   const post = blogViewModel.posts.find((item) => item.id === postId) ?? blogViewModel.posts[0];
 
   return (

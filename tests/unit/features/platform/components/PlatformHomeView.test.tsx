@@ -37,7 +37,7 @@ describe('PlatformHomeView', () => {
   it('회원이면 상단바에 로그아웃 링크와 내 서비스 피드를 보여준다', () => {
     render(<PlatformHomeView viewModel={MEMBER_VIEW_MODEL} />);
 
-    expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '내 서비스 피드' })).toBeInTheDocument();
     expect(screen.queryByText('/ welcome')).not.toBeInTheDocument();
   });

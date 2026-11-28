@@ -1,12 +1,10 @@
 import { FeedObservationDetailContainer } from '@/features/feed/container/FeedObservationDetailContainer';
-import { getMockAuthStatus, type PageSearchParams } from '@/shared/model/mockAuth';
 
 /**
  * feed 관찰 상세 화면 Props입니다.
  */
 type FeedObservationDetailPageProps = {
   params: Promise<{ observationId: string }>; // URL path params
-  searchParams: Promise<PageSearchParams>;  // URL query
 };
 
 /**
@@ -15,9 +13,8 @@ type FeedObservationDetailPageProps = {
  * @param props 화면 Props
  * @returns feed 관찰 상세 화면
  */
-export default async function FeedObservationDetailPage({ params, searchParams }: FeedObservationDetailPageProps) {
+export default async function FeedObservationDetailPage({ params }: FeedObservationDetailPageProps) {
   const { observationId } = await params;
-  const authStatus = getMockAuthStatus(await searchParams);
 
-  return <FeedObservationDetailContainer authStatus={authStatus} observationId={observationId} />;
+  return <FeedObservationDetailContainer observationId={observationId} />;
 }

@@ -58,7 +58,7 @@ describe('BlogMenuView', () => {
     // member 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
     rerender(<BlogMenuView menuKind="popular" viewModel={{ ...VIEW_MODEL, authStatus: 'member' }} />);
 
-    expect(screen.getByRole('link', { name: '로그아웃' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
   });
 
   it('blog 홈으로 돌아가는 링크를 보여준다', () => {

@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { LoginLink } from '@/features/auth/components/LoginLink';
+
 import { AppContent } from '@/shared/ui/AppContent';
 import { AppFrame } from '@/shared/ui/AppFrame';
 import { AppTopBar } from '@/shared/ui/AppTopBar';
@@ -52,9 +54,9 @@ export function FeedView({ viewModel }: FeedViewProps) {
 
           {!isMember && (
             <div className="mt-4 flex flex-wrap gap-2">
-              <Link className="key key-primary relative inline-flex h-10 items-center whitespace-nowrap px-4 text-sm font-semibold after:absolute after:-inset-y-0.5 after:inset-x-0" href="/login">
+              <LoginLink className="key key-primary relative inline-flex h-10 items-center whitespace-nowrap px-4 text-sm font-semibold after:absolute after:-inset-y-0.5 after:inset-x-0">
                 로그인
-              </Link>
+              </LoginLink>
               <Link className="key relative inline-flex h-10 items-center whitespace-nowrap px-4 text-sm font-semibold after:absolute after:-inset-y-0.5 after:inset-x-0" href="/signup">
                 회원가입
               </Link>

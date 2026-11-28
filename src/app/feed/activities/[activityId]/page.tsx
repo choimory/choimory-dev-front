@@ -1,12 +1,10 @@
 import { FeedActivityDetailContainer } from '@/features/feed/container/FeedActivityDetailContainer';
-import { getMockAuthStatus, type PageSearchParams } from '@/shared/model/mockAuth';
 
 /**
  * feed 알림 상세 화면 Props입니다.
  */
 type FeedActivityDetailPageProps = {
-  params: Promise<{ activityId: string }>;    // URL path params
-  searchParams: Promise<PageSearchParams>;  // URL query
+  params: Promise<{ activityId: string }>; // URL path params
 };
 
 /**
@@ -15,9 +13,8 @@ type FeedActivityDetailPageProps = {
  * @param props 화면 Props
  * @returns feed 알림 상세 화면
  */
-export default async function FeedActivityDetailPage({ params, searchParams }: FeedActivityDetailPageProps) {
+export default async function FeedActivityDetailPage({ params }: FeedActivityDetailPageProps) {
   const { activityId } = await params;
-  const authStatus = getMockAuthStatus(await searchParams);
 
-  return <FeedActivityDetailContainer activityId={activityId} authStatus={authStatus} />;
+  return <FeedActivityDetailContainer activityId={activityId} />;
 }

@@ -1,23 +1,21 @@
-import { PlatformServicesView } from '../components/PlatformServicesView';
-import { platformHomeViewModel, type PlatformAuthStatus } from '../model/platformHomeTypes';
+'use client';
 
-/**
- * 플랫폼 서비스 메뉴 Container Props입니다.
- */
-type PlatformServicesContainerProps = {
-  authStatus: PlatformAuthStatus; // 화면 확인용 인증 상태
-};
+import { useAuth } from '@/features/auth/context/AuthContext';
+
+import { PlatformServicesView } from '../components/PlatformServicesView';
+import { platformHomeViewModel } from '../model/platformHomeTypes';
 
 /**
  * 플랫폼 서비스 메뉴 화면의 데이터 흐름을 담당하는 Container입니다.
  *
- * @param props Container Props
  * @returns 플랫폼 서비스 메뉴 화면
  */
-export function PlatformServicesContainer({ authStatus }: PlatformServicesContainerProps) {
+export function PlatformServicesContainer() {
+  const { isLoggedIn } = useAuth();
+
   return (
     <PlatformServicesView
-      isLoggedIn={authStatus === 'member'}
+      isLoggedIn={isLoggedIn}
       services={platformHomeViewModel.services}
     />
   );

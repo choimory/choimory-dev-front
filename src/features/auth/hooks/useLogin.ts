@@ -3,6 +3,7 @@ import { useState, type FormEvent } from 'react';
 import { ApiError } from '@/shared/api/apiTypes';
 
 import { authApi } from '../api/authApi';
+import { useAuth } from '../context/AuthContext';
 
 /**
  * 로그인 오류를 사용자에게 보여줄 메시지로 바꿉니다.
@@ -22,11 +23,13 @@ export function toLoginErrorMessage(error: unknown): string {
 
 /**
  * 로그인 폼의 상태와 제출 흐름을 담당하는 Hook입니다.
+ * 로그인에 성공하면 인증 상태를 로그인으로 반영한 뒤 onSuccess를 실행합니다.
  *
  * @param onSuccess 로그인 성공 후 실행할 동작 (예: 화면 이동)
  * @returns 입력 값, 제출 상태, 오류 메시지와 이벤트 함수
  */
 export function useLogin(onSuccess: () => void) {
+  const { markLoggedIn } = useAuth();                       // 로그인 성공을 인증 상태에 반영
   const [email, setEmail] = useState('');                       // 이메일 입력 값
   const [password, setPassword] = useState('');                 // 비밀번호 입력 값
   const [isSubmitting, setIsSubmitting] = useState(false);      // 로그인 요청 진행 여부
@@ -49,6 +52,7 @@ export function useLogin(onSuccess: () => void) {
 
     try {
       await authApi.login({ email, password });
+      markLoggedIn();
       onSuccess();
     } catch (error) {
       setErrorMessage(toLoginErrorMessage(error));

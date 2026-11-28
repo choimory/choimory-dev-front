@@ -1,20 +1,18 @@
-import { FeedView } from '../components/FeedView';
-import { feedViewModel, type FeedAuthStatus } from '../model/feedTypes';
+'use client';
 
-/**
- * feed Container Props입니다.
- */
-type FeedContainerProps = {
-  authStatus: FeedAuthStatus; // 화면 확인용 인증 상태
-};
+import { useAuth } from '@/features/auth/context/AuthContext';
+
+import { FeedView } from '../components/FeedView';
+import { feedViewModel } from '../model/feedTypes';
 
 /**
  * feed 서비스 화면의 데이터 흐름을 담당하는 Container입니다.
  *
- * @param props Container Props
  * @returns feed 서비스 화면
  */
-export function FeedContainer({ authStatus }: FeedContainerProps) {
+export function FeedContainer() {
+  const { authStatus } = useAuth();
+
   return (
     <FeedView
       viewModel={{

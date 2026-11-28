@@ -20,6 +20,7 @@ import type { MeSettingItem, MeViewModel } from '../model/meTypes';
  */
 type MeViewProps = {
   viewModel: MeViewModel; // 마이페이지 화면 데이터
+  isLoggedIn: boolean;    // 로그인 여부
 };
 
 /** 개인정보 입력창과 자기소개 입력 영역 공통 클래스 */
@@ -43,12 +44,12 @@ const KEY_HIT_AREA_CLASS_NAME =
  * @param props 컴포넌트 Props
  * @returns 마이페이지 화면
  */
-export function MeView({ viewModel }: MeViewProps) {
+export function MeView({ viewModel, isLoggedIn }: MeViewProps) {
   const [selectedSetting, setSelectedSetting] = useState<MeSettingItem | null>(null);
 
   return (
     <AppFrame>
-      <AppTopBar isLoggedIn />
+      <AppTopBar isLoggedIn={isLoggedIn} />
 
       <AppContent className="grid gap-5">
         <Card as="section" className="sm:p-5">

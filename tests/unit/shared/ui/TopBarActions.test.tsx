@@ -1,9 +1,18 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { AnchorHTMLAttributes } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { AuthContext } from '@/features/auth/context/AuthContext';
 import { TopBarActions } from '@/shared/ui/TopBarActions';
+
+import { createAuthValue } from '../../../fixtures/auth';
+
+const hardNavigate = vi.fn();
+
+vi.mock('@/shared/navigation/hardNavigate', () => ({
+  hardNavigate: (path: string) => hardNavigate(path),
+}));
 
 // Next.js Link는 라우터 없이 클릭하면 실제 페이지 이동을 시도하므로, 이 파일에서는 이동 없이 onClick만 실행되는 a 태그로 대체한다
 vi.mock('next/link', () => ({
@@ -23,19 +32,56 @@ vi.mock('next/link', () => ({
 
 /**
  * TopBarActions 테스트
- * 상단바 액션(검색 오버레이, 알림 패널과 탭 필터, 서비스 패널, 로그인/로그아웃 링크)의 열고 닫기 동작을 확인합니다.
+ * 상단바 액션(검색 오버레이, 알림 패널과 탭 필터, 서비스 패널, 로그인 링크와 로그아웃 버튼)의 열고 닫기 동작과 로그아웃 동작을 확인합니다.
  * Next Link는 라우터 없이 클릭하면 실제 이동을 시도하므로 이 파일에서는 이동 없이 onClick만 실행되는 a 태그로 대체합니다.
  */
 describe('TopBarActions', () => {
-  it('비로그인이면 로그인 링크를, 로그인이면 로그아웃 링크를 보여준다', () => {
+  beforeEach(() => {
+    hardNavigate.mockClear();
+  });
+
+  it('비로그인이면 로그인 링크를, 로그인이면 로그아웃 버튼을 보여준다', () => {
     const { rerender } = render(<TopBarActions isLoggedIn={false} />);
 
     expect(screen.getByRole('link', { name: '로그인' })).toHaveAttribute('href', '/login');
 
-    // 로그인 상태로 다시 렌더링하면 링크가 로그아웃으로 바뀐다
+    // 로그인 상태로 다시 렌더링하면 로그인 링크가 로그아웃 버튼으로 바뀐다
     rerender(<TopBarActions isLoggedIn />);
 
-    expect(screen.getByRole('link', { name: '로그아웃' })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: '로그인' })).not.toBeInTheDocument();
+  });
+
+  it('로그아웃 버튼을 누르면 로그아웃한 뒤 홈으로 전체 이동한다', async () => {
+    const authValue = createAuthValue('member');
+    render(
+      <AuthContext.Provider value={authValue}>
+        <TopBarActions isLoggedIn />
+      </AuthContext.Provider>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: '로그아웃' }));
+
+    await waitFor(() => expect(hardNavigate).toHaveBeenCalledWith('/'));
+    expect(authValue.logout).toHaveBeenCalledTimes(1);
+  });
+
+  it('서버 로그아웃이 오래 걸려도 완료된 뒤에 홈으로 전체 이동한다', async () => {
+    let finishLogout: () => void = () => {};
+    const logout = vi.fn(() => new Promise<void>((resolve) => { finishLogout = resolve; }));
+    render(
+      <AuthContext.Provider value={createAuthValue('member', { logout })}>
+        <TopBarActions isLoggedIn />
+      </AuthContext.Provider>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: '로그아웃' }));
+
+    expect(hardNavigate).not.toHaveBeenCalled();
+
+    finishLogout();
+
+    await waitFor(() => expect(hardNavigate).toHaveBeenCalledWith('/'));
   });
 
   it('처음에는 검색, 알림, 서비스 패널이 열려 있지 않다', () => {

@@ -66,7 +66,7 @@ env/
 
 | 변수 | 사용처 | 설명 |
 |---|---|---|
-| `MEMBER_API_BASE_URL` | 서버(Route Handler) 전용 | Next 서버가 member-api를 호출할 때 사용하는 주소 |
+| `MEMBER_API_BASE_URL` | 서버(Route Handler, 프록시) 전용 | Next 서버가 member-api를 호출할 때 사용하는 주소. BFF와 `src/proxy.ts`의 토큰 검증이 쓴다 |
 | `NEXT_PUBLIC_MEMBER_API_BASE_URL` | 브라우저 | 브라우저가 member-api를 직접 호출할 때 사용하는 공개 주소 |
 
 - `next.config.ts`가 `APP_ENV`에 맞는 `env/.env.{APP_ENV}`를 `process.loadEnvFile`로 로드합니다. `APP_ENV`는 `local`, `dev`, `prod`만 허용하며, 없으면 파일을 읽지 않고 주입된 환경변수만 사용합니다.
@@ -104,7 +104,7 @@ src/
 │   ├── base.css                      # 기본 요소 규칙 (포커스 링, 제목 서체, 모션 줄이기 등)
 │   ├── favicon.ico
 │   ├── globals.css                   # 다크 모드 값, 기존 토큰 이름 연결, 로고 토큰, 공용 재료 클래스
-│   ├── layout.tsx                    # 폰트 로드 (next/font, <html>에 변수 클래스)
+│   ├── layout.tsx                    # 폰트 로드 (next/font, <html>에 변수 클래스), AuthProvider로 앱 전체를 감쌈
 │   ├── login/page.tsx
 │   ├── me/page.tsx
 │   ├── notice/page.tsx
@@ -113,11 +113,14 @@ src/
 │   ├── signup/page.tsx
 │   └── tokens.css                    # 디자인 토큰 원본 (Tailwind v4 @theme, 라이트 기준)
 │
+├── proxy.ts                          # 보호 경로의 토큰 검증 (Next.js 16 Proxy, 서버 전용)
+│
 ├── features/
 │   ├── auth/
 │   │   ├── api/                      # authApi (login, logout, restoreSession, join)
-│   │   ├── components/
+│   │   ├── components/               # RequireAuth (로그인 가드), LoginLink (next가 붙은 로그인 링크), 로그인/회원가입 화면
 │   │   ├── container/
+│   │   ├── context/                  # AuthProvider, useAuth (로그인 상태)
 │   │   ├── hooks/                    # useLogin, useSignup
 │   │   ├── model/
 │   │   └── server/                   # authBff (BFF 핸들러, 서버 전용)
@@ -140,9 +143,9 @@ src/
 │
 └── shared/
     ├── api/                          # apiClient, httpClient, tokenStore, tokenRefresher, apiTypes, bffResponse
-    ├── auth/                         # refreshCookie (서버 전용)
+    ├── auth/                         # cookieNames, redirect(next 검증), refreshCookie와 sessionCookies(서버 전용)
     ├── config/                       # env (서버 전용 환경변수)
-    ├── model/
+    ├── navigation/                   # hardNavigate (전체 페이지 이동)
     └── ui/
 
 env/                   # APP_ENV별 환경변수 (git 제외)
@@ -150,17 +153,17 @@ env/                   # APP_ENV별 환경변수 (git 제외)
 design.md              # 고정된 디자인 시스템 문서 (화면 작업 시 기준)
 
 tests/
-├── fixtures/          # 테스트용 데이터 (feature별 픽스처)
+├── fixtures/          # 테스트용 데이터 (feature별 픽스처), auth.tsx(인증 상태 고정 Provider)
 └── unit/              # Vitest 단위, 컴포넌트 테스트 (src/와 같은 경로로 미러링)
+    ├── proxy.test.ts  # 프록시 (Node 환경)
     ├── features/
-    │   ├── auth/ blog/ feed/ me/ platform/   # components/, container/, model/ (auth는 api/, hooks/, server/ 포함)
+    │   ├── auth/ blog/ feed/ me/ platform/   # components/, container/, model/ (auth는 api/, context/, hooks/, server/ 포함)
     └── shared/
         ├── api/ auth/ config/
-        ├── model/
         └── ui/
 
 vitest.config.mts      # Vitest 설정
-vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더링 정리)
+vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더링 정리, next/navigation 기본 mock)
 ```
 
 경로 별칭은 `@/*` → `./src/*` 입니다.
@@ -236,7 +239,8 @@ vitest.setup.ts        # 테스트 공통 설정 (jest-dom 매처 등록, 렌더
 - 인증
   - 로그인 화면 (member-api 연동, 실패 시 오류 메시지, 소셜 로그인 버튼은 화면 구성 확인용)
   - 회원가입 화면 (member-api 연동, 필드별 검증 오류 표시)
-  - 상단바와 마이페이지의 로그인 상태 표시는 아직 `?auth=member` 쿼리(`shared/model/mockAuth.ts`)를 사용한다. 회원 조회 API가 생기면 실제 세션으로 교체한다
+  - 상단바와 화면의 로그인 상태 표시는 실제 로그인과 토큰으로 판단한다. (`AuthProvider`가 새로고침 후 쿠키로 복원)
+  - 로그인 필요 화면(내 정보, 내 블로그, 내 피드와 관찰 화면 등)은 비로그인이면 로그인 화면으로 이동하고, 로그인하면 원래 페이지로 돌아온다. 자세한 내용은 아래 "로그인 상태와 화면 접근 제어"를 따른다
 - 마이페이지
   - 프로필 요약
   - 설정 카드 클릭으로 여는 개인정보 변경 모달
@@ -395,7 +399,7 @@ flowchart TD
 - 서비스 화면의 중앙 콘텐츠는 `shared/ui/AppContent.tsx`를 사용한다.
 - `AppContent`의 기본 variant는 `wide`이며, 기본 폭은 `max-w-[768px]`이다.
 - `AppTopBar`와 `BottomNavigation`의 기본 폭도 wide 기준이다.
-- 상단바 액션은 `shared/ui/TopBarActions.tsx`에서 검색, 알림, 서비스 popover, 로그인/로그아웃 UI를 담당한다.
+- 상단바 액션은 `shared/ui/TopBarActions.tsx`에서 검색, 알림, 서비스 popover, 로그인/로그아웃 UI를 담당한다. 로그인 링크는 `LoginLink`로 현재 경로를 `next`로 붙이고, 로그아웃 버튼은 로그아웃한 뒤 홈으로 전체 이동한다.
 - 검색 오버레이는 `document.body` portal 기반으로 렌더링하여 화면 전체 기준으로 표시한다.
 - 알림과 서비스 팝오버도 `document.body` portal 기반으로 렌더링하여 화면 빈 영역 클릭으로 닫히게 한다.
 - 브랜드 로고는 `shared/ui/BrandLogo.tsx`를 사용하며 화면별로 애니메이션 여부를 조정한다.
@@ -405,7 +409,6 @@ flowchart TD
 - heading은 간결한 명사형으로 쓴다. description은 `PageIntroCard`(화면 최상단)에서만 쓰고 따뜻한 안내형 문구로 작성하며, `SectionHeader`에는 description을 쓰지 않는다.
 - 숫자와 라벨을 보여주는 통계는 `shared/ui/StatCard.tsx`를 공용으로 사용한다. `lg`는 위쪽 구분선 위의 큰 표 형식 숫자, `sm`은 진한 면이며, 클릭 가능 여부는 `onClick` prop으로 정한다.
 - 좁은 레이아웃은 로그인/회원가입 같은 예외 화면에만 제한적으로 사용한다.
-- 개발 확인용 공통 모델은 `shared/model`에 둔다.
 
 ---
 
@@ -421,6 +424,8 @@ member-api(`choimory-dev-member-api`)와 연동하는 구조입니다. OpenAPI �
 | 토큰 재발급 | `POST /v1/member/reissue` | 브라우저 → `POST /api/auth/reissue`(BFF) → member-api |
 | 로그아웃 | `POST /v1/logout` | 브라우저 → `POST /api/auth/logout`(BFF) → member-api |
 | 회원가입 | `POST /v1/member/join` | 브라우저 → member-api 직접 호출 (CORS 필요) |
+| Access Token 검증 | `GET /v1/member/token/verify` | `src/proxy.ts`(Next 서버) → member-api. 보호 경로 요청마다 호출한다 |
+| 내정보 조회 | `GET /v1/member/me` | member-api에 있으며 프론트는 아직 연동하지 않았다 |
 
 - member-api 공통 응답은 `{code, name, message, data}`이며, `httpRequest`가 `data`를 꺼내고 실패는 `ApiError`로 던집니다. 가입 검증 실패(400)의 `data`는 `getValidateResults`로 필드 목록을 꺼냅니다.
 - 그 외 일반 API는 브라우저가 `apiClient`로 member-api를 직접 호출합니다. 일반 화면의 데이터는 클라이언트에서 불러오는 것이 기본이며, 서버 컴포넌트는 로그인 없이 볼 수 있는 공개 데이터에만 사용합니다.
@@ -430,11 +435,13 @@ member-api(`choimory-dev-member-api`)와 연동하는 구조입니다. OpenAPI �
 | 토큰 | 수명 | 보관 위치 |
 |---|---|---|
 | Refresh Token | 14일 | httpOnly 쿠키(`refresh_token`). BFF만 읽고 쓴다. SameSite=Lax, `path=/api/auth`, `secure`는 `NODE_ENV=production`일 때 |
-| Access Token | 30분 | 브라우저 메모리(`shared/api/tokenStore.ts`). 새로고침하면 사라진다 |
+| Access Token | 30분 | 브라우저 메모리(`shared/api/tokenStore.ts`). 새로고침하면 사라진다. API 인증은 이 값을 `Authorization` 헤더로 보낸다 |
+| Access Token 쿠키 | 30분 | httpOnly 쿠키(`access_token`). 프록시의 페이지 접근 판단에만 쓰고 API 인증에는 쓰지 않는다. SameSite=Lax, `path=/`, `secure`는 `NODE_ENV=production`일 때 |
+| 세션 표시 쿠키 | 14일 | httpOnly 쿠키(`session_hint`, 값 `1`, 토큰 아님). Refresh Token과 같은 수명이며 Access Token이 만료돼도 로그인 세션이 남아 있다는 신호로 프록시가 쓴다 |
 
 - 로그인 응답에서 Refresh Token은 쿠키로만 전달하고, Access Token만 본문으로 내려줍니다.
 - Refresh Token은 1회용(rotation)이므로 재발급할 때마다 쿠키를 새 값으로 교체합니다.
-- BFF는 Refresh Token을 다루는 로그인, 로그아웃, 재발급에만 사용합니다.
+- BFF는 Refresh Token을 다루는 로그인, 로그아웃, 재발급에만 사용합니다. 이 세 곳이 `refresh_token`, `access_token`, `session_hint` 쿠키를 함께 설정(로그인, 재발급 성공)하고 함께 삭제(로그아웃, 재발급 400/401)합니다. 재발급의 일시적 오류에서는 쿠키를 유지합니다.
 - 새로고침 후 로그인 상태는 `authApi.restoreSession()`(재발급)으로 복원합니다.
 
 ### apiClient의 토큰 갱신
@@ -446,6 +453,59 @@ member-api(`choimory-dev-member-api`)와 연동하는 구조입니다. OpenAPI �
 3. 갱신까지 실패하면 `onAuthExpired`(기본: `/login` 이동)를 실행하고 원래 오류를 던진다.
 4. 갱신 요청은 동시에 하나만 보낸다. Refresh Token이 1회용이라 같은 토큰으로 두 번 보내면 하나가 실패하기 때문이다.
 5. 인증이 필요 없는 요청은 `{ auth: false }`로 보낸다.
+
+### 로그인 상태와 화면 접근 제어
+
+로그인 상태는 `AuthProvider`(`features/auth/context`)가 관리하고, 보호 화면은 서버 프록시와 클라이언트 가드가 함께 막습니다.
+
+- `AuthProvider`는 `app/layout.tsx`에서 앱 전체를 감싸며, 마운트될 때 `authApi.restoreSession()`(재발급)으로 로그인 상태를 복원합니다. 상태는 `loading`, `member`, `guest`이고, 복원 중(`loading`)은 화면을 구분할 때 `guest`로 취급합니다. `AuthProvider` 밖에서는 항상 `guest`입니다.
+- Container가 `useAuth()`로 로그인 여부를 읽어 View와 상단바에 넘깁니다. `isLoggedIn` prop 전달 구조는 그대로입니다.
+- 로그인에 성공하면 `markLoggedIn()`을 호출하고, 로그아웃은 서버 처리가 실패해도 `guest`로 바꿉니다.
+
+**보호 경로** (비로그인이면 로그인 화면으로 이동)
+
+| 경로 | 화면 |
+|---|---|
+| `/me` | 내 정보 |
+| `/blog/me`, `/blog/following` | 내 블로그, 팔로잉 |
+| `/feed/me`, `/feed/me/targets/[targetId]` | 내 피드, 대상별 알림 설정 |
+| `/feed/observations`, `/feed/observations/[observationId]`, `/feed/activities/[activityId]` | 관찰 목록과 상세, 알림 상세 |
+
+그 외 경로(`/`, `/notice`, `/services`, `/blog`, `/blog/popular`, `/blog/[nickname]`, `/blog/posts/[postId]`, `/feed`, `/feed/popular`, `/feed/targets/[targetId]`, `/login`, `/signup`)는 비로그인으로도 열립니다.
+
+```mermaid
+flowchart TD
+    R[보호 경로 요청] --> A{access_token 쿠키}
+    A -->|없음| H{session_hint 쿠키}
+    H -->|있음| P[통과: 화면이 열리면 AuthProvider가 자동 갱신]
+    H -->|없음| L["/login?next=경로 로 이동"]
+    A -->|있음| V["member-api verify 호출 (타임아웃 2초)"]
+    V -->|200| P
+    V -->|401 TOKEN_EXPIRED| H
+    V -->|그 외 401| D["access_token 삭제 후 /login?next=경로 로 이동"]
+    V -->|타임아웃, 네트워크 오류, 5xx| L
+    P --> G["RequireAuth (클라이언트 가드)"]
+    G -->|member| S[화면 표시]
+    G -->|loading| W[비워 두고 대기]
+    G -->|guest| L
+```
+
+- **서버 프록시**(`src/proxy.ts`): Next.js 16 Proxy(Node.js 런타임)이며 보호 경로에만 `config.matcher`로 적용됩니다. 프리페치 요청은 건너뜁니다. 토큰은 member-api의 `verify` API로 검증하며(JWT가 HS256 대칭키라 프론트가 서명을 직접 검증할 수 없다), member-api가 응답하지 않으면 로그인으로 보냅니다(fail-closed).
+- **클라이언트 가드**(`RequireAuth`): 보호 화면의 Container를 감쌉니다. 로그인 상태를 복원하는 중에는 이동하지 않고 비워 두며, 비로그인으로 확정되면 로그인 화면으로 보냅니다. 프록시를 지나쳤거나 프리페치된 화면, 로그아웃 직후, `session_hint`를 위조한 경우를 막는 보강입니다.
+- 이 화면 접근 제어는 UX 용도입니다. 실제 데이터는 API가 `Authorization` 헤더의 토큰을 검증해 보호합니다. `session_hint`를 위조하면 보호 화면의 껍데기까지는 볼 수 있지만 API 데이터는 받을 수 없습니다.
+- **보호 경로를 바꿀 때**: `matcher`는 빌드 때 분석되는 리터럴이어야 해서 변수나 공통 상수를 쓸 수 없습니다. 경로를 추가하거나 공개로 되돌리려면 `src/proxy.ts`의 `matcher`와 해당 Container의 `RequireAuth`를 함께 고칩니다.
+
+**로그인 후 돌아가기(`next`)**
+
+- 프록시, `RequireAuth`, `apiClient`의 갱신 실패, 공개 페이지의 `LoginLink`가 `/login?next=<현재 경로>`로 이동시킵니다. 홈, 로그인, 회원가입이면 `next` 없이 `/login`입니다. 쿼리 문자열은 `next`에 넣지 않습니다.
+- `app/login/page.tsx`가 `searchParams`의 `next`를 서버에서 `sanitizeNextPath`로 검증해 `LoginContainer`에 `redirectTo`로 넘깁니다. 같은 사이트의 내부 경로만 허용하고, 절대 주소, `//`, `/\`, 인코딩으로 우회한 값, 제어문자, 너무 긴 값, `/login`과 `/signup`은 `/`로 바꿉니다. (오픈 리다이렉트 방지)
+
+**로그인과 로그아웃 후에는 전체 페이지 이동**
+
+- 로그인 성공 후와 로그아웃 후 이동은 `router.push`가 아니라 `hardNavigate`(`window.location.assign`)를 씁니다.
+- 로그인: 비로그인으로 보호 경로에 클라이언트 이동하면 프록시의 리다이렉트 결과가 라우터 캐시에 남고, 로그인 후 `router.push`가 서버에 다시 요청하지 않고 그 캐시를 재사용해 로그인 화면에 머뭅니다.
+- 로그아웃: 보호 화면에서는 `RequireAuth`의 로그인 이동과 로그아웃 후 홈 이동이 경쟁하므로, 진행 중인 이동을 덮어쓰는 전체 이동으로 결과를 `/`로 고정합니다.
+- 대가로 페이지가 한 번 새로고침되고, 메모리의 Access Token은 새 페이지에서 `restoreSession`으로 다시 복원됩니다.
 
 ### 새 API를 추가할 때
 
@@ -510,6 +570,10 @@ member-api(`choimory-dev-member-api`)와 연동하는 구조입니다. OpenAPI �
 - 라우터 없이 `next/link`를 클릭하면 jsdom이 페이지 이동을 시도하므로, 링크 클릭이 필요한 테스트는 파일 안에서 `vi.mock('next/link', ...)`로 대체한다.
 - 서버 전용 코드(Route Handler 핸들러 등)의 테스트는 파일 첫 줄에 `// @vitest-environment node`를 둔다. `next/headers` 같은 서버 모듈은 `vi.mock`으로 대체한다.
 - API 호출 테스트는 `vi.stubGlobal('fetch', ...)` 또는 함수의 `fetchImpl` 옵션으로 fetch를 대체한다. 공통 응답 Response 생성은 `tests/fixtures/api.ts`의 `jsonResponse`를 사용한다.
+- 로그인 상태가 필요한 테스트는 `tests/fixtures/auth.tsx`의 `createAuthWrapper('member' | 'guest', 덮어쓸 값)`를 `render`의 `wrapper`로 쓴다. 실제 토큰 복원 요청을 보내지 않고 상태를 고정하며, `{ state: 'loading' }`을 덮어써 복원 중도 검증한다.
+- `vitest.setup.ts`가 `next/navigation`(`useRouter`, `usePathname`, `useSearchParams`)을 기본 mock으로 대체한다. 파일 안에서 `vi.mock('next/navigation', ...)`로 다시 대체하면 그 파일에서는 그 값이 우선하므로, `usePathname`을 쓰는 컴포넌트(`RequireAuth`, `LoginLink`, `BlogGuestSection` 등)를 렌더링하는 테스트는 `usePathname`도 함께 넣는다.
+- 전체 페이지 이동(`hardNavigate`)은 `@/shared/navigation/hardNavigate`를 `vi.mock`으로 대체해 호출 경로를 검증한다. (jsdom에서는 `window.location.assign`을 대체할 수 없다)
+- 프록시 테스트(`tests/unit/proxy.test.ts`)는 `// @vitest-environment node`로 `NextRequest`와 `fetch` mock을 쓰고, 보호 경로 matcher는 `unstable_doesMiddlewareMatch`로 검증한다.
 - 현재 Playwright(E2E)와 MSW(API 모킹 통합 테스트)는 도입하지 않았다. API 연동 후 추가한다.
 
 ---
