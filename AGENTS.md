@@ -5,10 +5,11 @@
 - 문서 작성, 코드 작성, 테스트 수행 등의 모든 구체적인 행동들은, 시작하라는 지시 전까지는 기본적으로 대화로 계획과 의견을 계속 주고 받는다.
 - 문서 작성, 코드 작성, 테스트 수행 등의 행동을 시작하고 싶다면, 작업을 시작해도 될지를 물어보고 대답에 따라 시작한다.
 - 문서 작성, 코드 작성, 테스트 수행 등의 행동은 바로 시작하지 말고, 일단 어떻게 진행할지 계획을 설명해준다.
+- 지시자의 결정(답변)이 필요한 상황에는, 추천 선택지가 포함된 선택지들을 건내준다. (지시자가 선택하기 힘들거나 번거로울때, 추천 방식으로 해주라는 식으로 빠르게 진행할 수 있도록)
 - 작업이 끝난 후에도 문서를 바로 작성하지 말고, 일단 작업한 내용을 설명해준다.
 - 특정 작업과 관련된 상세한 히스토리를 참고할땐, .agents/histories/calendar.md를 확인하여 해당 작업의 디렉토리 내 문서들을 참고한다.
 - .agents/histories/**/*.md가 작업 히스토리 역할을 하므로, README.md에는 작업 히스토리는 남기지 않고, 전체 프로젝트 구조와 아키텍처 그리고 도메인 설명과 코드 등 프로젝트의 기술적인 것에 관한 설명들만 이야기한다.
-- README.md를 작성할땐, 이해에 도움이 되도록 프로젝트 전체 구조나 아키텍처, 다이어그램을 Mermaid로 같이 보여주는거 선호함.
+- README.md를 작성할땐, 이해에 도움이 되도록 프로젝트 전체 구조나 아키텍처, 다이어그램을 Mermaid로 함께 보여주는것을 선호함.
 
 ---
 
@@ -71,13 +72,3 @@
 .agents/rules/dev-ops/**/*.md
 
 ---
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->

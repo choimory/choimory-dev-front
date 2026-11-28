@@ -8,6 +8,8 @@
   - [harness-update](#harness-update)
   - [frontend-design](#frontend-design)
   - [design-taste-frontend](#design-taste-frontend)
+  - [ui-ux-pro-max](#ui-ux-pro-max)
+  - [impeccable](#impeccable)
 
 ---
 
@@ -30,16 +32,20 @@
 | harness-update | common/harness | choimory-harness 기준으로 AGENTS.md, .agents 규칙/스킬 최신화. 변경 목록 확인 → 허락 → 적용 → 임시파일 정리 | `.agents/skills/harness-update/SKILL.md` | 자체 제작 |
 | frontend-design | front/design | 새 UI와 기존 UI에 제품·사용자 맥락에 맞는 시각 방향, 타이포그래피, 레이아웃을 설계하고 구현 | `.agents/skills/frontend-design/SKILL.md` | [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0) |
 | design-taste-frontend | front/design | 회사·제품·랜딩 페이지 제작과 리디자인. 업종별 레이아웃, 실제 사진·제품 UI, 브라우저 검증 | `.agents/skills/design-taste-frontend/SKILL.md` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) (MIT) |
+| ui-ux-pro-max | front/design | 스타일·팔레트·폰트·UX 가이드라인 로컬 데이터 검색으로 디자인 시스템 생성, UI 설계·리뷰·수정 (웹·모바일·데스크톱) | `.agents/skills/ui-ux-pro-max/SKILL.md` | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) (MIT) |
+| impeccable | front/design | 프론트엔드 UI 설계·리디자인·비평·감사·다듬기. critique/audit/polish/animate 등 하위 명령어, PRODUCT.md·DESIGN.md 관리 | `.agents/skills/impeccable/SKILL.md` | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) |
 
 ### 디자인 스킬 선택 기준
 
-새 UI 제작에는 hallmark, frontend-design, design-taste-frontend의 자동 호출 조건이 겹친다. 원하는 스킬이 있으면 이름으로 직접 호출한다.
+새 UI 제작·기존 UI 개선에는 hallmark, frontend-design, design-taste-frontend, ui-ux-pro-max, impeccable의 자동 호출 조건이 겹친다. 원하는 스킬이 있으면 이름으로 직접 호출한다.
 
 | 상황 | 스킬 |
 |---|---|
 | 새 페이지, 테마 기반, 디자인 시스템 고정 | hallmark |
 | 새 UI·기존 UI의 시각 방향 설계 (범용) | frontend-design |
 | 회사·제품·랜딩 페이지를 사진·에셋과 브라우저 검증까지 | design-taste-frontend |
+| 업종·제품 유형에 맞는 스타일·색상·폰트를 데이터 기반으로 선정, 디자인 시스템 문서화 | ui-ux-pro-max |
+| 기존 UI 비평·감사·다듬기 등 세분화된 개선 작업, 네이티브(iOS/Android) 화면 | impeccable |
 
 ## 스킬별 사용법
 
@@ -101,3 +107,42 @@ node .agents/skills/harness-update/scripts/harness-update.mjs cleanup --source <
 - 검증 도구에 Node.js 22 이상과 Chrome/Edge/Chromium이 필요하다. ffmpeg는 선택 사항.
 - 제작 시 1440·1024·768·390px 너비를 브라우저로 확인하고, `scripts/gate.mjs`로 완료 조건을 검사한다.
 - 사진·아이콘 등 에셋을 포함해 용량이 크다 (약 39MB).
+
+### ui-ux-pro-max
+
+| 명령어 | 설명 |
+|---|---|
+| `/ui-ux-pro-max <만들 UI 설명>` | 제품 유형·업종에 맞는 스타일, 팔레트, 폰트, UX 규칙을 검색해 디자인 시스템을 정하고 구현 (ex. `/ui-ux-pro-max 뷰티 스파 예약 랜딩 페이지`) |
+| `/ui-ux-pro-max <기존 UI 경로> 리뷰해줘` | 접근성, 터치, 반응형, 타이포그래피 등 우선순위별 규칙으로 기존 UI 점검 및 수정 |
+| `/ui-ux-pro-max <설명>, 디자인 시스템 저장해줘` | `design-system/<project>/MASTER.md`(+ 페이지별 override)로 디자인 시스템을 저장해 이후 페이지가 공유 |
+
+스크립트 직접 실행 (스킬 디렉토리에서):
+
+```bash
+# 디자인 시스템 추천 (--persist로 파일 저장, --tokens css|dtcg로 토큰 출력, --preview로 미리보기 HTML)
+python scripts/search.py "<제품 유형> <업종> <키워드>" --design-system [-p "프로젝트명"]
+
+# 도메인별 검색 (style, color, typography, ux 등)
+python scripts/search.py "<키워드>" --domain <domain>
+```
+
+- 검색 스크립트에 Python 3.x가 필요하다 (표준 라이브러리만 사용, 네트워크 호출 없음).
+
+### impeccable
+
+| 명령어 | 설명 |
+|---|---|
+| `/impeccable` | 프로젝트 상황에 맞는 명령어 메뉴를 보여줌 (자동 실행 없음) |
+| `/impeccable <만들 UI 설명>` | 일반 디자인 작업. PRODUCT.md가 없으면 `init`으로 제품 맥락부터 정리한 뒤 진행 |
+| `/impeccable init` / `/impeccable document` | 제품 맥락을 `PRODUCT.md`로 기록 / 기존 코드에서 `DESIGN.md` 생성 |
+| `/impeccable shape <기능>` | 코드 작성 전 UX/UI 계획 |
+| `/impeccable critique <대상>` / `/impeccable audit <대상>` | 휴리스틱 점수 기반 UX 리뷰 / 접근성·성능·반응형 기술 점검 |
+| `/impeccable polish <대상>` | 출시 전 최종 다듬기 |
+| `/impeccable bolder·quieter·distill·harden·onboard <대상>` | 과감하게 / 차분하게 / 단순화 / 에러·i18n·엣지케이스 보강 / 첫 실행·빈 상태 설계 |
+| `/impeccable animate·colorize·typeset·layout·delight·overdrive <대상>` | 모션 / 색상 / 타이포그래피 / 간격·위계 / 개성 / 한계 돌파 |
+| `/impeccable clarify·adapt·optimize <대상>` | UX 문구 / 기기·화면 크기 대응 / UI 성능 |
+| `/impeccable live` / `/impeccable generate <n> <요소>` | 브라우저에서 요소를 골라 변형안 반복 / 지정 요소의 변형안 생성 |
+
+- 세션마다 처음 한 번 `scripts/impeccable context`(Windows에서 `sh`가 없으면 `scripts/impeccable.cmd`)를 실행해 PRODUCT.md·DESIGN.md를 불러온다.
+- 런처는 동봉되었거나 첫 실행 시 한 번 내려받는 자체 실행 바이너리를 사용하며, Node 등 별도 런타임이 필요 없다.
+- 렌더링 결과 확인은 `scripts/impeccable shot <page>`로 한다.
